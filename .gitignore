@@ -8,6 +8,10 @@
 /[Oo]bj/
 /[Bb]uild/
 /[Bb]uilds/
+
+/[Aa]ssets/LowPoly Assets
+/[Aa]ssets/Joystick Pack
+/[Aa]ssets/TextMesh Pro
 /[Ll]ogs/
 /[Uu]ser[Ss]ettings/
 *.log
