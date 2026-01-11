@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Pickup
   - New tag
+  - FartilizedSubLand
+  - FartilizedLand
   layers:
   - Default
   - TransparentFX
