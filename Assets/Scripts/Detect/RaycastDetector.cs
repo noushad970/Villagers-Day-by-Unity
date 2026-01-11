@@ -69,12 +69,12 @@ public class RaycastDetector : MonoBehaviour
             // Only pick up objects with tag "Pickup"
             if (target.CompareTag("Pickup"))
             {
-                PickUp(target);
+                PickUp(target,0.1f);
             }
         }
     }
 
-    void PickUp(GameObject obj)
+    void PickUp(GameObject obj,float reduceMultiplier)
     {
         heldObject = obj;
 
@@ -84,7 +84,7 @@ public class RaycastDetector : MonoBehaviour
         // Reset local position/rotation
         obj.transform.localPosition = Vector3.zero;
         obj.transform.localRotation = Quaternion.identity;
-        obj.transform.localScale *= 0.1f;
+        obj.transform.localScale *= reduceMultiplier;
         // Disable physics while holding
         Rigidbody rb = obj.GetComponent<Rigidbody>();
         if (rb != null)
