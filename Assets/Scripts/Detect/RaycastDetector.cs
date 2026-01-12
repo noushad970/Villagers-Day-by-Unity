@@ -1,4 +1,5 @@
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.InputSystem.HID;
 using UnityEngine.UI;
 
 public class RaycastDetector : MonoBehaviour
@@ -12,11 +13,16 @@ public class RaycastDetector : MonoBehaviour
     public Button interactButton;    // interact button
 
     private GameObject heldObject = null; // currently held object
+    public GameObject[] plantPrefab, cropPrefab;
+    public float bigPlantHarvestRedius = 0.5f;
+    private RaycastHit hit;
+    private Ray ray;
 
     void Start()
     {
         if (interactButton != null)
             interactButton.onClick.AddListener(OnInteract);
+
     }
 
     void Update()
@@ -28,8 +34,8 @@ public class RaycastDetector : MonoBehaviour
         referenceObject.rotation = Quaternion.Euler(targetEuler.x, targetEuler.y, 0);
 
         // Shoot a ray forward from the reference object
-        Ray ray = new Ray(referenceObject.position, referenceObject.forward);
-        RaycastHit hit;
+        ray = new Ray(referenceObject.position, referenceObject.forward);
+       
 
         // Debug ray in Scene view
         Debug.DrawRay(referenceObject.position, referenceObject.forward * rayLength, Color.green);
@@ -114,4 +120,97 @@ public class RaycastDetector : MonoBehaviour
         Debug.Log("Dropped: " + heldObject.name);
         heldObject = null;
     }
+    public void PlantingTree(string plantName)
+    {
+        if (referenceObject == null) return;
+
+        Ray ray = new Ray(referenceObject.position, referenceObject.forward);
+        RaycastHit hit;
+
+        if (Physics.Raycast(ray, out hit, rayLength))
+        {
+            GameObject target = hit.collider.gameObject;
+
+            // Detect ONLY objects with tag "mytag"
+            if (target.CompareTag("Land"))
+            {
+                // Instantiate demoObject at hit point
+                for (int i = 0; i < plantPrefab.Length; i++)
+                {
+                    if(plantPrefab[i].name==plantName)
+                    {
+                        Collider[] nearby = Physics.OverlapSphere(hit.point, bigPlantHarvestRedius);
+
+                        foreach (Collider col in nearby)
+                        {
+                            if (col.gameObject.name.Contains(plantPrefab[i].name))
+                            {
+                                Debug.Log("Harvest blocked: demoObject already nearby");
+                                return; // ❌ Do not harvest
+                            }
+                        }
+                        Instantiate(plantPrefab[i], hit.point, Quaternion.identity);
+                        break;
+                    }
+                }
+
+                Debug.Log("Harvested on: " + target.name);
+            }
+        }
+    }
+    public void plantingCrops(string cropName)
+    {
+        if (referenceObject == null) return;
+
+      
+
+        if (Physics.Raycast(ray, out hit, rayLength))
+        {
+            GameObject target = hit.collider.gameObject;
+            Debug.Log("Raycast hit: " + target.name);
+            // Detect ONLY Fertilized Land
+            if (!target.CompareTag("CropArea"))
+                return;
+
+            // Find CropArea around hit point
+            Collider[] nearby = Physics.OverlapSphere(hit.point, bigPlantHarvestRedius);
+
+            foreach (Collider col in nearby)
+            {
+                if (col.CompareTag("CropArea"))
+                {
+                    Debug.Log("Found CropArea: " + col.name);
+                    // ❌ Prevent double planting
+                    if (col.transform.childCount > 0)
+                    {
+                        Debug.Log("Crop already planted here");
+                        return;
+                    }
+                    for (int i=0;i<cropPrefab.Length;i++)
+                    {
+                        if(cropPrefab[i].name==cropName)
+                        {
+                            Debug.Log("Crop already planted here");
+                            // Instantiate crop at CropArea position
+                            GameObject crop = Instantiate(
+                                cropPrefab[i],
+                                col.transform.position,
+                                Quaternion.identity
+                            );
+
+                            // Parent crop to CropArea
+                            crop.transform.SetParent(col.transform);
+
+                            Debug.Log("Planted crop: " + cropName);
+                            return;
+                        }
+                    }
+                    
+                    
+                }
+            }
+        }
+    }
+               
+
 }

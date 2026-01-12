@@ -8,6 +8,8 @@ TagManager:
   - New tag
   - FartilizedSubLand
   - FartilizedLand
+  - Land
+  - CropArea
   layers:
   - Default
   - TransparentFX
