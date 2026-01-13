@@ -14,7 +14,6 @@ public class CharacterMovement : MonoBehaviour
 
     private CharacterController controller;
     private Vector3 velocity;
-
     // Run Button State
     public static bool isRunPressed = false;
     [SerializeField] private Button jumpButton;
@@ -38,13 +37,14 @@ public class CharacterMovement : MonoBehaviour
 
     public CharacterState currentState;
     private CharacterState lastState;
-
+    public static CharacterMovement instance;
     void Start()
     {
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
         currentState = CharacterState.Idle;
         jumpButton.onClick.AddListener(Jump);
+        instance = this;
     }
 
     void Update()
@@ -81,6 +81,22 @@ public class CharacterMovement : MonoBehaviour
                 isTouching = false;
             }
         }
+
+    }
+    public void FacePlayerToCamera()
+    {
+        if (mainCam == null) return;
+
+        // Get camera forward direction
+        Vector3 direction = mainCam.transform.forward;
+
+        // Ignore vertical tilt
+        direction.y = 0f;
+
+        if (direction.sqrMagnitude < 0.001f) return;
+
+        // Rotate player toward camera direction
+        this.gameObject.transform.rotation = Quaternion.LookRotation(direction);
     }
     // =========================
     // MOVEMENT
@@ -101,7 +117,7 @@ public class CharacterMovement : MonoBehaviour
 
     //    // WALK / RUN
     //    float speed = isRunPressed ? runSpeed : walkSpeed;
-       
+
     //    Debug.Log("Current speed: " + speed);
     //    Vector3 move = new Vector3(x, 0f, z);
 

@@ -17,11 +17,24 @@ public class RaycastDetector : MonoBehaviour
     public float bigPlantHarvestRedius = 0.5f;
     private RaycastHit hit;
     private Ray ray;
+    [Header("Indicator")]
+    [Header("Indicator")]
+    public GameObject indicatorPrefab;
+    public Material validMaterial;   // green
+    public Material invalidMaterial; // red
 
+    private GameObject indicatorInstance;
+    private Animator anim;
     void Start()
     {
         if (interactButton != null)
             interactButton.onClick.AddListener(OnInteract);
+        if (indicatorPrefab != null)
+        {
+            indicatorInstance = Instantiate(indicatorPrefab);
+            indicatorInstance.SetActive(false);
+        }
+        anim = GetComponent<Animator>();
 
     }
 
@@ -42,23 +55,52 @@ public class RaycastDetector : MonoBehaviour
 
         if (Physics.Raycast(ray, out hit, rayLength))
         {
+            bool canPlace = false;
             // Skip if hit object is the object this script is attached to
             if (hit.collider.gameObject == gameObject)
                 return;
+            if (hit.collider.CompareTag("CropArea"))
+            {
+                Collider[] nearby = Physics.OverlapSphere(hit.point, 2f);
+              //  canPlace = nearby.Length == 1; // example condition
+                canPlace = true;
+            }
+            else
+            {
+                canPlace=false;
+            }
 
+            UpdateIndicator(hit.point, canPlace);
             // Print the tag of the object hit
             Debug.Log("Hit object: " + hit.collider.gameObject.name + " | Tag: " + hit.collider.gameObject.tag);
         }
+        else
+        {
+            if (indicatorInstance != null)
+                indicatorInstance.SetActive(false);
+        }
+    }
+    void UpdateIndicator(Vector3 position, bool isValid)
+    {
+        if (indicatorInstance == null) return;
+
+        indicatorInstance.SetActive(true);
+        indicatorInstance.transform.position = position + Vector3.up * 0.02f;
+        Debug.Log("Is valid placement: " + isValid);
+        MeshRenderer mr = indicatorInstance.GetComponent<MeshRenderer>();
+        mr.material = isValid ? validMaterial : invalidMaterial;
     }
 
     void OnInteract()
     {
+        anim.Play("Interect");  
         // If already holding an object, drop it
         if (heldObject != null)
         {
             DropObject();
             return;
         }
+        CharacterMovement.instance.FacePlayerToCamera();
 
         // Shoot ray to detect object in front
         Ray ray = new Ray(referenceObject.position, referenceObject.forward);
@@ -83,6 +125,7 @@ public class RaycastDetector : MonoBehaviour
     void PickUp(GameObject obj,float reduceMultiplier)
     {
         heldObject = obj;
+        CharacterMovement.instance.FacePlayerToCamera();
 
         // Parent it to the hand
         obj.transform.SetParent(hand);
@@ -108,6 +151,7 @@ public class RaycastDetector : MonoBehaviour
 
         // Unparent the object
         heldObject.transform.SetParent(null);
+        CharacterMovement.instance.FacePlayerToCamera();
 
         // Re-enable physics
         Rigidbody rb = heldObject.GetComponent<Rigidbody>();
@@ -123,10 +167,11 @@ public class RaycastDetector : MonoBehaviour
     public void PlantingTree(string plantName)
     {
         if (referenceObject == null) return;
-
+        CharacterMovement.instance.FacePlayerToCamera();
         Ray ray = new Ray(referenceObject.position, referenceObject.forward);
         RaycastHit hit;
 
+        anim.Play("Interact");
         if (Physics.Raycast(ray, out hit, rayLength))
         {
             GameObject target = hit.collider.gameObject;
@@ -162,8 +207,9 @@ public class RaycastDetector : MonoBehaviour
     {
         if (referenceObject == null) return;
 
-      
+        CharacterMovement.instance.FacePlayerToCamera();
 
+        anim.Play("Interact");
         if (Physics.Raycast(ray, out hit, rayLength))
         {
             GameObject target = hit.collider.gameObject;
