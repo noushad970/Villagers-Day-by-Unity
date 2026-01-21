@@ -1061,6 +1061,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4982881246547970003}
   - component: {fileID: 5379922831554632984}
+  - component: {fileID: 4703854516258702269}
   m_Layer: 0
   m_Name: Chicken
   m_TagString: Untagged
@@ -1076,7 +1077,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8063962767407569432}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -52.46265, y: 10.2345, z: 85.1248}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -1107,6 +1108,35 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4703854516258702269
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8063962767407569432}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 06c903f5d18cbc44f90ff529fdd05404, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::HenAndDuck
+  eatAndDrinkPoint1: {fileID: 0}
+  eatAndDrinkPoint2: {fileID: 0}
+  currentState: 0
+  moveSpeed: 1
+  stopRadius: 1
+  reachDistance: 0.3
+  rotationSpeed: 5
+  randomWalkPoints:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
 --- !u!1 &8286065449523306015
 GameObject:
   m_ObjectHideFlags: 0
