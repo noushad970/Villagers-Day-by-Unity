@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System.IO;
 
 public class PlayerSaveManager : MonoBehaviour
@@ -63,7 +63,10 @@ public class PlayerSaveManager : MonoBehaviour
         SavePlayer();
         return true;
     }
-
+    public int GetCoinCount()
+    {
+        return playerData.coins;
+    }
     // ---------------- SEEDS ----------------
     public void AddPlantedOrCollectedItem(string PlantedOrCollectedItemName, int amount)
     {
@@ -99,4 +102,54 @@ public class PlayerSaveManager : MonoBehaviour
         if (field == null) return 0;
         return (int)field.GetValue(playerData);
     }
+    public int GetItemPrice(string itemName)
+    {
+        switch (itemName)
+        {
+            // Seeds
+            case "BeanSeed": return 5;
+            case "BeetrootSeed": return 6;
+            case "BroccoliSeed": return 7;
+            case "CabbageSeed": return 6;
+            case "CarrotSeed": return 5;
+            case "ChilliSeed": return 8;
+            case "CornSeed": return 7;
+            case "PepperSeed": return 8;
+            case "PumkinSeed": return 10;
+            case "TomatoSeed": return 6;
+            case "WatermelonSeed": return 12;
+            case "WheatSeed": return 4;
+
+            // Crops
+            case "Bean": return 20;
+            case "Beetroot": return 25;
+            case "Broccoli": return 30;
+            case "Cabbage": return 22;
+            case "Carrot": return 20;
+            case "Chilli": return 35;
+            case "Corn": return 28;
+            case "Pepper": return 32;
+            case "Pumkin": return 50;
+            case "Tomato": return 24;
+            case "Watermelon": return 60;
+            case "Wheat": return 18;
+
+            // Fish
+            case "Rohu": return 80;
+            case "Hilsa": return 150;
+            case "Tilapia": return 70;
+            case "Catfish": return 65;
+            case "Salmon": return 200;
+            case "Tuna": return 180;
+            case "Mackerel": return 90;
+            case "Sardine": return 50;
+            case "Cod": return 100;   // ✅ example you asked for
+            case "Carp": return 75;
+
+            default:
+                Debug.LogWarning("Item price not found: " + itemName);
+                return 0;
+        }
+    }
+
 }

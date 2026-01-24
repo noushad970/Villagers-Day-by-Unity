@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using UnityEngine;
 
-public class HenAndDuck : MonoBehaviour
+public class AnimalLifeCycle : MonoBehaviour
 {
     [Header("Food & Water Points")]
     [SerializeField] private FoodAndWaterPoint eatAndDrinkPoint1;

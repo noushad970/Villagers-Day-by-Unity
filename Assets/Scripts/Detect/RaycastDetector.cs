@@ -91,6 +91,7 @@ public class RaycastDetector : MonoBehaviour
         {
             bool canPlace = false;
             // Skip if hit object is the object this script is attached to
+            //Debug.Log("Hit object: " + hit.collider.gameObject.name + " | Tag: " + hit.collider.gameObject.tag);
             if (hit.collider.gameObject == gameObject || hit.collider.gameObject.CompareTag("Tools"))
                 return;
             if (hit.collider.CompareTag("CropArea"))
@@ -163,6 +164,7 @@ public class RaycastDetector : MonoBehaviour
             {
                 PickUp(target,0.1f);
             }
+            ShopkeeperInventory.instance.OpenShopUI(getObjectName());
         }
     }
 
@@ -322,6 +324,7 @@ public class RaycastDetector : MonoBehaviour
                         Debug.Log("Crop already planted here");
                         return;
                     }
+
                     for (int i=0;i<cropPrefab.Length;i++)
                     {
                         if(cropPrefab[i].name==cropName)
@@ -359,6 +362,16 @@ public class RaycastDetector : MonoBehaviour
             }
         }
     }
-               
+    //farmerShopKeeper,fisherShopKeeper,blacksmithShopKeeper,foodShopKeeper,meatShopKeeper,seedShopKeeper,animalShopKeeper
+    public string getObjectName()
+    {
+       
+        if (hit.collider.name.ToString()=="fisherShopKeeper" || hit.collider.name.ToString() == "foodShopKeeper" || hit.collider.name.ToString() == "farmerShopKeeper"|| hit.collider.name.ToString() =="blacksmithShopKeeper"|| hit.collider.name.ToString()== "meatShopKeeper"||hit.collider.name.ToString()== "seedShopKeeper" || hit.collider.name.ToString() == "animalShopKeeper")
+        {
+            Debug.Log("Collider Name: " + hit.collider.name);
+            return hit.collider.name.ToString();
+        }else
+            return "";
+    }
 
 }

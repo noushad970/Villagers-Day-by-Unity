@@ -83,11 +83,11 @@ public class FishingManager : MonoBehaviour
     }
     private void activateFishingUI()
     {
-        Debug.Log("Fishing UI Activated");
-        Debug.Log("isFishingRodeActive:" + ActivateCraftingTool.isFishingRodeActive);
-        Debug.Log("canFishing:" + canFishing);
-        Debug.Log("fishingStage1:" + ActivateCraftingTool.fishingStage1);
-        Debug.Log("fishingStage2:" + ActivateCraftingTool.fishingStage2);
+        //Debug.Log("Fishing UI Activated");
+        //Debug.Log("isFishingRodeActive:" + ActivateCraftingTool.isFishingRodeActive);
+        //Debug.Log("canFishing:" + canFishing);
+        //Debug.Log("fishingStage1:" + ActivateCraftingTool.fishingStage1);
+        //Debug.Log("fishingStage2:" + ActivateCraftingTool.fishingStage2);
 
         if (ActivateCraftingTool.isFishingRodeActive)
         {

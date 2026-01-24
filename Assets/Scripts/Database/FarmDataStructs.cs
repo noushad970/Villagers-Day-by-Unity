@@ -57,4 +57,17 @@ public class PlayerStateData
     //trees count
 
     //fruits count
+
+    //fishname
+    public int Rohu;
+    public int Hilsa;
+    public int Tilapia;
+    public int Catfish;
+    public int Salmon;
+    public int Tuna;
+    public int Mackerel;
+    public int Sardine;
+    public int Cod;
+    public int Carp;
+
 }
