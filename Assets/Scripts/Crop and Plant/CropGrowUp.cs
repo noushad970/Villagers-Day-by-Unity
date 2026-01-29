@@ -11,10 +11,12 @@ public class CropGrowUp : MonoBehaviour
     [SerializeField] private float minSizeX=.1f, minSizeY=0.1f, minSizeZ = 0.1f;
     [SerializeField] private float maxSizeX=1.5f, maxSizeY = 1.5f, maxSizeZ = 1.5f;
     [SerializeField] private float totTime = 60f;
-
+    private checkIsGrownCrop isGrownCrop;
     private void Awake()
     {
-        for(int i=0; i< growthStages.Length; i++)
+        isGrownCrop = GetComponent<checkIsGrownCrop>();
+        isGrownCrop.enabled = false;
+        for (int i=0; i< growthStages.Length; i++)
         {
             growthStages[i].SetActive(false);
         }   
@@ -76,16 +78,17 @@ public class CropGrowUp : MonoBehaviour
             yield return new WaitForSeconds(stageDuration);
             growthStages[2].SetActive(false);
             growthStages[3].SetActive(true);
-
-            if(wastedStage!= null)
+            isGrownCrop.enabled = true;
+            if (wastedStage!= null)
             {
                 yield return new WaitForSeconds(cropWastedTime);
                 wastedStage.SetActive(true);
                 growthStages[3].SetActive(false);
             }
         }
-        else {             
-            if(wastedStage!= null)
+        else { 
+            isGrownCrop.enabled = true;
+            if (wastedStage!= null)
             {
                 yield return new WaitForSeconds(cropWastedTime);
                 wastedStage.SetActive(true);

@@ -1,4 +1,4 @@
-using UnityEngine;
+﻿using UnityEngine;
 using System;
 
 [Serializable]
@@ -91,4 +91,41 @@ public class LandDataComponent : MonoBehaviour
         landData.isFertilized = isFertilized;
         return landData;
     }
+    public void RemoveCrop(GameObject cropAreaObject)
+    {
+        if (cropAreaObject == null)
+        {
+            Debug.LogWarning("CropArea object is null");
+            return;
+        }
+
+        for (int i = 0; i < cropAreasTransforms.Length; i++)
+        {
+            if (cropAreasTransforms[i].gameObject == cropAreaObject.transform.parent.gameObject)
+            {
+                if (!landData.cropAreas[i].isPlanted)
+                {
+                    Debug.Log("No crop planted on this CropArea");
+                    return;
+                }
+
+                // Clear saved data
+                landData.cropAreas[i].cropName = "";
+                landData.cropAreas[i].isPlanted = false;
+                plantedCropNames[i] = "";
+
+                // Remove visual crop GameObject
+                if (cropAreasTransforms[i].childCount > 0)
+                {
+                    Destroy(cropAreasTransforms[i].GetChild(0).gameObject);
+                }
+
+                Debug.Log($"Crop removed from {gameObject.name} → {cropAreaObject.name}");
+                return;
+            }
+        }
+
+        Debug.LogWarning("CropArea GameObject not found in this LandDataComponent");
+    }
+
 }

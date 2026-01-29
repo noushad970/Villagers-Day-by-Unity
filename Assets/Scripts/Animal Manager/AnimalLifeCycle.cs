@@ -4,11 +4,10 @@ using UnityEngine;
 public class AnimalLifeCycle : MonoBehaviour
 {
     [Header("Food & Water Points")]
-    [SerializeField] private FoodAndWaterPoint eatAndDrinkPoint1;
-    [SerializeField] private FoodAndWaterPoint eatAndDrinkPoint2;
+    [SerializeField] private FoodAndWaterPoint[] eatAndDrinkPoints;   // ← changed to array
 
     private Animator anim;
-
+    [SerializeField] private string animalName;
     public enum animalState
     {
         idleState,
@@ -30,19 +29,36 @@ public class AnimalLifeCycle : MonoBehaviour
     // ------------------ RANDOM WALK ------------------
     [Header("Random Walk Points")]
     public GameObject[] randomWalkPoints;
+
     private Transform currentTarget;
 
     private void Start()
     {
         anim = GetComponent<Animator>();
         currentState = animalState.idleState;
-
         PickRandomPoint();
 
         // ✅ Start lifecycle ONLY ONCE
         StartCoroutine(LifeCycle());
     }
+    private void initializeAnimal()
+    {
+        if(animalName=="Chicken")
+        {
 
+        }
+        else if(animalName=="Cow")
+        {
+        }
+        else if(animalName=="Sheep")
+        {
+        }else if(animalName=="Pig")
+        {
+        }
+        else if(animalName=="Goat")
+        {
+        }
+    }
     private void Update()
     {
         switch (currentState)
@@ -94,7 +110,6 @@ public class AnimalLifeCycle : MonoBehaviour
                     yield return null;
                     break;
             }
-
             yield return null;
         }
     }
@@ -102,18 +117,17 @@ public class AnimalLifeCycle : MonoBehaviour
     // ================== FOOD LOGIC ==================
     void CheckFood()
     {
-        if (eatAndDrinkPoint1 != null && eatAndDrinkPoint1.checkFood())
+        // Look for the first available food point
+        foreach (var point in eatAndDrinkPoints)
         {
-            MoveToFood(eatAndDrinkPoint1);
+            if (point != null && point.checkFood())
+            {
+                MoveToFood(point);
+                return;   // found and moving → exit loop
+            }
         }
-        else if (eatAndDrinkPoint2 != null && eatAndDrinkPoint2.checkFood())
-        {
-            MoveToFood(eatAndDrinkPoint2);
-        }
-        else
-        {
-            Debug.Log("No food available");
-        }
+
+        Debug.Log("No food available");
     }
 
     void MoveToFood(FoodAndWaterPoint point)
@@ -159,7 +173,6 @@ public class AnimalLifeCycle : MonoBehaviour
 
         Vector3 dir = (currentTarget.position - transform.position).normalized;
         dir.y = 0f;
-
         transform.position += dir * moveSpeed * Time.deltaTime;
         RotateTowards(dir);
     }

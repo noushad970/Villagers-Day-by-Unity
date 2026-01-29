@@ -14,6 +14,23 @@ TagManager:
   - PlowHitPoint
   - Water
   - GateCow1
+  - EatAndDrinkPointCow
+  - EatAndDrinkPointGoat
+  - EatAndDrinkPointChicken
+  - EatAndDrinkPointSheep
+  - EatAndDrinkPointDuck
+  - SpawnPointCow
+  - SpawnPointSheep
+  - SpawnPointChicken
+  - SpawnPointGoat
+  - SpawnPointDuck
+  - WayPointCow
+  - WayPointSheep
+  - WayPointChicken
+  - WayPointDuck
+  - WayPointGoat
+  - CollectableCrop
+  - CollectableFruit
   layers:
   - Default
   - TransparentFX

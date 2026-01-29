@@ -10,9 +10,11 @@ GameObject:
   m_Component:
   - component: {fileID: 62239719268048140}
   - component: {fileID: 6485749792604217865}
+  - component: {fileID: -4253126078703099884}
+  - component: {fileID: -5893828316253832809}
   m_Layer: 0
   m_Name: Tomato
-  m_TagString: Untagged
+  m_TagString: CollectableCrop
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -62,6 +64,40 @@ MonoBehaviour:
   maxSizeY: 1.5
   maxSizeZ: 1.5
   totTime: 60
+--- !u!65 &-4253126078703099884
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856841741753039903}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.5, y: 1, z: 0.5}
+  m_Center: {x: 0, y: 0.3, z: 0}
+--- !u!114 &-5893828316253832809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1856841741753039903}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4302c21c55268c49bde24f513fe0fbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::checkIsGrownCrop
+  isGrownCrop: 0
 --- !u!1 &2494823309486752871
 GameObject:
   m_ObjectHideFlags: 0

@@ -99,9 +99,11 @@ GameObject:
   m_Component:
   - component: {fileID: 8707581400517002314}
   - component: {fileID: 8283140085165711331}
+  - component: {fileID: -1610697940264371405}
+  - component: {fileID: -3855321857015479462}
   m_Layer: 0
   m_Name: Beetroot
-  m_TagString: Untagged
+  m_TagString: CollectableCrop
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -151,6 +153,40 @@ MonoBehaviour:
   maxSizeY: 1.5
   maxSizeZ: 1.5
   totTime: 60
+--- !u!65 &-1610697940264371405
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4029713168117528640}
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_IsTrigger: 1
+  m_ProvidesContacts: 0
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Size: {x: 0.7, y: 0.7, z: 0.7}
+  m_Center: {x: 0, y: 0.2, z: 0}
+--- !u!114 &-3855321857015479462
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4029713168117528640}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e4302c21c55268c49bde24f513fe0fbe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::checkIsGrownCrop
+  isGrownCrop: 0
 --- !u!1 &4995611691323513257
 GameObject:
   m_ObjectHideFlags: 0

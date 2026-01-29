@@ -165,6 +165,30 @@ public class RaycastDetector : MonoBehaviour
                 PickUp(target,0.1f);
             }
             ShopkeeperInventory.instance.OpenShopUI(getObjectName());
+            //collect crop
+            if(target.CompareTag("CollectableCrop") && target.GetComponent<checkIsGrownCrop>().enabled==true)
+            {
+                Debug.Log("Collecting crop:" + target.name.ToString());
+                //remove from save data
+                GameObject pr = hit.collider.gameObject.transform.parent.gameObject;
+                GameObject gPr = pr.transform.parent.gameObject;
+                GameObject ggPr = gPr.transform.parent.gameObject;
+                int index = hit.collider.gameObject.transform.GetSiblingIndex();
+                Debug.Log("Collecting crop index:" + index.ToString());
+                Debug.Log("Collecting crop parent:" + gPr.name.ToString());
+
+                Debug.Log("Collecting crop grand parent:" + pr.name.ToString());
+                ggPr.GetComponent<LandDataComponent>().RemoveCrop(target); 
+                FarmController farmController = FindObjectOfType<FarmController>();
+              //  Destroy(target);
+                if (farmController != null)
+                {
+                    farmController.SaveFarm();
+                    Debug.Log("Farm saved after sub-land activation.");
+
+                }
+                addCropToInventory(target.name.ToString());
+            }
         }
     }
 
@@ -373,5 +397,13 @@ public class RaycastDetector : MonoBehaviour
         }else
             return "";
     }
-
+    public string RemoveCloneFromName(string fullName)
+    {
+        return fullName.Replace("(Clone)", "").Trim();
+    }
+    public void addCropToInventory(string cropName)
+    {
+        string getCropName= RemoveCloneFromName(cropName);
+        PlayerSaveManager.Instance.AddPlantedOrCollectedItem(getCropName, 1);
+    }
 }

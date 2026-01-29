@@ -75,6 +75,7 @@ public class PlayerSaveManager : MonoBehaviour
         {
             int current = (int)field.GetValue(playerData);
             field.SetValue(playerData, current + amount);
+            Debug.Log($"Added {amount} to {PlantedOrCollectedItemName}. New total: {(int)field.GetValue(playerData)}");
             SavePlayer();
         }
         else

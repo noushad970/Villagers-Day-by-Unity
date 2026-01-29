@@ -14,29 +14,45 @@ public class ShopkeeperInventory : MonoBehaviour
     }
     public void OpenShopUI(string shopKeeperName)
     {
-        CloseAllShopUIs();
-        shopPanel.SetActive(true);
-        closeButton.gameObject.SetActive(true);
+        
         switch (shopKeeperName)
         {
             case "farmerShopKeeper":
                 farmerShopUI.SetActive(true);
+                CloseAllShopUIs();
+                shopPanel.SetActive(true);
+                closeButton.gameObject.SetActive(true);
                 break;
             case "fisherShopKeeper":
                 fisherShopUI.SetActive(true);
+                CloseAllShopUIs();
+                shopPanel.SetActive(true);
+                closeButton.gameObject.SetActive(true);
                 break;
                 
             case "foodShopKeeper":
                 foodShopUI.SetActive(true);
+                CloseAllShopUIs();
+                shopPanel.SetActive(true);
+                closeButton.gameObject.SetActive(true);
                 break;
             case "meatShopKeeper":
                 meatShopUI.SetActive(true);
+                CloseAllShopUIs();
+                shopPanel.SetActive(true);
+                closeButton.gameObject.SetActive(true);
                 break;
             case "seedShopKeeper":
                 seedShopUI.SetActive(true);
+                CloseAllShopUIs();
+                shopPanel.SetActive(true);
+                closeButton.gameObject.SetActive(true);
                 break;
             case "animalShopKeeper":
                 animalShopUI.SetActive(true);
+                CloseAllShopUIs();
+                shopPanel.SetActive(true);
+                closeButton.gameObject.SetActive(true);
                 break;
             default:
                 Debug.LogWarning("Unknown shopkeeper: " + shopKeeperName);
