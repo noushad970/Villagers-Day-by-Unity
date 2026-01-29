@@ -23,6 +23,8 @@ public class CropGrowUp : MonoBehaviour
         StartCoroutine(cropGrowing());
         StartScaling();
         cropName=this.gameObject.name;
+        StartCoroutine(readyForCollect());
+
 
 
     }
@@ -78,7 +80,6 @@ public class CropGrowUp : MonoBehaviour
             yield return new WaitForSeconds(stageDuration);
             growthStages[2].SetActive(false);
             growthStages[3].SetActive(true);
-            isGrownCrop.enabled = true;
             if (wastedStage!= null)
             {
                 yield return new WaitForSeconds(cropWastedTime);
@@ -87,7 +88,6 @@ public class CropGrowUp : MonoBehaviour
             }
         }
         else { 
-            isGrownCrop.enabled = true;
             if (wastedStage!= null)
             {
                 yield return new WaitForSeconds(cropWastedTime);
@@ -100,6 +100,11 @@ public class CropGrowUp : MonoBehaviour
     public void finalState()
     {
 
+    }
+    IEnumerator readyForCollect()
+    {
+        yield return new WaitForSeconds(cropGrowthTime);
+        isGrownCrop.enabled = true;
     }
     public bool isCropGrown()
     {

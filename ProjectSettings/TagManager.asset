@@ -31,6 +31,16 @@ TagManager:
   - WayPointGoat
   - CollectableCrop
   - CollectableFruit
+  - EatAndDrinkPointGoat2
+  - SpawnPointGoat2
+  - Goat
+  - WayPointGoat2
+  - Chicken
+  - Goat2
+  - Duck
+  - Sheep
+  - Cow
+  - CollectableAnimalItem
   layers:
   - Default
   - TransparentFX

@@ -13,4 +13,9 @@ public class FoodAndWaterPoint : MonoBehaviour
         Debug.Log("Food is not available.");
         return false;
     }
+
+    public void refillFood()
+    {
+        foodObject.SetActive(true);
+    }
 }

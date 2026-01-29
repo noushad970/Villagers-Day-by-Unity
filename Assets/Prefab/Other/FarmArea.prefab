@@ -4411,6 +4411,8 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3084024626696190680, guid: 83c0f25e535807c4395f06b2651c2991, type: 3}
+    - {fileID: -7092968888389302360, guid: 83c0f25e535807c4395f06b2651c2991, type: 3}
+    - {fileID: 3646767522327209078, guid: 83c0f25e535807c4395f06b2651c2991, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -4440,8 +4442,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06c903f5d18cbc44f90ff529fdd05404, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimalLifeCycle
-  eatAndDrinkPoint1: {fileID: 2943815530573438485}
-  eatAndDrinkPoint2: {fileID: 680981840903198295}
+  eatAndDrinkPoints: []
+  animalName: 
   currentState: 0
   moveSpeed: 1
   stopRadius: 2
@@ -4607,6 +4609,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 3507746843320673368, guid: ba7822ac197971a4ea18dcb53dfcb9fa, type: 3}
+    - {fileID: 3205074465102253333, guid: ba7822ac197971a4ea18dcb53dfcb9fa, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents:
@@ -4631,8 +4634,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06c903f5d18cbc44f90ff529fdd05404, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AnimalLifeCycle
-  eatAndDrinkPoint1: {fileID: 2943815530573438485}
-  eatAndDrinkPoint2: {fileID: 680981840903198295}
+  eatAndDrinkPoints: []
+  animalName: 
   currentState: 0
   moveSpeed: 1
   stopRadius: 2

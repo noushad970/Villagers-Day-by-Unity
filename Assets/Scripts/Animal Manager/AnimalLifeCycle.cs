@@ -8,6 +8,7 @@ public class AnimalLifeCycle : MonoBehaviour
 
     private Animator anim;
     [SerializeField] private string animalName;
+    public Transform collectableItem;
     public enum animalState
     {
         idleState,
@@ -35,9 +36,18 @@ public class AnimalLifeCycle : MonoBehaviour
     private void Start()
     {
         anim = GetComponent<Animator>();
+        foreach (Transform child in transform)
+        {
+            if (child.CompareTag("CollectableAnimalItem"))
+            {
+                collectableItem = child;
+            }
+        }
+        collectableItem.gameObject.SetActive(false);
+        animalName = gameObject.name;
+        initializeAnimal();
         currentState = animalState.idleState;
         PickRandomPoint();
-
         // ✅ Start lifecycle ONLY ONCE
         StartCoroutine(LifeCycle());
     }
@@ -49,14 +59,36 @@ public class AnimalLifeCycle : MonoBehaviour
         }
         else if(animalName=="Cow")
         {
+            GameObject[] foodPoint = GameObject.FindGameObjectsWithTag("EatAndDrinkPointCow");
+            for(int i=0;i<foodPoint.Length;i++)
+            {
+                eatAndDrinkPoints[i]= foodPoint[i].GetComponent<FoodAndWaterPoint>();
+            }
+            GameObject[] wayPoints = GameObject.FindGameObjectsWithTag("WayPointCow");
+            for(int i=0;i<wayPoints.Length;i++)
+            {
+                randomWalkPoints[i]= wayPoints[i];
+            }
         }
         else if(animalName=="Sheep")
         {
         }else if(animalName=="Pig")
         {
         }
-        else if(animalName=="Goat")
+        else if(gameObject.CompareTag("Goat2"))
         {
+            GameObject[] foodPoint = GameObject.FindGameObjectsWithTag("EatAndDrinkPointGoat2");
+            Debug.Log("Found " + foodPoint.Length + " Food Points for Goat2");
+            for (int i = 0; i < foodPoint.Length; i++)
+            {
+                Debug.Log("Found Food Point for Goat2: " + foodPoint[i].name);
+                eatAndDrinkPoints[i] = foodPoint[i].GetComponent<FoodAndWaterPoint>();
+            }
+            GameObject[] wayPoints = GameObject.FindGameObjectsWithTag("WayPointGoat2");
+            for (int i = 0; i < wayPoints.Length; i++)
+            {
+                randomWalkPoints[i] = wayPoints[i];
+            }
         }
     }
     private void Update()
@@ -77,6 +109,14 @@ public class AnimalLifeCycle : MonoBehaviour
             case animalState.giveEggState:
                 anim.Play("Idle");
                 break;
+        }
+        if (currentState == animalState.giveEggState) {
+
+            collectableItem.gameObject.SetActive(true);
+        }
+        else
+        {
+                       collectableItem.gameObject.SetActive(false);
         }
     }
 
@@ -126,7 +166,7 @@ public class AnimalLifeCycle : MonoBehaviour
                 return;   // found and moving → exit loop
             }
         }
-
+        anim.Play("Idle");
         Debug.Log("No food available");
     }
 
