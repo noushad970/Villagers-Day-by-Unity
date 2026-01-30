@@ -70,4 +70,14 @@ public class PlayerStateData
     public int Cod;
     public int Carp;
 
+    //animal items count
+    public int egg;
+    public int milk;
+    public int wool;
+    public int meat;
+
+}
+public class animalItemData
+{
+    
 }

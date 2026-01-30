@@ -51,7 +51,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: 4358dd9ad117c9b4e8356aad2b29c098, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
@@ -120,6 +120,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AnimalLifeCycle
   eatAndDrinkPoints: []
   animalName: 
+  collectableItem: {fileID: 0}
   currentState: 0
   moveSpeed: 1
   stopRadius: 2

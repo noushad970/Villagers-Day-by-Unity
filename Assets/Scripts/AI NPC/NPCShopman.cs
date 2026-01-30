@@ -18,6 +18,7 @@ public class NPCShopman : MonoBehaviour
 
     [SerializeField] private Button yesButton,NoButton;
 
+    [SerializeField] private AnimalDeliveryMovementVehicle vehicle;
     private GameObject itms;
     private string selectedItemName;
     private int selectedItemPrice;
@@ -108,6 +109,8 @@ public class NPCShopman : MonoBehaviour
             GameObject buyItem = animalItemBuy[i];
             buyItem.GetComponent<Button>()
                 .onClick.AddListener(() => onClickShopItemButton(buyItem));
+            //vehicle start with animal name
+
         }
         for (int i = 0; i < blacksmithItemSell.Length; i++)
         {
@@ -207,6 +210,7 @@ public class NPCShopman : MonoBehaviour
         {
             PlayerSaveManager.Instance.AddPlantedOrCollectedItem(selectedItemName, 1);
             PlayerSaveManager.Instance.AddCoins(-selectedItemPrice);
+            vehicle.deliverAnimal(selectedItemName,true);
         }
 
         confirmPanel.SetActive(false);

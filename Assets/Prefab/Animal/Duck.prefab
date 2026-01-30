@@ -1686,7 +1686,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: a9f1367e097d4224cb1f10c4036c21fc, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
@@ -1707,8 +1707,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 06c903f5d18cbc44f90ff529fdd05404, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HenAndDuck
-  eatAndDrinkPoints: []
+  eatAndDrinkPoints:
+  - {fileID: 0}
+  - {fileID: 0}
   animalName: 
+  collectableItem: {fileID: 0}
   currentState: 0
   moveSpeed: 1
   stopRadius: 2

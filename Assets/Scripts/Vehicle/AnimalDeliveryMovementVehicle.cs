@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class AnimalDeliveryMovementVehicle : MonoBehaviour
@@ -15,9 +16,11 @@ public class AnimalDeliveryMovementVehicle : MonoBehaviour
 
     private int currentPointIndex = 0;
     private bool isVisiting = false;
+    [SerializeField] public GameObject[] animals;
     private void Start()
     {
-        canMove = true;
+        // canMove = true;
+        deliverAnimal("Cow", true);
     }
     void Update()
     {
@@ -34,6 +37,7 @@ public class AnimalDeliveryMovementVehicle : MonoBehaviour
         {
             MoveToPoint();
         }
+        Debug.Log("Can move Vehicle: " + canMove);
     }
 
     void StartNewVisit()
@@ -41,7 +45,29 @@ public class AnimalDeliveryMovementVehicle : MonoBehaviour
         currentPointIndex = 0;
         isVisiting = true;
     }
+    public void deliverAnimal(string animalName,bool move)
+    {
+        canMove = move;
+        for(int i=0;i<animals.Length;i++)
+        {
+            if(animals[i].tag.ToString()==animalName)
+            {
+                animals[i].SetActive(true);
+            }
+            else
+            {
+                animals[i].SetActive(false);
+            }
+        }
+        StartCoroutine(canMoveWait());
 
+    }
+    IEnumerator canMoveWait()
+    {
+        yield return new WaitForSeconds(2f);
+        if (canMove)
+            canMove = false;
+    }
     void MoveToPoint()
     {
         Transform target = points[currentPointIndex].transform;

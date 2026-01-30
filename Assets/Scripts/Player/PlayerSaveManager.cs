@@ -147,6 +147,12 @@ public class PlayerSaveManager : MonoBehaviour
             case "Cod": return 100;   // ✅ example you asked for
             case "Carp": return 75;
 
+            // animal items
+            case "Egg": return 10;
+            case "Milk": return 25;
+            case "Wool": return 30;
+            case "Meat": return 200;
+
             default:
                 Debug.LogWarning("Item price not found: " + itemName);
                 return 0;
