@@ -405,6 +405,6 @@ public class RaycastDetector : MonoBehaviour
     {
         string getCropName= RemoveCloneFromName(cropName);
         Debug.Log("Adding crop to inventory: " + getCropName);
-        PlayerSaveManager.Instance.AddPlantedOrCollectedItem(getCropName, 1);
+        PlayerSaveManager.Instance.AddItem(getCropName, 1);
     }
 }

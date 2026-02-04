@@ -55,7 +55,16 @@ public class AnimalLifeCycle : MonoBehaviour
     {
         if(animalName=="Chicken")
         {
-
+            GameObject[] foodPoint = GameObject.FindGameObjectsWithTag("EatAndDrinkPointChicken");
+            for (int i = 0; i < foodPoint.Length; i++)
+            {
+                eatAndDrinkPoints[i] = foodPoint[i].GetComponent<FoodAndWaterPoint>();
+            }
+            GameObject[] wayPoints = GameObject.FindGameObjectsWithTag("WayPointChicken");
+            for (int i = 0; i < wayPoints.Length; i++)
+            {
+                randomWalkPoints[i] = wayPoints[i];
+            }
         }
         else if(animalName=="Cow")
         {
@@ -72,7 +81,18 @@ public class AnimalLifeCycle : MonoBehaviour
         }
         else if(animalName=="Sheep")
         {
-        }else if(animalName=="Pig")
+            GameObject[] foodPoint = GameObject.FindGameObjectsWithTag("EatAndDrinkPointSheep");
+            for (int i = 0; i < foodPoint.Length; i++)
+            {
+                eatAndDrinkPoints[i] = foodPoint[i].GetComponent<FoodAndWaterPoint>();
+            }
+            GameObject[] wayPoints = GameObject.FindGameObjectsWithTag("WayPointSheep");
+            for (int i = 0; i < wayPoints.Length; i++)
+            {
+                randomWalkPoints[i] = wayPoints[i];
+            }
+        }
+        else if(animalName=="Pig")
         {
         }
         else if(gameObject.CompareTag("Goat2"))
@@ -89,13 +109,29 @@ public class AnimalLifeCycle : MonoBehaviour
             {
                 randomWalkPoints[i] = wayPoints[i];
             }
-        }else if (animalName == "Duck")
+        }
+        else if (gameObject.CompareTag("Goat1"))
         {
-            GameObject[] foodPoint = GameObject.FindGameObjectsWithTag("EatAndDrinkPointDuck");
-            Debug.Log("Found " + foodPoint.Length + " Food Points for Goat2");
+            GameObject[] foodPoint = GameObject.FindGameObjectsWithTag("EatAndDrinkPointGoat1");
+            Debug.Log("Found " + foodPoint.Length + " Food Points for Goat1");
             for (int i = 0; i < foodPoint.Length; i++)
             {
-                Debug.Log("Found Food Point for Goat2: " + foodPoint[i].name);
+                Debug.Log("Found Food Point for Goat1: " + foodPoint[i].name);
+                eatAndDrinkPoints[i] = foodPoint[i].GetComponent<FoodAndWaterPoint>();
+            }
+            GameObject[] wayPoints = GameObject.FindGameObjectsWithTag("WayPointGoat1");
+            for (int i = 0; i < wayPoints.Length; i++)
+            {
+                randomWalkPoints[i] = wayPoints[i];
+            }
+        }
+        else if (animalName == "Duck")
+        {
+            GameObject[] foodPoint = GameObject.FindGameObjectsWithTag("EatAndDrinkPointDuck");
+            Debug.Log("Found " + foodPoint.Length + " Food Points for Duck");
+            for (int i = 0; i < foodPoint.Length; i++)
+            {
+                Debug.Log("Found Food Point for Duck: " + foodPoint[i].name);
                 eatAndDrinkPoints[i] = foodPoint[i].GetComponent<FoodAndWaterPoint>();
             }
             GameObject[] wayPoints = GameObject.FindGameObjectsWithTag("WayPointDuck");
@@ -110,6 +146,9 @@ public class AnimalLifeCycle : MonoBehaviour
         switch (currentState)
         {
             case animalState.idleState:
+                anim.Play("Walk");
+                RandomWalk();
+                break;
             case animalState.drinkAndEatState:
                 anim.Play("Walk");
                 RandomWalk();
@@ -122,6 +161,7 @@ public class AnimalLifeCycle : MonoBehaviour
             case animalState.feedState:
             case animalState.giveEggState:
                 anim.Play("Idle");
+                collectableItem.gameObject.SetActive(true);
                 break;
         }
         if (currentState == animalState.giveEggState) {

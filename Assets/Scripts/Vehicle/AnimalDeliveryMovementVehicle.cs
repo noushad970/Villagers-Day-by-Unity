@@ -17,15 +17,20 @@ public class AnimalDeliveryMovementVehicle : MonoBehaviour
     private int currentPointIndex = 0;
     private bool isVisiting = false;
     [SerializeField] public GameObject[] animals;
+    public static bool vehicleIsBusy = false;
+
     private void Start()
     {
-        // canMove = true;
-        deliverAnimal("Cow", true);
+       canMove = false;
+
     }
     void Update()
     {
         if (points == null || points.Length == 0) return;
-
+        if (canMove)
+        {
+            StartCoroutine(canMoveWait());
+        }
         // Start a new visit
         if (canMove && !isVisiting)
         {
@@ -35,7 +40,15 @@ public class AnimalDeliveryMovementVehicle : MonoBehaviour
         // Continue visit even if canMove becomes false
         if (isVisiting)
         {
-            MoveToPoint();
+            string animalName = "";
+            for (int i = 0; i < animals.Length; i++)
+            {
+                if (animals[i].activeSelf)
+                {
+                    animalName = animals[i].tag.ToString();
+                }
+            }
+            MoveToPoint(animalName);
         }
         Debug.Log("Can move Vehicle: " + canMove);
     }
@@ -44,9 +57,14 @@ public class AnimalDeliveryMovementVehicle : MonoBehaviour
     {
         currentPointIndex = 0;
         isVisiting = true;
+
+        //////
+        ///
+
     }
     public void deliverAnimal(string animalName,bool move)
     {
+        vehicleIsBusy = true;
         canMove = move;
         for(int i=0;i<animals.Length;i++)
         {
@@ -59,7 +77,6 @@ public class AnimalDeliveryMovementVehicle : MonoBehaviour
                 animals[i].SetActive(false);
             }
         }
-        StartCoroutine(canMoveWait());
 
     }
     IEnumerator canMoveWait()
@@ -68,10 +85,26 @@ public class AnimalDeliveryMovementVehicle : MonoBehaviour
         if (canMove)
             canMove = false;
     }
-    void MoveToPoint()
+    void MoveToPoint(string animalName)
     {
         Transform target = points[currentPointIndex].transform;
+        if (target.CompareTag("SpawnAnimalPoint"))
+        {
+            ///
+            if(animalName!="")
+            {
+                Debug.Log("Spawned Animal: " + animalName);
+                Debug.Log("Total Cow: " + PlayerSaveManager.Instance.GetItemCount(animalName));
+                for (int i = 0; i < animals.Length; i++)
+                {
+                    if (animals[i].tag.ToString() == animalName)
+                    {
+                        animals[i].SetActive(false);
+                    }
+                }
+            }
 
+        }
         // Move
         transform.position = Vector3.MoveTowards(
             transform.position,
@@ -100,6 +133,7 @@ public class AnimalDeliveryMovementVehicle : MonoBehaviour
             if (currentPointIndex >= points.Length)
             {
                 isVisiting = false; // stop only after finishing visit
+                vehicleIsBusy = false;
             }
         }
     }

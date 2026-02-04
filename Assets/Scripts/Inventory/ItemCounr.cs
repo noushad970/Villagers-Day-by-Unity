@@ -10,6 +10,6 @@ public class ItemCounr : MonoBehaviour
     }
     private void Update()
     {
-        count.text=PlayerSaveManager.Instance.GetPlantedOrCollectedItemCount(gameObject.name.ToString()).ToString();
+        count.text=PlayerSaveManager.Instance.GetItemCount(gameObject.name.ToString()).ToString();
     }
 }

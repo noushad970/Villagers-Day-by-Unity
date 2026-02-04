@@ -68,7 +68,7 @@ public class PlayerSaveManager : MonoBehaviour
         return playerData.coins;
     }
     // ---------------- SEEDS ----------------
-    public void AddPlantedOrCollectedItem(string PlantedOrCollectedItemName, int amount)
+    public void AddItem(string PlantedOrCollectedItemName, int amount)
     {
         var field = typeof(PlayerStateData).GetField(PlantedOrCollectedItemName);
         if (field != null)
@@ -84,7 +84,7 @@ public class PlayerSaveManager : MonoBehaviour
         }
     }
 
-    public bool UsePlantedOrCollectedItem(string PlantedOrCollectedItemName, int amount)
+    public bool UseItem(string PlantedOrCollectedItemName, int amount)
     {
         var field = typeof(PlayerStateData).GetField(PlantedOrCollectedItemName);
         if (field == null) return false;
@@ -97,7 +97,7 @@ public class PlayerSaveManager : MonoBehaviour
         return true;
     }
 
-    public int GetPlantedOrCollectedItemCount(string seedName)
+    public int GetItemCount(string seedName)
     {
         var field = typeof(PlayerStateData).GetField(seedName);
         if (field == null) return 0;
@@ -152,6 +152,14 @@ public class PlayerSaveManager : MonoBehaviour
             case "Milk": return 25;
             case "Wool": return 30;
             case "Meat": return 200;
+            
+            // animals
+            case "Cow": return 1000;
+            case "Chicken": return 100;
+            case "Sheep": return 500;
+            case "Goat1": return 600;
+            case "Goat2": return 600;
+            case "Duck": return 100;
 
             default:
                 Debug.LogWarning("Item price not found: " + itemName);

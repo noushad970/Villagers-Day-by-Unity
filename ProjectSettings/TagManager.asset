@@ -41,6 +41,11 @@ TagManager:
   - Sheep
   - Cow
   - CollectableAnimalItem
+  - SpawnAnimalPoint
+  - Goat1
+  - EatAndDrinkPointGoat1
+  - WayPointGoat1
+  - SpawnPointGoat1
   layers:
   - Default
   - TransparentFX

@@ -8,13 +8,13 @@ public class NPCShopman : MonoBehaviour
     [SerializeField] private string shopKeeperName;
     [SerializeField] private Button sellPanelButton,buyPanelButton;
     [SerializeField] private GameObject sellPanel,buyPanel;
-    [SerializeField] private GameObject[] fishesSell,fishesBuy;//Rohu Hilsa (Ilish) Tilapia Catfish Salmon Tuna Mackerel Sardine Cod Carp fishFood
-    [SerializeField] private GameObject[] foodItemSell,foodItemBuy;
-    [SerializeField] private GameObject[] meatItemSell,meatItemBuy;
-    [SerializeField] private GameObject[] seedItemSell,seedItemBuy;
-    [SerializeField] private GameObject[] animalItemSell,animalItemBuy;
-    [SerializeField] private GameObject[] blacksmithItemSell,blacksmithItemBuy;
-    [SerializeField] private GameObject[] farmerItemSell,farmerItemBuy;
+    [SerializeField] private Button[] fishesSell,fishesBuy;//Rohu Hilsa (Ilish) Tilapia Catfish Salmon Tuna Mackerel Sardine Cod Carp fishFood
+    [SerializeField] private Button[] foodItemSell,foodItemBuy;
+    [SerializeField] private Button[] meatItemSell,meatItemBuy;
+    [SerializeField] private Button[] seedItemSell,seedItemBuy;
+    [SerializeField] private Button[] animalItemSell,animalItemBuy;
+    [SerializeField] private Button[] blacksmithItemSell,blacksmithItemBuy;
+    [SerializeField] private Button[] farmerItemSell,farmerItemBuy;
 
     [SerializeField] private Button yesButton,NoButton;
 
@@ -28,12 +28,13 @@ public class NPCShopman : MonoBehaviour
         shopKeeperName = gameObject.name;
         sellPanelButton.onClick.AddListener(onClickSellButton);
         buyPanelButton.onClick.AddListener(onClickBuyButton);
-        sellPanel.SetActive(true);
-        buyPanel.SetActive(false);
+        onClickBuyButton();
         yesButton.onClick.AddListener(confirmPanelYes);
 
         NoButton.onClick.AddListener(confirmPanelNo);
         ButtonUpdateBuyAndSell();
+
+        //PlayerSaveManager.Instance.AddItem("Cow", -5);
 
     }
 
@@ -42,110 +43,97 @@ public class NPCShopman : MonoBehaviour
         for (int i = 0; i < fishesSell.Length; i++)
         {
             if (!fishesSell[i]) return;
-            GameObject sellItem = fishesSell[i];
-            sellItem.GetComponent<Button>()
-                .onClick.AddListener(() => onClickShopItemButton(sellItem));
+            Button sellItem = fishesSell[i];
+            sellItem.onClick.AddListener(() => onClickShopItemButton(sellItem));
         }
 
         for (int i = 0; i < fishesBuy.Length; i++)
         {
             if(!fishesBuy[i]) return;
-            GameObject buyItem = fishesBuy[i];
-            buyItem.GetComponent<Button>()
-                .onClick.AddListener(() => onClickShopItemButton(buyItem));
+            Button buyItem = fishesBuy[i];
+            buyItem.onClick.AddListener(() => onClickShopItemButton(buyItem));
         }
         for (int i = 0; i < foodItemSell.Length; i++)
         {
             if(!foodItemSell[i]) return;
-            GameObject sellItem = foodItemSell[i];
-            sellItem.GetComponent<Button>()
-                .onClick.AddListener(() => onClickShopItemButton(sellItem));
+            Button sellItem = foodItemSell[i];
+            sellItem.onClick.AddListener(() => onClickShopItemButton(sellItem));
         }
         for (int i = 0; i < foodItemBuy.Length; i++)
         {
             if(!foodItemBuy[i]) return;
-            GameObject buyItem = foodItemBuy[i];
-            buyItem.GetComponent<Button>()
-                .onClick.AddListener(() => onClickShopItemButton(buyItem));
+            Button buyItem = foodItemBuy[i];
+            buyItem.onClick.AddListener(() => onClickShopItemButton(buyItem));
         }
         for (int i = 0; i < meatItemSell.Length; i++)
         {
             if(!meatItemSell[i]) return;
-            GameObject sellItem = meatItemSell[i];
-            sellItem.GetComponent<Button>()
-                .onClick.AddListener(() => onClickShopItemButton(sellItem));
+            Button sellItem = meatItemSell[i];
+            sellItem.onClick.AddListener(() => onClickShopItemButton(sellItem));
         }
         for (int i = 0; i < meatItemBuy.Length; i++)
         {
             if(!meatItemBuy[i]) return;
-            GameObject buyItem = meatItemBuy[i];
-            buyItem.GetComponent<Button>()
-                .onClick.AddListener(() => onClickShopItemButton(buyItem));
+            Button buyItem = meatItemBuy[i];
+            buyItem.onClick.AddListener(() => onClickShopItemButton(buyItem));
         }
         for (int i = 0; i < seedItemSell.Length; i++)
         {
             if(!seedItemSell[i]) return;
-            GameObject sellItem = seedItemSell[i];
-            sellItem.GetComponent<Button>()
-                .onClick.AddListener(() => onClickShopItemButton(sellItem));
+            Button sellItem = seedItemSell[i];
+            sellItem.onClick.AddListener(() => onClickShopItemButton(sellItem));
         }
         for (int i = 0; i < seedItemBuy.Length; i++)
         {
             if(!seedItemBuy[i]) return;
-            GameObject buyItem = seedItemBuy[i];
-            buyItem.GetComponent<Button>()
-                .onClick.AddListener(() => onClickShopItemButton(buyItem));
+            Button buyItem = seedItemBuy[i];
+            buyItem.onClick.AddListener(() => onClickShopItemButton(buyItem));
         }
         for (int i = 0; i < animalItemSell.Length; i++)
         {
             if(!animalItemSell[i]) return;
-            GameObject sellItem = animalItemSell[i];
-            sellItem.GetComponent<Button>()
-                .onClick.AddListener(() => onClickShopItemButton(sellItem));
+            Button sellItem = animalItemSell[i];
+            sellItem.onClick.AddListener(() => onClickShopItemButton(sellItem));
         }
         for (int i = 0; i < animalItemBuy.Length; i++)
         {
-            if(!animalItemBuy[i]) return;
-            GameObject buyItem = animalItemBuy[i];
-            buyItem.GetComponent<Button>()
-                .onClick.AddListener(() => onClickShopItemButton(buyItem));
-            //vehicle start with animal name
+            
+            if (!animalItemBuy[i]) return;
+            Button buyItem = animalItemBuy[i];
+            buyItem.onClick.AddListener(() => onClickShopItemButton(buyItem));
+            
 
         }
         for (int i = 0; i < blacksmithItemSell.Length; i++)
         {
             if(!blacksmithItemSell[i]) return;
-            GameObject sellItem = blacksmithItemSell[i];
-            sellItem.GetComponent<Button>()
-                .onClick.AddListener(() => onClickShopItemButton(sellItem));
+            Button sellItem = blacksmithItemSell[i];
+            sellItem.onClick.AddListener(() => onClickShopItemButton(sellItem));
         }
         for (int i = 0; i < blacksmithItemBuy.Length; i++)
         {
             if(!blacksmithItemBuy[i]) return;
-            GameObject buyItem = blacksmithItemBuy[i];
-            buyItem.GetComponent<Button>()
-                .onClick.AddListener(() => onClickShopItemButton(buyItem));
+            Button buyItem = blacksmithItemBuy[i];
+            buyItem.onClick.AddListener(() => onClickShopItemButton(buyItem));
         }
         for (int i = 0; i < farmerItemSell.Length; i++)
         {
             if(!farmerItemSell[i]) return;
-            GameObject sellItem = farmerItemSell[i];
-            sellItem.GetComponent<Button>()
-                .onClick.AddListener(() => onClickShopItemButton(sellItem));
+            Button sellItem = farmerItemSell[i];
+            sellItem.onClick.AddListener(() => onClickShopItemButton(sellItem));
         }
         for (int i = 0; i < farmerItemBuy.Length; i++)
         {
             if(!farmerItemBuy[i]) return;
-            GameObject buyItem = farmerItemBuy[i];
-            buyItem.GetComponent<Button>()
-                .onClick.AddListener(() => onClickShopItemButton(buyItem));
+            Button buyItem = farmerItemBuy[i];
+            buyItem.onClick.AddListener(() => onClickShopItemButton(buyItem));
         }
 
     }
     IEnumerator wait()
     {
         yield return new WaitForSeconds(02f);
-        PlayerSaveManager.Instance.AddPlantedOrCollectedItem("Rohu", 5);
+        PlayerSaveManager.Instance.AddItem("Rohu", 5);
 
     }
     public string ShopKeeperName { get { return shopKeeperName; } }
@@ -160,15 +148,15 @@ public class NPCShopman : MonoBehaviour
         buyPanel.SetActive(true);
     }
     [SerializeField] private GameObject confirmPanel;
-    public void onClickShopItemButton(GameObject itm)
+    public void onClickShopItemButton(Button itm)
     {
-        itms = itm;
+        itms = itm.gameObject;
         selectedItemName = itm.name;
         selectedItemPrice = PlayerSaveManager.Instance.GetItemPrice(itm.name);
         if (sellPanel.activeSelf)
         {
             // Logic for selling the item to the shopkeeper
-            if(PlayerSaveManager.Instance.GetPlantedOrCollectedItemCount(itm.name.ToString())>0)
+            if(PlayerSaveManager.Instance.GetItemCount(itm.name.ToString())>0)
             {
 
                 // Further logic for confirming the sale
@@ -203,14 +191,43 @@ public class NPCShopman : MonoBehaviour
 
         if (sellPanel.activeSelf)
         {
-            PlayerSaveManager.Instance.UsePlantedOrCollectedItem(selectedItemName, 1);
+            PlayerSaveManager.Instance.UseItem(selectedItemName, 1);
             PlayerSaveManager.Instance.AddCoins(selectedItemPrice);
         }
         else
         {
-            PlayerSaveManager.Instance.AddPlantedOrCollectedItem(selectedItemName, 1);
-            PlayerSaveManager.Instance.AddCoins(-selectedItemPrice);
-            vehicle.deliverAnimal(selectedItemName,true);
+
+            if ((selectedItemName == "Cow" || selectedItemName == "Sheep" || selectedItemName == "Chicken" || selectedItemName == "Duck" || selectedItemName == "Goat1" || selectedItemName == "Goat2"))
+            {
+                if (AnimalDeliveryMovementVehicle.vehicleIsBusy)
+                {
+                    Debug.Log("Vehicle is busy delivering another animal. Please wait.");
+
+                }
+                else
+                {
+                    if (PlayerSaveManager.Instance.GetItemCount(selectedItemName) <= 4)
+                    {
+                        vehicle.deliverAnimal(selectedItemName, true);
+                        AnimalSpawner.instance.SpawnAnimal(selectedItemName);
+                        //set animal inactive after spawn
+                        PlayerSaveManager.Instance.AddItem(selectedItemName, 1);
+                    }
+                    else
+                    {
+                        Debug.Log("Not animal or you have too many of this animal. Cannot deliver.");
+                    }
+                }
+            }
+            else
+            {
+
+                PlayerSaveManager.Instance.AddItem(selectedItemName, 1);
+                PlayerSaveManager.Instance.AddCoins(-selectedItemPrice);
+
+            }
+
+           
         }
 
         confirmPanel.SetActive(false);

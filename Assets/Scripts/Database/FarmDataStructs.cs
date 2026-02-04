@@ -71,10 +71,18 @@ public class PlayerStateData
     public int Carp;
 
     //animal items count
-    public int egg;
-    public int milk;
-    public int wool;
-    public int meat;
+    public int Egg;
+    public int Milk;
+    public int Wool;
+    public int Meat;
+
+    //animal count
+    public int Cow;
+    public int Chicken;
+    public int Sheep;
+    public int Goat1,Goat2;
+    public int Duck;
+
 
 }
 public class animalItemData

@@ -52,6 +52,24 @@ public class FishingManager : MonoBehaviour
                     congratsUI.SetActive(true);
                     SorryUI.SetActive(false);
                     // Add logic for catching a fish
+                    string[] fishNames =
+                    {
+                        "Rohu",
+                        "Hilsa",
+                        "Tilapia",
+                        "Catfish",
+                        "Salmon",
+                        "Tuna",
+                        "Mackerel",
+                        "Sardine",
+                        "Cod",
+                        "Carp"
+
+                    };
+
+                    int randomIndex = Random.Range(0, fishNames.Length);
+                    PlayerSaveManager.Instance.AddItem(fishNames[randomIndex], 1);
+                    //caught fish UI
                     StopCoroutine(bitingFunction());
                 }
                 else
