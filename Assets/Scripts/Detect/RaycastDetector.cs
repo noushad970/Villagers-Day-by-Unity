@@ -189,9 +189,15 @@ public class RaycastDetector : MonoBehaviour
                 }
                 addCropToInventory(target.name.ToString());
             }
+            //collect animal item
+            if (target.GetComponent<AnimalLifeCycle>().isReadyToCollect())
+            {
+                Debug.Log("Collecting animal item:" + target.name.ToString());
+                target.GetComponent<AnimalLifeCycle>().CollectItem();
+            }
         }
     }
-
+  
     void PickUp(GameObject obj,float reduceMultiplier)
     {
         heldObject = obj;

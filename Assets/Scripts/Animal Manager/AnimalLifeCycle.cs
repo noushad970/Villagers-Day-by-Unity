@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using UnityEngine;
+using UnityEngine.InputSystem.XR.Haptics;
 
 public class AnimalLifeCycle : MonoBehaviour
 {
@@ -53,7 +54,7 @@ public class AnimalLifeCycle : MonoBehaviour
     }
     private void initializeAnimal()
     {
-        if(animalName=="Chicken")
+        if (animalName == "Chicken")
         {
             GameObject[] foodPoint = GameObject.FindGameObjectsWithTag("EatAndDrinkPointChicken");
             for (int i = 0; i < foodPoint.Length; i++)
@@ -66,20 +67,20 @@ public class AnimalLifeCycle : MonoBehaviour
                 randomWalkPoints[i] = wayPoints[i];
             }
         }
-        else if(animalName=="Cow")
+        else if (animalName == "Cow")
         {
             GameObject[] foodPoint = GameObject.FindGameObjectsWithTag("EatAndDrinkPointCow");
-            for(int i=0;i<foodPoint.Length;i++)
+            for (int i = 0; i < foodPoint.Length; i++)
             {
-                eatAndDrinkPoints[i]= foodPoint[i].GetComponent<FoodAndWaterPoint>();
+                eatAndDrinkPoints[i] = foodPoint[i].GetComponent<FoodAndWaterPoint>();
             }
             GameObject[] wayPoints = GameObject.FindGameObjectsWithTag("WayPointCow");
-            for(int i=0;i<wayPoints.Length;i++)
+            for (int i = 0; i < wayPoints.Length; i++)
             {
-                randomWalkPoints[i]= wayPoints[i];
+                randomWalkPoints[i] = wayPoints[i];
             }
         }
-        else if(animalName=="Sheep")
+        else if (animalName == "Sheep")
         {
             GameObject[] foodPoint = GameObject.FindGameObjectsWithTag("EatAndDrinkPointSheep");
             for (int i = 0; i < foodPoint.Length; i++)
@@ -92,10 +93,10 @@ public class AnimalLifeCycle : MonoBehaviour
                 randomWalkPoints[i] = wayPoints[i];
             }
         }
-        else if(animalName=="Pig")
+        else if (animalName == "Pig")
         {
         }
-        else if(gameObject.CompareTag("Goat2"))
+        else if (gameObject.CompareTag("Goat2"))
         {
             GameObject[] foodPoint = GameObject.FindGameObjectsWithTag("EatAndDrinkPointGoat2");
             Debug.Log("Found " + foodPoint.Length + " Food Points for Goat2");
@@ -140,6 +141,19 @@ public class AnimalLifeCycle : MonoBehaviour
                 randomWalkPoints[i] = wayPoints[i];
             }
         }
+        else if (animalName == "Sheep2")
+        {
+            GameObject[] foodPoint = GameObject.FindGameObjectsWithTag("EatAndDrinkPointSheep2");
+            for (int i = 0; i < foodPoint.Length; i++)
+            {
+                eatAndDrinkPoints[i] = foodPoint[i].GetComponent<FoodAndWaterPoint>();
+            }
+            GameObject[] wayPoints = GameObject.FindGameObjectsWithTag("WayPointSheep2");
+            for (int i = 0; i < wayPoints.Length; i++)
+            {
+                randomWalkPoints[i] = wayPoints[i];
+            }
+        }
     }
     private void Update()
     {
@@ -164,13 +178,14 @@ public class AnimalLifeCycle : MonoBehaviour
                 collectableItem.gameObject.SetActive(true);
                 break;
         }
-        if (currentState == animalState.giveEggState) {
+        if (currentState == animalState.giveEggState)
+        {
 
             collectableItem.gameObject.SetActive(true);
         }
         else
         {
-                       collectableItem.gameObject.SetActive(false);
+            collectableItem.gameObject.SetActive(false);
         }
     }
 
@@ -207,86 +222,106 @@ public class AnimalLifeCycle : MonoBehaviour
             yield return null;
         }
     }
-
-    // ================== FOOD LOGIC ==================
-    void CheckFood()
+    public void CollectItem()
     {
-        // Look for the first available food point
-        foreach (var point in eatAndDrinkPoints)
+        if (currentState == animalState.giveEggState)
         {
-            if (point != null && point.checkFood())
-            {
-                MoveToFood(point);
-                return;   // found and moving → exit loop
-            }
+            collectableItem.gameObject.SetActive(false);
+            Debug.Log("Collected item from " + animalName);
+            PlayerSaveManager.Instance.AddItem(collectableItem.gameObject.name.ToString(), 1);
+            currentState = animalState.idleState;
         }
-        anim.Play("Idle");
-        Debug.Log("No food available");
     }
-
-    void MoveToFood(FoodAndWaterPoint point)
+    public bool isReadyToCollect()
     {
-        float distance = Vector3.Distance(transform.position, point.transform.position);
-
-        if (distance > stopRadius)
+        if (currentState == animalState.giveEggState)
         {
-            Vector3 dir = (point.transform.position - transform.position).normalized;
-            dir.y = 0f;
-            transform.position += dir * moveSpeed * Time.deltaTime;
-            RotateTowards(dir);
-            anim.Play("Walk");
+            return true;
         }
         else
         {
-            Debug.Log("Reached food point");
-            point.foodObject.SetActive(false);
-            StartCoroutine(FeedingState());
+            return false;
         }
     }
-
-    IEnumerator FeedingState()
-    {
-        currentState = animalState.feedState;
-        anim.Play("Idle");
-        yield return new WaitForSeconds(Random.Range(5, 10));
-        currentState = animalState.drinkAndEatState;
-    }
-
-    // ================== RANDOM WALK ==================
-    void RandomWalk()
-    {
-        if (currentTarget == null || randomWalkPoints.Length == 0)
-            return;
-
-        float distance = Vector3.Distance(transform.position, currentTarget.position);
-
-        if (distance <= reachDistance)
+        // ================== FOOD LOGIC ==================
+        void CheckFood()
         {
-            PickRandomPoint();
+            // Look for the first available food point
+            foreach (var point in eatAndDrinkPoints)
+            {
+                if (point != null && point.checkFood())
+                {
+                    MoveToFood(point);
+                    return;   // found and moving → exit loop
+                }
+            }
+            anim.Play("Idle");
+            Debug.Log("No food available");
         }
 
-        Vector3 dir = (currentTarget.position - transform.position).normalized;
-        dir.y = 0f;
-        transform.position += dir * moveSpeed * Time.deltaTime;
-        RotateTowards(dir);
-    }
+        void MoveToFood(FoodAndWaterPoint point)
+        {
+            float distance = Vector3.Distance(transform.position, point.transform.position);
 
-    void PickRandomPoint()
-    {
-        int index = Random.Range(0, randomWalkPoints.Length);
-        currentTarget = randomWalkPoints[index].transform;
-    }
+            if (distance > stopRadius)
+            {
+                Vector3 dir = (point.transform.position - transform.position).normalized;
+                dir.y = 0f;
+                transform.position += dir * moveSpeed * Time.deltaTime;
+                RotateTowards(dir);
+                anim.Play("Walk");
+            }
+            else
+            {
+                Debug.Log("Reached food point");
+                point.foodObject.SetActive(false);
+                StartCoroutine(FeedingState());
+            }
+        }
 
-    // ================== ROTATION ==================
-    void RotateTowards(Vector3 direction)
-    {
-        if (direction.sqrMagnitude == 0) return;
+        IEnumerator FeedingState()
+        {
+            currentState = animalState.feedState;
+            anim.Play("Idle");
+            yield return new WaitForSeconds(Random.Range(5, 10));
+            currentState = animalState.drinkAndEatState;
+        }
 
-        Quaternion targetRot = Quaternion.LookRotation(direction);
-        transform.rotation = Quaternion.Slerp(
-            transform.rotation,
-            targetRot,
-            rotationSpeed * Time.deltaTime
-        );
+        // ================== RANDOM WALK ==================
+        void RandomWalk()
+        {
+            if (currentTarget == null || randomWalkPoints.Length == 0)
+                return;
+
+            float distance = Vector3.Distance(transform.position, currentTarget.position);
+
+            if (distance <= reachDistance)
+            {
+                PickRandomPoint();
+            }
+
+            Vector3 dir = (currentTarget.position - transform.position).normalized;
+            dir.y = 0f;
+            transform.position += dir * moveSpeed * Time.deltaTime;
+            RotateTowards(dir);
+        }
+
+        void PickRandomPoint()
+        {
+            int index = Random.Range(0, randomWalkPoints.Length);
+            currentTarget = randomWalkPoints[index].transform;
+        }
+
+        // ================== ROTATION ==================
+        void RotateTowards(Vector3 direction)
+        {
+            if (direction.sqrMagnitude == 0) return;
+
+            Quaternion targetRot = Quaternion.LookRotation(direction);
+            transform.rotation = Quaternion.Slerp(
+                transform.rotation,
+                targetRot,
+                rotationSpeed * Time.deltaTime
+            );
+        }
     }
-}

@@ -79,7 +79,7 @@ public class PlayerStateData
     //animal count
     public int Cow;
     public int Chicken;
-    public int Sheep;
+    public int Sheep,Sheep2;
     public int Goat1,Goat2;
     public int Duck;
 

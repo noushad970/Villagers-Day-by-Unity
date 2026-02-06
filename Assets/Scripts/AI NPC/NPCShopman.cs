@@ -30,7 +30,7 @@ public class NPCShopman : MonoBehaviour
         buyPanelButton.onClick.AddListener(onClickBuyButton);
         onClickBuyButton();
         yesButton.onClick.AddListener(confirmPanelYes);
-
+        onClickBuyButton();
         NoButton.onClick.AddListener(confirmPanelNo);
         ButtonUpdateBuyAndSell();
 
@@ -197,7 +197,7 @@ public class NPCShopman : MonoBehaviour
         else
         {
 
-            if ((selectedItemName == "Cow" || selectedItemName == "Sheep" || selectedItemName == "Chicken" || selectedItemName == "Duck" || selectedItemName == "Goat1" || selectedItemName == "Goat2"))
+            if ((selectedItemName == "Cow" || selectedItemName == "Sheep" || selectedItemName == "Sheep2" || selectedItemName == "Chicken" || selectedItemName == "Duck" || selectedItemName == "Goat1" || selectedItemName == "Goat2"))
             {
                 if (AnimalDeliveryMovementVehicle.vehicleIsBusy)
                 {
@@ -209,9 +209,6 @@ public class NPCShopman : MonoBehaviour
                     if (PlayerSaveManager.Instance.GetItemCount(selectedItemName) <= 4)
                     {
                         vehicle.deliverAnimal(selectedItemName, true);
-                        AnimalSpawner.instance.SpawnAnimal(selectedItemName);
-                        //set animal inactive after spawn
-                        PlayerSaveManager.Instance.AddItem(selectedItemName, 1);
                     }
                     else
                     {

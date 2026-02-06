@@ -6,6 +6,8 @@ public class InventoryManager : MonoBehaviour
 {
     [SerializeField] private GameObject[] inventorySlotsItems;
     [SerializeField] private TextMeshProUGUI[] CountSlotItemTexts;///11 for seed types
+
+    //Rohu, Hilsa, Tilapia, Catfish, Salmon, Tuna, Mackerel, Sardine, Cod, Carp, Egg, Milk, Wool, Meat
     private void Start()
     {
         for (int i = 0; i < inventorySlotsItems.Length; i++)
@@ -241,6 +243,133 @@ public class InventoryManager : MonoBehaviour
         {
             inventorySlotsItems[23].SetActive(false);
         }
+        if (PlayerSaveManager.Instance.GetItemCount("Rohu") > 0)
+        {
+            inventorySlotsItems[24].SetActive(true);
+            CountSlotItemTexts[24].text = PlayerSaveManager.Instance.GetItemCount("Rohu").ToString();
+        }
+        else
+        {
+            inventorySlotsItems[24].SetActive(false);
+        }
+        if(PlayerSaveManager.Instance.GetItemCount("Hilsa") > 0)
+        {
+            inventorySlotsItems[25].SetActive(true);
+            CountSlotItemTexts[25].text = PlayerSaveManager.Instance.GetItemCount("Hilsa").ToString();
+        }
+        else
+        {
+            inventorySlotsItems[25].SetActive(false);
+        }
+         if(PlayerSaveManager.Instance.GetItemCount("Tilapia") > 0)
+        {
+            inventorySlotsItems[26].SetActive(true);
+            CountSlotItemTexts[26].text = PlayerSaveManager.Instance.GetItemCount("Tilapia").ToString();
+        }
+        else
+        {
+            inventorySlotsItems[26].SetActive(false);
+        }
+         if(PlayerSaveManager.Instance.GetItemCount("Catfish") > 0)
+        {
+            inventorySlotsItems[27].SetActive(true);
+            CountSlotItemTexts[27].text = PlayerSaveManager.Instance.GetItemCount("Catfish").ToString();
+        }
+        else
+        {
+            inventorySlotsItems[27].SetActive(false);
+        }
+         if(PlayerSaveManager.Instance.GetItemCount("Salmon") > 0)
+        {
+            inventorySlotsItems[28].SetActive(true);
+            CountSlotItemTexts[28].text = PlayerSaveManager.Instance.GetItemCount("Salmon").ToString();
+        }
+        else
+        {
+            inventorySlotsItems[28].SetActive(false);
+        }
+         if(PlayerSaveManager.Instance.GetItemCount("Tuna") > 0)
+        {
+            inventorySlotsItems[29].SetActive(true);
+            CountSlotItemTexts[29].text = PlayerSaveManager.Instance.GetItemCount("Tuna").ToString();
+        }
+        else
+        {
+            inventorySlotsItems[29].SetActive(false);
+        }
+         if(PlayerSaveManager.Instance.GetItemCount("Mackerel") > 0)
+        {
+            inventorySlotsItems[30].SetActive(true);
+            CountSlotItemTexts[30].text = PlayerSaveManager.Instance.GetItemCount("Mackerel").ToString();
+        }
+        else
+        {
+            inventorySlotsItems[30].SetActive(false);
+        }
+        if (PlayerSaveManager.Instance.GetItemCount("Sardine") > 0)
+        {
+            inventorySlotsItems[31].SetActive(true);
+            CountSlotItemTexts[31].text = PlayerSaveManager.Instance.GetItemCount("Sardine").ToString();
+        }
+        else {
+            inventorySlotsItems[31].SetActive(false);
+        }
+        if (PlayerSaveManager.Instance.GetItemCount("Cod") > 0)
+        {
+            inventorySlotsItems[32].SetActive(true);
+            CountSlotItemTexts[32].text = PlayerSaveManager.Instance.GetItemCount("Cod").ToString();
+        }
+        else
+        {
+            inventorySlotsItems[32].SetActive(false);
+        }
+        if(PlayerSaveManager.Instance.GetItemCount("Carp") > 0)
+        {
+            inventorySlotsItems[33].SetActive(true);
+            CountSlotItemTexts[33].text = PlayerSaveManager.Instance.GetItemCount("Carp").ToString();
+        }
+        else
+        {
+            inventorySlotsItems[33].SetActive(false);
+        }
+        if(PlayerSaveManager.Instance.GetItemCount("Egg") > 0)
+        {
+            inventorySlotsItems[34].SetActive(true);
+            CountSlotItemTexts[34].text = PlayerSaveManager.Instance.GetItemCount("Egg").ToString();
+        }
+        else
+        {
+            inventorySlotsItems[34].SetActive(false);
+        }
+            if(PlayerSaveManager.Instance.GetItemCount("Milk") > 0)
+            {
+                inventorySlotsItems[35].SetActive(true);
+                CountSlotItemTexts[35].text = PlayerSaveManager.Instance.GetItemCount("Milk").ToString();
+            }
+            else
+            {
+                inventorySlotsItems[35].SetActive(false);
+            }
+            if(PlayerSaveManager.Instance.GetItemCount("Wool") > 0)
+            {
+                inventorySlotsItems[36].SetActive(true);
+                CountSlotItemTexts[36].text = PlayerSaveManager.Instance.GetItemCount("Wool").ToString();
+            }
+            else
+            {
+                inventorySlotsItems[36].SetActive(false);
+            }
+            if(PlayerSaveManager.Instance.GetItemCount("Meat") > 0)
+            {
+                inventorySlotsItems[37].SetActive(true);
+                CountSlotItemTexts[37].text = PlayerSaveManager.Instance.GetItemCount("Meat").ToString();
+            }
+            else
+            {
+                inventorySlotsItems[37].SetActive(false);
+        }
+
+
 
     }
     private void OnChangingItemButtonClicked(Button clickedButton)

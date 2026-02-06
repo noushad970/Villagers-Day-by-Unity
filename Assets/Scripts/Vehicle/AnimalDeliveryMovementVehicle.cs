@@ -95,6 +95,10 @@ public class AnimalDeliveryMovementVehicle : MonoBehaviour
             {
                 Debug.Log("Spawned Animal: " + animalName);
                 Debug.Log("Total Cow: " + PlayerSaveManager.Instance.GetItemCount(animalName));
+
+                AnimalSpawner.instance.SpawnAnimal(animalName);
+                //set animal inactive after spawn
+                PlayerSaveManager.Instance.AddItem(animalName, 1);
                 for (int i = 0; i < animals.Length; i++)
                 {
                     if (animals[i].tag.ToString() == animalName)

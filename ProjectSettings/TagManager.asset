@@ -46,6 +46,10 @@ TagManager:
   - EatAndDrinkPointGoat1
   - WayPointGoat1
   - SpawnPointGoat1
+  - Sheep2
+  - SpawnPointSheep2
+  - WayPointSheep2
+  - EatAndDrinkPointSheep2
   layers:
   - Default
   - TransparentFX

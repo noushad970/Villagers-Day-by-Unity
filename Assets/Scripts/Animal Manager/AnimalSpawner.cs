@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class AnimalSpawner : MonoBehaviour
 {
-    public Transform spawnPointCow, spawnPointSheep, spawnPointChicken,spawnPointDuck, spawnPointGoat1,spawnPointGoat2;
-    public GameObject cowPrefab, sheepPrefab, chickenPrefab,duckPrefab,goatPrefab1,goatPrefab2;
-    public Transform parentCow, parentSheep, parentChicken,parentDuck,parentGoat1,parentGoat2;
+    public Transform spawnPointCow, spawnPointSheep, spawnPointChicken,spawnPointDuck, spawnPointGoat1,spawnPointGoat2, spawnPointSheep2;
+    public GameObject cowPrefab, sheepPrefab, sheepPrefab2, chickenPrefab,duckPrefab,goatPrefab1,goatPrefab2;
+    public Transform parentCow, parentSheep, parentSheep2, parentChicken,parentDuck,parentGoat1,parentGoat2;
     public static AnimalSpawner instance;
     private void Start()
     {
@@ -23,6 +23,9 @@ public class AnimalSpawner : MonoBehaviour
                 break;
             case "Sheep":
                 Instantiate(sheepPrefab, spawnPointSheep.position, spawnPointSheep.rotation,parentSheep);
+                break;
+            case "Sheep2":
+                Instantiate(sheepPrefab2, spawnPointSheep2.position, spawnPointSheep2.rotation, parentSheep2);
                 break;
             case "Chicken":
                 Instantiate(chickenPrefab, spawnPointChicken.position, spawnPointChicken.rotation,parentChicken);
