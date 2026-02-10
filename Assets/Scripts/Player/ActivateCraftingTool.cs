@@ -5,10 +5,10 @@ using UnityEngine.UI;
 public class ActivateCraftingTool : MonoBehaviour
 {
     public static ActivateCraftingTool Instance;
-    [SerializeField] private GameObject PickAxe,Shovel,fishingRode,Hammer;
+    [SerializeField] private GameObject Axe,Shovel,fishingRode,Hammer;
     public static bool handIsEmpty = true;
-    [SerializeField] private Button takePickAxeButton, takeShovelButton, takeFishingRodeButton, takeHammerButton,emptyHandButton,interectButton;
-    public static bool isPickAxeActive, isShovelActive, isFishingRodeActive, isHammerActive,fishingStage1,fishingStage2,fishRodPull;
+    [SerializeField] private Button takeAxeButton, takeShovelButton, takeFishingRodeButton, takeHammerButton,emptyHandButton,interectButton;
+    public static bool isAxeActive, isShovelActive, isFishingRodeActive, isHammerActive,fishingStage1,fishingStage2,fishRodPull;
     private Animator anim;
     [SerializeField] private CinemachineCamera cam;
     [SerializeField] FixedJoystick joystick;
@@ -18,7 +18,7 @@ public class ActivateCraftingTool : MonoBehaviour
         Instance = this;
         anim = GetComponent<Animator>();
         takeFishingRodeButton.onClick.AddListener(ActivateFishingRode);
-        takePickAxeButton.onClick.AddListener(ActivatePickAxe);
+        takeAxeButton.onClick.AddListener(ActivatePickAxe);
         takeShovelButton.onClick.AddListener(ActivateShovel);
         takeHammerButton.onClick.AddListener(ActivateSword);
         interectButton.onClick.AddListener(onClickInterectButton);
@@ -33,11 +33,11 @@ public class ActivateCraftingTool : MonoBehaviour
     }
     public void setActiveAllToolsFalse()
     {
-        PickAxe.SetActive(false);
+        Axe.SetActive(false);
         Shovel.SetActive(false);
         fishingRode.SetActive(false);
         Hammer.SetActive(false);
-        isPickAxeActive = false;
+        isAxeActive = false;
         isShovelActive = false;
         isFishingRodeActive = false;
         isHammerActive = false;
@@ -47,8 +47,8 @@ public class ActivateCraftingTool : MonoBehaviour
     public void ActivatePickAxe()
     {
         setActiveAllToolsFalse();
-        PickAxe.SetActive(true);
-        isPickAxeActive = true;
+        Axe.SetActive(true);
+        isAxeActive = true;
         handIsEmpty = false;
 
     }
@@ -83,10 +83,10 @@ public class ActivateCraftingTool : MonoBehaviour
     }
     private void onClickInterectButton()
     {
-        if(isPickAxeActive)
+        if(isAxeActive)
         {
             //do something with pickaxe
-            anim.Play("Mining");
+            anim.Play("Chopping");
         }
         else if (isShovelActive)
         {
@@ -126,7 +126,7 @@ public class ActivateCraftingTool : MonoBehaviour
     }
     public bool isToolActive()
     {
-        if(isPickAxeActive || isShovelActive || isFishingRodeActive || isHammerActive)
+        if(isAxeActive || isShovelActive || isFishingRodeActive || isHammerActive)
         {
             return true;
         }
