@@ -50,6 +50,7 @@ TagManager:
   - SpawnPointSheep2
   - WayPointSheep2
   - EatAndDrinkPointSheep2
+  - TreeHitPoint
   layers:
   - Default
   - TransparentFX
