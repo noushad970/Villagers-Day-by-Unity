@@ -51,6 +51,7 @@ TagManager:
   - WayPointSheep2
   - EatAndDrinkPointSheep2
   - TreeHitPoint
+  - MotorButton
   layers:
   - Default
   - TransparentFX

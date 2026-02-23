@@ -189,12 +189,33 @@ public class RaycastDetector : MonoBehaviour
                 }
                 addCropToInventory(target.name.ToString());
             }
-            //collect animal item
-            if (target.GetComponent<AnimalLifeCycle>().isReadyToCollect())
+            //water button detection and on off
+            WateringSystem wat = target.GetComponent<WateringSystem>();
+            if (target.CompareTag("MotorButton") && wat != null)
             {
-                Debug.Log("Collecting animal item:" + target.name.ToString());
-                target.GetComponent<AnimalLifeCycle>().CollectItem();
+                Debug.Log("Get the button: "+wat.name);
+                if (wat.IsWateringOn())
+                {
+                    Debug.Log("Turning on watering system ");
+                    wat.TurnOffWatering();
+                }
+                else
+                {
+                    Debug.Log("Turning off watering system ");
+                    wat.TurnOnWatering();
+                }
             }
+            //collect animal item
+            if(target.GetComponent<AnimalLifeCycle>()!=null)
+            {
+                AnimalLifeCycle cycle = target.GetComponent<AnimalLifeCycle>();
+                if (cycle.isReadyToCollect() && cycle != null)
+                {
+                    Debug.Log("Collecting animal item:" + target.name.ToString());
+                    cycle.CollectItem();
+                }
+            }
+            
         }
     }
   
