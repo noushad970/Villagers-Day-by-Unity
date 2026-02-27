@@ -75,6 +75,12 @@ public class PlayerStateData
     public int Milk;
     public int Wool;
     public int Meat;
+    public int Wood;
+
+    //other items count those are in per kg
+    public int Flour;
+    public int Rice;
+    public int Suger;
 
     //animal count
     public int Cow;
@@ -83,6 +89,11 @@ public class PlayerStateData
     public int Goat1,Goat2;
     public int Duck;
 
+    //mission index
+    public int CurrentMission1Index=0;
+    public int CurrentMission2Index=0;
+    public int CurrentMission3Index = 0;
+    public int CurrentMission4Index = 0;
 
 }
 public class animalItemData

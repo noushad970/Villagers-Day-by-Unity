@@ -83,6 +83,21 @@ public class PlayerSaveManager : MonoBehaviour
             Debug.LogError("Seed not found: " + PlantedOrCollectedItemName);
         }
     }
+    public void UpdateItem(string PlantedOrCollectedItemName, int amount)
+    {
+        var field = typeof(PlayerStateData).GetField(PlantedOrCollectedItemName);
+        if (field != null)
+        {
+            int current = (int)field.GetValue(playerData);
+            field.SetValue(playerData, amount);
+            Debug.Log($"Updated {amount} to {PlantedOrCollectedItemName}. New Update Value: {(int)field.GetValue(playerData)}");
+            SavePlayer();
+        }
+        else
+        {
+            Debug.LogError("Seed not found: " + PlantedOrCollectedItemName);
+        }
+    }
 
     public bool UseItem(string PlantedOrCollectedItemName, int amount)
     {
@@ -152,7 +167,15 @@ public class PlayerSaveManager : MonoBehaviour
             case "Milk": return 25;
             case "Wool": return 30;
             case "Meat": return 200;
-            
+            case "Wood": return 15;
+
+            //food items
+            case "Rice": return 40;
+            case "Flour": return 30;
+            case "Suger": return 40;
+
+
+
             // animals
             case "Cow": return 1000;
             case "Chicken": return 100;

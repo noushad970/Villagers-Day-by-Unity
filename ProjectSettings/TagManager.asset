@@ -52,6 +52,7 @@ TagManager:
   - EatAndDrinkPointSheep2
   - TreeHitPoint
   - MotorButton
+  - Wood
   layers:
   - Default
   - TransparentFX

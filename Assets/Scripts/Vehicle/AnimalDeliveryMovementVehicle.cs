@@ -10,7 +10,7 @@ public class AnimalDeliveryMovementVehicle : MonoBehaviour
     [SerializeField] private float moveSpeed = 3f;
     [SerializeField] private float rotationSpeed = 5f;
     [SerializeField] private float reachDistance = 0.1f;
-
+    [SerializeField] private TireSpin tireSpin;
     [Header("Logic")]
     public bool canMove = false;
 
@@ -49,6 +49,11 @@ public class AnimalDeliveryMovementVehicle : MonoBehaviour
                 }
             }
             MoveToPoint(animalName);
+            tireSpin.StartRotation();
+        }
+        else
+        {
+            tireSpin.StopRotation();
         }
         Debug.Log("Can move Vehicle: " + canMove);
     }

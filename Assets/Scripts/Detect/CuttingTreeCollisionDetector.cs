@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.Splines;
 
@@ -8,14 +9,18 @@ public class CuttingTreeCollisionDetector : MonoBehaviour
     private bool hasHitThisChop = false;
     public int hitCount = 0;
     [SerializeField] private ParticleSystem hitParticle;
+    public ParticleSystem treeDestroyParticla;
+    public GameObject treeWoodPrefab;
     Rigidbody rb;
     public float animDetectionTime = 1.5f; // Time window to detect hits during chopping animation  
+    public RaycastDetector detector;
     private void Awake()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
         if (player != null)
         {
             animator = player.GetComponent<Animator>();
+            detector = player.GetComponent<RaycastDetector>();
         }
         rb = GetComponent<Rigidbody>();
         // Find AxeEffect in hierarchy
@@ -24,6 +29,7 @@ public class CuttingTreeCollisionDetector : MonoBehaviour
         {
             hitParticle = effectObj.GetComponent<ParticleSystem>();
         }
+
     }
     private void Update()
     {
@@ -51,9 +57,30 @@ public class CuttingTreeCollisionDetector : MonoBehaviour
                 RotateTree(this.gameObject);
                 rb.isKinematic = false;
                 //spawn tree wood prefab here
+                StartCoroutine(destroyTree());
+
             }
             Destroy(p.gameObject, 4f);
+            //
         }
+    }
+    IEnumerator destroyTree()
+    {
+        yield return new WaitForSeconds(5f);
+        treeWoodPrefab.SetActive(true);
+        GameObject woodStack=treeWoodPrefab;
+
+        Instantiate(woodStack, this.transform.position, Quaternion.identity);
+        Destroy(this.gameObject); 
+        detector.RemoveTree(this.gameObject);
+        treeDestroyParticla.Play();
+        StartCoroutine(destroyWoodStack(woodStack));
+    }
+    IEnumerator destroyWoodStack(GameObject gm)
+    {
+               yield return new WaitForSeconds(40f);
+       Destroy(gm);
+
     }
     private void RotateTree(GameObject treeObject)
     {

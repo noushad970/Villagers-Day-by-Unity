@@ -215,7 +215,13 @@ public class RaycastDetector : MonoBehaviour
                     cycle.CollectItem();
                 }
             }
-            
+            // collect wood
+            if(target.CompareTag("Wood"))
+            {
+                PlayerSaveManager.Instance.AddItem("Wood", Random.Range(3,8));
+                Destroy(target);
+                //adding particle of collection with sound
+            }
         }
     }
   
@@ -319,7 +325,7 @@ public class RaycastDetector : MonoBehaviour
         }
 
         // Destroy the tree in the scene
-        Destroy(tree);
+       // Destroy(tree);
 
         Debug.Log($"Tree removed: {tree.name}");
     }
