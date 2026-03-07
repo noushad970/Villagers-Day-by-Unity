@@ -28,16 +28,16 @@ public class NPCShopman : MonoBehaviour
         shopKeeperName = gameObject.name;
         sellPanelButton.onClick.AddListener(onClickSellButton);
         buyPanelButton.onClick.AddListener(onClickBuyButton);
-        onClickBuyButton();
+        //onClickBuyButton();
         yesButton.onClick.AddListener(confirmPanelYes);
-        onClickBuyButton();
+       // onClickBuyButton();
         NoButton.onClick.AddListener(confirmPanelNo);
         ButtonUpdateBuyAndSell();
 
         //PlayerSaveManager.Instance.AddItem("Cow", -5);
 
     }
-
+    
     private void ButtonUpdateBuyAndSell()
     {
         for (int i = 0; i < fishesSell.Length; i++)
@@ -151,7 +151,8 @@ public class NPCShopman : MonoBehaviour
     public void onClickShopItemButton(Button itm)
     {
         itms = itm.gameObject;
-        selectedItemName = itm.name;
+        selectedItemName = itm.name.ToString();
+        Debug.Log(selectedItemName);
         selectedItemPrice = PlayerSaveManager.Instance.GetItemPrice(itm.name);
         if (sellPanel.activeSelf)
         {
@@ -162,11 +163,11 @@ public class NPCShopman : MonoBehaviour
                 // Further logic for confirming the sale
                 confirmPanel.SetActive(true);
 
-               
+
             }
             else
             {
-                Debug.Log("You don't have enough items to sell.");
+                NoticeUI.Instance.ShowNotice("You don't have enough items to sell.");
             }
         }
         else if(buyPanel.activeSelf)
@@ -180,14 +181,17 @@ public class NPCShopman : MonoBehaviour
             }
             else
             {
-                Debug.Log("You don't have enough coins to buy.");
+                    NoticeUI.Instance.ShowNotice("You don't have enough coins to buy.");
             }
         }
     }
     void confirmPanelYes()
     {
         if (string.IsNullOrEmpty(selectedItemName))
+        {
             return;
+
+        }
 
         if (sellPanel.activeSelf)
         {
@@ -201,7 +205,7 @@ public class NPCShopman : MonoBehaviour
             {
                 if (AnimalDeliveryMovementVehicle.vehicleIsBusy)
                 {
-                    Debug.Log("Vehicle is busy delivering another animal. Please wait.");
+                    NoticeUI.Instance.ShowNotice("Vehicle is busy delivering another animal. Please wait.");
 
                 }
                 else
@@ -209,10 +213,11 @@ public class NPCShopman : MonoBehaviour
                     if (PlayerSaveManager.Instance.GetItemCount(selectedItemName) <= 4)
                     {
                         vehicle.deliverAnimal(selectedItemName, true);
+                        NoticeUI.Instance.ShowNotice("Delivering " + selectedItemName + " to your farm. Please wait...");
                     }
                     else
                     {
-                        Debug.Log("Not animal or you have too many of this animal. Cannot deliver.");
+                        NoticeUI.Instance.ShowNotice("You have too many of this animal. Cannot deliver.");
                     }
                 }
             }

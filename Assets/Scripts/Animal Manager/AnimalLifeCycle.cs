@@ -99,10 +99,8 @@ public class AnimalLifeCycle : MonoBehaviour
         else if (gameObject.CompareTag("Goat2"))
         {
             GameObject[] foodPoint = GameObject.FindGameObjectsWithTag("EatAndDrinkPointGoat2");
-            Debug.Log("Found " + foodPoint.Length + " Food Points for Goat2");
             for (int i = 0; i < foodPoint.Length; i++)
             {
-                Debug.Log("Found Food Point for Goat2: " + foodPoint[i].name);
                 eatAndDrinkPoints[i] = foodPoint[i].GetComponent<FoodAndWaterPoint>();
             }
             GameObject[] wayPoints = GameObject.FindGameObjectsWithTag("WayPointGoat2");
@@ -114,10 +112,9 @@ public class AnimalLifeCycle : MonoBehaviour
         else if (gameObject.CompareTag("Goat1"))
         {
             GameObject[] foodPoint = GameObject.FindGameObjectsWithTag("EatAndDrinkPointGoat1");
-            Debug.Log("Found " + foodPoint.Length + " Food Points for Goat1");
             for (int i = 0; i < foodPoint.Length; i++)
             {
-                Debug.Log("Found Food Point for Goat1: " + foodPoint[i].name);
+
                 eatAndDrinkPoints[i] = foodPoint[i].GetComponent<FoodAndWaterPoint>();
             }
             GameObject[] wayPoints = GameObject.FindGameObjectsWithTag("WayPointGoat1");
@@ -129,10 +126,8 @@ public class AnimalLifeCycle : MonoBehaviour
         else if (animalName == "Duck")
         {
             GameObject[] foodPoint = GameObject.FindGameObjectsWithTag("EatAndDrinkPointDuck");
-            Debug.Log("Found " + foodPoint.Length + " Food Points for Duck");
             for (int i = 0; i < foodPoint.Length; i++)
             {
-                Debug.Log("Found Food Point for Duck: " + foodPoint[i].name);
                 eatAndDrinkPoints[i] = foodPoint[i].GetComponent<FoodAndWaterPoint>();
             }
             GameObject[] wayPoints = GameObject.FindGameObjectsWithTag("WayPointDuck");
@@ -200,6 +195,7 @@ public class AnimalLifeCycle : MonoBehaviour
                     yield return new WaitForSeconds(Random.Range(20, 40));
                     currentState = animalState.hungerState;
                     Debug.Log("Animal is now hungry");
+
                     break;
 
                 case animalState.feedState:
@@ -227,7 +223,7 @@ public class AnimalLifeCycle : MonoBehaviour
         if (currentState == animalState.giveEggState)
         {
             collectableItem.gameObject.SetActive(false);
-            Debug.Log("Collected item from " + animalName);
+            NoticeUI.Instance.ShowNotice("Collected "+collectableItem.gameObject.name.ToString()+" from " + animalName); 
             PlayerSaveManager.Instance.AddItem(collectableItem.gameObject.name.ToString(), 1);
             currentState = animalState.idleState;
         }
@@ -256,7 +252,6 @@ public class AnimalLifeCycle : MonoBehaviour
                 }
             }
             anim.Play("Idle");
-            Debug.Log("No food available");
         }
 
         void MoveToFood(FoodAndWaterPoint point)
@@ -273,7 +268,6 @@ public class AnimalLifeCycle : MonoBehaviour
             }
             else
             {
-                Debug.Log("Reached food point");
                 point.foodObject.SetActive(false);
                 StartCoroutine(FeedingState());
             }

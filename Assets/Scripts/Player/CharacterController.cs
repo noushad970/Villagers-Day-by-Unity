@@ -44,7 +44,10 @@ public class CharacterMovement : MonoBehaviour
         HoldingPumpkin,
         HoldingTomato,
         HoldingWatermelon,
-        HoldingWheat
+        HoldingWheat,
+        HoldingRohu,
+        HoldingBigTree,
+        HoldingCrismasTree
 
     }
     public bool SetHandStateFromString(string stateName)
@@ -240,6 +243,11 @@ public class CharacterMovement : MonoBehaviour
     // =========================
     // GRAVITY
     // =========================
+
+    public string getCurrentHandState()
+    {
+        return handState.ToString();
+    }   
     void HandleGravity()
     {
         if (controller.isGrounded && velocity.y < 0)

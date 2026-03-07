@@ -49,7 +49,6 @@ public class CollisionPointDetector : MonoBehaviour
             return;
 
         hitCount++;
-        Debug.Log("Plow hit count: " + hitCount);
 
         // Play dust particle
         if (dustParticle != null)
@@ -65,7 +64,6 @@ public class CollisionPointDetector : MonoBehaviour
             if (land != null) land.SetActive(false);
             if (subLand != null) subLand.SetActive(true);
             SublandParticle.Play();
-            Debug.Log("Land switched to SubLand");
 
             // ✅ Update the LandDataComponent state
             if (landData != null)
@@ -77,7 +75,6 @@ public class CollisionPointDetector : MonoBehaviour
                 if (farmController != null)
                 {
                     farmController.SaveFarm();
-                    Debug.Log("Farm saved after sub-land activation.");
                 }
             }
         }

@@ -116,11 +116,15 @@ public class TreeSaveManager : MonoBehaviour
             {
                 if(treePrefab[i].name == data.plantName)
                 {
-                    GameObject tree = Instantiate(treePrefab[i], data.position, Quaternion.identity);
-                    plantedTrees.Add(tree);
-                    if(data.state == "Cutted")
+                    Debug.Log($"Loading tree: {data.plantName} at {data.position} with state {data.state}");
+                    if (data.state == "Cutted")
                     {
-                        Destroy(tree);
+
+                    }
+                    else
+                    {
+                        GameObject tree = Instantiate(treePrefab[i], data.position, Quaternion.identity);
+                        plantedTrees.Add(tree);
                     }
                     break;
                 }

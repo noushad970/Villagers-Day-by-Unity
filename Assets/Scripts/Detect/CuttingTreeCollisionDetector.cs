@@ -52,6 +52,9 @@ public class CuttingTreeCollisionDetector : MonoBehaviour
             p.Play();
             hitCount++;
             hasHitThisChop = true;
+
+
+            NoticeUI.Instance.ShowNotice($"Tree Hit! ({hitCount}/3)");
             if (hitCount == 3)
             {
                 RotateTree(this.gameObject);

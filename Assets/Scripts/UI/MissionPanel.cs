@@ -56,7 +56,7 @@ public class MissionPanel : MonoBehaviour
     {
         if (airplane.getFlyingStatus())
         {
-            Debug.Log("Airplane is still flying. Cannot deliver food.");
+            NoticeUI.Instance.ShowNotice("Airplane is still flying. Cannot deliver food.");
             return;
         }
         if(canDelivered)
@@ -106,7 +106,7 @@ public class MissionPanel : MonoBehaviour
         }
         else
         {
-                       Debug.Log("Cannot deliver food. Requirements not met.");
+            NoticeUI.Instance.ShowNotice("Cannot deliver food. Requirements not met.");
         }
     }
     private void ClearItems()

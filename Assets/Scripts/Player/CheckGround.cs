@@ -16,10 +16,7 @@ public class GroundCheck : MonoBehaviour
         isGrounded = Physics.CheckSphere(groundCheck.position, checkRadius, groundLayer);
 
         // Debug
-        if (isGrounded)
-            Debug.Log("Player is Grounded");
-        else
-            Debug.Log("Player is NOT Grounded");
+ 
     }
 
     // Optional: visualize in scene

@@ -89,6 +89,10 @@ public class PlayerStateData
     public int Goat1,Goat2;
     public int Duck;
 
+    //tree count
+    public int BigTree;
+    public int CrismasTree;
+
     //mission index
     public int CurrentMission1Index=0;
     public int CurrentMission2Index=0;

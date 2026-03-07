@@ -184,6 +184,10 @@ public class PlayerSaveManager : MonoBehaviour
             case "Goat2": return 600;
             case "Duck": return 100;
 
+            //tree
+            case "CrismasTree": return 50;
+            case "BigTree": return 40;
+
             default:
                 Debug.LogWarning("Item price not found: " + itemName);
                 return 0;

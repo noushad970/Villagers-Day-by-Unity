@@ -41,7 +41,6 @@ public class AnimalSpawner : MonoBehaviour
                 
                 break;
             default:
-                Debug.LogWarning("Unknown animal type: " + animalType);
                 break;
         }
     }

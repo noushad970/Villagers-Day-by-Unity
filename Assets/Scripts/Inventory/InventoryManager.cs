@@ -364,9 +364,71 @@ public class InventoryManager : MonoBehaviour
                 inventorySlotsItems[37].SetActive(true);
                 CountSlotItemTexts[37].text = PlayerSaveManager.Instance.GetItemCount("Meat").ToString();
             }
+
             else
             {
                 inventorySlotsItems[37].SetActive(false);
+            }
+        if (PlayerSaveManager.Instance.GetItemCount("Wood") > 0)
+        {
+            inventorySlotsItems[38].SetActive(true);
+            CountSlotItemTexts[38].text = PlayerSaveManager.Instance.GetItemCount("Wood").ToString();
+        }
+
+        else
+        {
+            inventorySlotsItems[38].SetActive(false);
+        }
+        if (PlayerSaveManager.Instance.GetItemCount("Rice") > 0)
+        {
+            inventorySlotsItems[39].SetActive(true);
+            CountSlotItemTexts[39].text = PlayerSaveManager.Instance.GetItemCount("Rice").ToString();
+        }
+
+        else
+        {
+            inventorySlotsItems[39].SetActive(false);
+        }
+        if (PlayerSaveManager.Instance.GetItemCount("Flour") > 0)
+        {
+            inventorySlotsItems[40].SetActive(true);
+            CountSlotItemTexts[40].text = PlayerSaveManager.Instance.GetItemCount("Flour").ToString();
+        }
+
+        else
+        {
+            inventorySlotsItems[40].SetActive(false);
+        }
+        if (PlayerSaveManager.Instance.GetItemCount("Suger") > 0)
+        {
+            inventorySlotsItems[41].SetActive(true);
+            CountSlotItemTexts[41].text = PlayerSaveManager.Instance.GetItemCount("Suger").ToString();
+        }
+
+        else
+        {
+            inventorySlotsItems[41].SetActive(false);
+        }
+        if (PlayerSaveManager.Instance.GetItemCount("BigTree") > 0)
+        {
+            inventorySlotsItems[42].SetActive(true);
+            CountSlotItemTexts[42].text = PlayerSaveManager.Instance.GetItemCount("BigTree").ToString();
+        }
+
+        else
+        {
+            inventorySlotsItems[42].SetActive(false);
+        }
+
+        if (PlayerSaveManager.Instance.GetItemCount("CrismasTree") > 0)
+        {
+            inventorySlotsItems[42].SetActive(true);
+            CountSlotItemTexts[42].text = PlayerSaveManager.Instance.GetItemCount("CrismasTree").ToString();
+        }
+
+        else
+        {
+            inventorySlotsItems[42].SetActive(false);
         }
 
 

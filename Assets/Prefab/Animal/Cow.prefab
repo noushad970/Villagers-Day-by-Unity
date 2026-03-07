@@ -272,6 +272,7 @@ SkinnedMeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -629,6 +630,7 @@ SkinnedMeshRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+  m_MaskInteraction: 0
   serializedVersion: 2
   m_Quality: 0
   m_UpdateWhenOffscreen: 0
@@ -743,7 +745,7 @@ Transform:
   m_GameObject: {fileID: 2756753492441004695}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0.038552705, y: -0.04419166, z: 0.10282132}
   m_LocalScale: {x: 3, y: 3, z: 3}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -795,8 +797,8 @@ MonoBehaviour:
   collectableItem: {fileID: 0}
   currentState: 0
   moveSpeed: 1
-  stopRadius: 2
-  reachDistance: 0.3
+  stopRadius: 3
+  reachDistance: 1.09
   rotationSpeed: 5
   randomWalkPoints:
   - {fileID: 0}
@@ -877,7 +879,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 0
+  m_Constraints: 80
   m_CollisionDetection: 0
 --- !u!1 &2793988370032918328
 GameObject:

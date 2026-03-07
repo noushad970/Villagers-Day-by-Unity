@@ -3,6 +3,7 @@ using System.Collections;
 
 public class DoorOpenClose : MonoBehaviour
 {
+    public static DoorOpenClose Instance { get; private set; }
     [Header("Reference Objects")]
     public GameObject positive90Object; // rotates to +90
     public GameObject negative90Object; // rotates to -90
@@ -14,18 +15,22 @@ public class DoorOpenClose : MonoBehaviour
     private Coroutine negCoroutine;
     private void Start()
     {
-        RotateNegativeToMinus90();
-        RotatePositiveTo90();
-        StartCoroutine(wait2());
     }
     // ---------- POSITIVE 90 ----------
     public void RotatePositiveTo90()
     {
         StartRotation(positive90Object, 0f, 90f, ref posCoroutine);
     }
+    public void doorOpenAndClose()
+    {
+
+        RotateNegativeToMinus90();
+        RotatePositiveTo90();
+        StartCoroutine(wait2());
+    }
     IEnumerator wait2()
     {
-               yield return new WaitForSeconds(2f);
+               yield return new WaitForSeconds(4f);
          backToZeroAll();
     }
     public void backToZeroAll()

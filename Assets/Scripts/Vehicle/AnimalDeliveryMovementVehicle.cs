@@ -55,7 +55,6 @@ public class AnimalDeliveryMovementVehicle : MonoBehaviour
         {
             tireSpin.StopRotation();
         }
-        Debug.Log("Can move Vehicle: " + canMove);
     }
 
     void StartNewVisit()
@@ -98,8 +97,8 @@ public class AnimalDeliveryMovementVehicle : MonoBehaviour
             ///
             if(animalName!="")
             {
-                Debug.Log("Spawned Animal: " + animalName);
-                Debug.Log("Total Cow: " + PlayerSaveManager.Instance.GetItemCount(animalName));
+                //Debug.Log("Spawned Animal: " + animalName);
+                //Debug.Log("Total Cow: " + PlayerSaveManager.Instance.GetItemCount(animalName));
 
                 AnimalSpawner.instance.SpawnAnimal(animalName);
                 //set animal inactive after spawn
