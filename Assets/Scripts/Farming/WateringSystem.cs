@@ -37,6 +37,7 @@ public class WateringSystem : MonoBehaviour
     {
         onMotor.SetActive(true);
         offMotor.SetActive(false);
+        AudioManager.Instance.playwateringSound();
         isWateringOn = true;
         NoticeUI.Instance.ShowNotice("Watering On");
     }
@@ -45,6 +46,7 @@ public class WateringSystem : MonoBehaviour
         onMotor.SetActive(false);
         offMotor.SetActive(true);
         isWateringOn = false;
+        AudioManager.Instance.stopWateringSound();
         NoticeUI.Instance.ShowNotice("Watering Off");
     }
     public bool IsWateringOn()

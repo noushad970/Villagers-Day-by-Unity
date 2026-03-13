@@ -75,6 +75,7 @@ public class RaycastDetector : MonoBehaviour
         plantingCrops(RemoveLast4(plantingObj));
         else
         PlantingTree(plantingObj);
+
     }
     private void detectWithRay()
     {
@@ -181,6 +182,7 @@ public class RaycastDetector : MonoBehaviour
                 int index = hit.collider.gameObject.transform.GetSiblingIndex();
                 ggPr.GetComponent<LandDataComponent>().RemoveCrop(target); 
                 FarmController farmController = FindObjectOfType<FarmController>();
+                AudioManager.Instance.playCollectSound();
               //  Destroy(target);
                 if (farmController != null)
                 {
@@ -193,6 +195,7 @@ public class RaycastDetector : MonoBehaviour
             WateringSystem wat = target.GetComponent<WateringSystem>();
             if (target.CompareTag("MotorButton") && wat != null)
             {
+                AudioManager.Instance.playClickSound();
                 if (wat.IsWateringOn())
                 {
                     wat.TurnOffWatering();
@@ -209,6 +212,7 @@ public class RaycastDetector : MonoBehaviour
                 if (cycle.isReadyToCollect() && cycle != null)
                 {
                     cycle.CollectItem();
+                    AudioManager.Instance.playCollectSound();
                 }
             }
             // collect wood
@@ -216,16 +220,19 @@ public class RaycastDetector : MonoBehaviour
             {
                 PlayerSaveManager.Instance.AddItem("Wood", Random.Range(3,8));
                 Destroy(target);
+                AudioManager.Instance.playCollectSound();
                 //adding particle of collection with sound
             }
             if (target.CompareTag("DoorNegative"))
             {
                 DoorOpenClose door = target.GetComponent<DoorOpenClose>();
+                AudioManager.Instance.playDoorSound();  
                 door.doorOpenAndClose();
             }
             if (target.CompareTag("DeliveryMission"))
             {
                 DeliveryPanelUI.instance.openDeliveryPanel();
+                AudioManager.Instance.playClickSound();
             }
         }
     }
@@ -275,20 +282,22 @@ public class RaycastDetector : MonoBehaviour
     public void PlantingTree(string plantName)
     {
         if (referenceObject == null) return;
-        Ray ray = new Ray(referenceObject.position, referenceObject.forward);
-        RaycastHit hit;
-
-        anim.Play("Interect");
-
-        if (Physics.Raycast(ray, out hit, rayLength))
+        if(PlayerSaveManager.Instance.GetItemCount(plantName)>0)
         {
-            GameObject target = hit.collider.gameObject;
+            Ray ray = new Ray(referenceObject.position, referenceObject.forward);
+            RaycastHit hit;
 
-            // Detect ONLY objects with tag "Land"
-            if (!target.CompareTag("Land"))
-                return;
+            anim.Play("Interect");
 
-            
+            if (Physics.Raycast(ray, out hit, rayLength))
+            {
+                GameObject target = hit.collider.gameObject;
+
+                // Detect ONLY objects with tag "Land"
+                if (!target.CompareTag("Land"))
+                    return;
+
+
                 // Loop through plant prefabs
                 for (int i = 0; i < plantPrefab.Length; i++)
                 {
@@ -312,14 +321,20 @@ public class RaycastDetector : MonoBehaviour
                         if (treeSaveManager != null)
                         {
                             treeSaveManager.SaveTree(tree, "Planted");
-                        PlayerSaveManager.Instance.AddItem(plantName, -1);
-                    }
+                            AudioManager.Instance.playPlantSound();
+                            PlayerSaveManager.Instance.AddItem(plantName, -1);
+                        }
 
                         NoticeUI.Instance.ShowNotice($"Planted: {plantName}");
                         break;
                     }
                 }
-           
+
+            }
+        }
+        else
+        {
+            NoticeUI.Instance.ShowNotice("You don't have any " + plantName + " to plant.");
         }
     }
     public void RemoveTree(GameObject tree)
@@ -365,64 +380,73 @@ public class RaycastDetector : MonoBehaviour
         if (referenceObject == null) return;
 
 
-        anim.Play("Interact");
-        if (Physics.Raycast(ray, out hit, rayLength))
+        if (PlayerSaveManager.Instance.GetItemCount(cropName) > 0)
         {
-            GameObject target = hit.collider.gameObject;
-            Debug.Log("Raycast hit: " + target.name);
-            // Detect ONLY Fertilized Land
-            if (!target.CompareTag("CropArea"))
-                return;
-
-            // Find CropArea around hit point
-            Collider[] nearby = Physics.OverlapSphere(hit.point, bigPlantHarvestRedius);
-
-            foreach (Collider col in nearby)
+            anim.Play("Interact");
+            if (Physics.Raycast(ray, out hit, rayLength))
             {
-                if (col.CompareTag("CropArea"))
+                GameObject target = hit.collider.gameObject;
+                Debug.Log("Raycast hit: " + target.name);
+                // Detect ONLY Fertilized Land
+                if (!target.CompareTag("CropArea"))
+                    return;
+
+                // Find CropArea around hit point
+                Collider[] nearby = Physics.OverlapSphere(hit.point, bigPlantHarvestRedius);
+
+                foreach (Collider col in nearby)
                 {
-
-                    // ❌ Prevent double planting
-                    if (col.transform.childCount > 0)
+                    if (col.CompareTag("CropArea"))
                     {
-                        NoticeUI.Instance.ShowNotice("Cannot plant here: Crop already planted");
-                        return;
-                    }
 
-                    for (int i=0;i<cropPrefab.Length;i++)
-                    {
-                        if(cropPrefab[i].name==cropName)
+                        // ❌ Prevent double planting
+                        if (col.transform.childCount > 0)
                         {
-                            // Instantiate crop at CropArea position
-                            GameObject crop = Instantiate(
-                                cropPrefab[i],
-                                col.transform.position,
-                                Quaternion.identity
-                            );
-                            
-                            // Parent crop to CropArea
-                            crop.transform.SetParent(col.transform);
-
-                            NoticeUI.Instance.ShowNotice("Planted: " + cropName);
-                            string seedname = cropName + "Seed";
-                            PlayerSaveManager.Instance.AddItem(seedname, -1);
-                            //save to LandDataComponent
-                            GameObject pr = hit.collider.gameObject.transform.parent.gameObject;
-                            GameObject gPr = pr.transform.parent.gameObject;
-                            int index = hit.collider.gameObject.transform.GetSiblingIndex();
-                            gPr.GetComponent<LandDataComponent>().PlantCrop(index, cropName);
-                            FarmController farmController = FindObjectOfType<FarmController>();
-                            if (farmController != null)
-                            {
-                                farmController.SaveFarm();
-                            }
+                            NoticeUI.Instance.ShowNotice("Cannot plant here: Crop already planted");
                             return;
                         }
+
+                        for (int i = 0; i < cropPrefab.Length; i++)
+                        {
+                            if (cropPrefab[i].name == cropName)
+                            {
+                                // Instantiate crop at CropArea position
+                                GameObject crop = Instantiate(
+                                    cropPrefab[i],
+                                    col.transform.position,
+                                    Quaternion.identity
+                                );
+
+                                // Parent crop to CropArea
+                                crop.transform.SetParent(col.transform);
+
+                                NoticeUI.Instance.ShowNotice("Planted: " + cropName);
+                                AudioManager.Instance.playPlantSound();
+                                string seedname = cropName + "Seed";
+                                PlayerSaveManager.Instance.AddItem(seedname, -1);
+                                //save to LandDataComponent
+                                GameObject pr = hit.collider.gameObject.transform.parent.gameObject;
+                                GameObject gPr = pr.transform.parent.gameObject;
+                                int index = hit.collider.gameObject.transform.GetSiblingIndex();
+                                gPr.GetComponent<LandDataComponent>().PlantCrop(index, cropName);
+                                FarmController farmController = FindObjectOfType<FarmController>();
+                                if (farmController != null)
+                                {
+                                    farmController.SaveFarm();
+                                }
+                                return;
+                            }
+                        }
+
+
                     }
-                    
-                    
                 }
             }
+
+        }
+        else
+        {
+            NoticeUI.Instance.ShowNotice("You don't have any " + cropName + " to plant.");
         }
     }
     //farmerShopKeeper,fisherShopKeeper,blacksmithShopKeeper,foodShopKeeper,meatShopKeeper,seedShopKeeper,animalShopKeeper

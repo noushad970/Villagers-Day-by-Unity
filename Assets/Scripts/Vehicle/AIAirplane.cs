@@ -53,6 +53,7 @@ public class AIAirplane : MonoBehaviour
         currentSpeed = 0f;
         isFlying = true;
         isStoppingPhase = false;
+        AudioManager.Instance.StartVehicleEnginePlane();
         isReturningToIdleRotation = false;
     }
 
@@ -60,6 +61,7 @@ public class AIAirplane : MonoBehaviour
     {
         isFlying = false;
         currentSpeed = 0f;
+        AudioManager.Instance.StopVehicleEnginePlane();
     }
 
     // ===============================

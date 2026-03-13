@@ -197,6 +197,7 @@ public class NPCShopman : MonoBehaviour
         {
             PlayerSaveManager.Instance.UseItem(selectedItemName, 1);
             PlayerSaveManager.Instance.AddCoins(selectedItemPrice);
+            AudioManager.Instance.playSellSound();
         }
         else
         {
@@ -214,6 +215,7 @@ public class NPCShopman : MonoBehaviour
                     {
                         vehicle.deliverAnimal(selectedItemName, true);
                         NoticeUI.Instance.ShowNotice("Delivering " + selectedItemName + " to your farm. Please wait...");
+                        AudioManager.Instance.playBuySound();
                     }
                     else
                     {
@@ -226,6 +228,7 @@ public class NPCShopman : MonoBehaviour
 
                 PlayerSaveManager.Instance.AddItem(selectedItemName, 1);
                 PlayerSaveManager.Instance.AddCoins(-selectedItemPrice);
+                AudioManager.Instance.playBuySound();
 
             }
 

@@ -50,6 +50,7 @@ public class ActivateCraftingTool : MonoBehaviour
         Axe.SetActive(true);
         isAxeActive = true;
         handIsEmpty = false;
+        AudioManager.Instance.playSwitchSound();
 
     }
     public void ActivateShovel()
@@ -58,6 +59,7 @@ public class ActivateCraftingTool : MonoBehaviour
         Shovel.SetActive(true);
         isShovelActive = true;
         handIsEmpty = false;
+        AudioManager.Instance.playSwitchSound();
 
     }
     public void ActivateFishingRode()
@@ -68,6 +70,7 @@ public class ActivateCraftingTool : MonoBehaviour
         handIsEmpty = false;
         fishingStage1 = true;
         fishingStage2 = false;
+        AudioManager.Instance.playSwitchSound();
     }
     public void ActivateSword()
     {
@@ -75,11 +78,13 @@ public class ActivateCraftingTool : MonoBehaviour
         Hammer.SetActive(true);
         isHammerActive = true;
         handIsEmpty = false;
+        AudioManager.Instance.playSwitchSound();
     }
     void onClickEmptyHand()
     {
         setActiveAllToolsFalse();
         CharacterMovement.instance.makeHandStateEmpty();
+        AudioManager.Instance.playSwitchSound();
     }
     private void onClickInterectButton()
     {
@@ -87,11 +92,13 @@ public class ActivateCraftingTool : MonoBehaviour
         {
             //do something with pickaxe
             anim.Play("Chopping");
+            AudioManager.Instance.playNoHittingSound();
         }
         else if (isShovelActive)
         {
             //do something with shovel
             anim.Play("Plowing");
+            AudioManager.Instance.playPlowingSound();
         }
         else if (isFishingRodeActive && FishingManager.canFishing)
         {
@@ -104,7 +111,7 @@ public class ActivateCraftingTool : MonoBehaviour
                 CharacterMovement.instance.freezePlayer();
                 cam.gameObject.SetActive(false);
                 joystick.enabled=false;
-                
+                AudioManager.Instance.playThrowingRodSound();
                 FishingManager.Instance.bitingStart();
             }
             else if (fishingStage2)
@@ -121,6 +128,7 @@ public class ActivateCraftingTool : MonoBehaviour
         else if (isHammerActive)
         {
             anim.Play("Cutting");
+            AudioManager.Instance.playNoHittingSound();
             //do something with hammer
         }
     }

@@ -70,7 +70,8 @@ public class AnimalDeliveryMovementVehicle : MonoBehaviour
     {
         vehicleIsBusy = true;
         canMove = move;
-        for(int i=0;i<animals.Length;i++)
+        AudioManager.Instance.StartVehicleEngine();
+        for (int i=0;i<animals.Length;i++)
         {
             if(animals[i].tag.ToString()==animalName)
             {
@@ -142,6 +143,7 @@ public class AnimalDeliveryMovementVehicle : MonoBehaviour
             {
                 isVisiting = false; // stop only after finishing visit
                 vehicleIsBusy = false;
+                AudioManager.Instance.StopVehicleEngine();
             }
         }
     }

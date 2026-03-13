@@ -1,6 +1,8 @@
 ﻿
 using System;
+using System.Collections;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.Playables;
 using UnityEngine.UI;
 
@@ -106,8 +108,49 @@ public class CharacterMovement : MonoBehaviour
         HandleTouchRotation();
         if(currentState== CharacterState.Idle)
         FacePlayerToCamera();
+        DetectUIButton();
+        soundManagement();
+    }
+    void DetectUIButton()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            if (EventSystem.current.IsPointerOverGameObject())
+            {
+                GameObject clickedObj = EventSystem.current.currentSelectedGameObject;
+
+                if (clickedObj != null)
+                {
+                    Button btn = clickedObj.GetComponent<Button>();
+
+                    if (btn != null)
+                    {
+                        Debug.Log("Button Pressed: " + btn.name);
+
+                        OnAnyButtonPressed(btn);
+                    }
+                }
+            }
+        }
     }
 
+    void OnAnyButtonPressed(Button button)
+    {
+        // Your global function
+        AudioManager.Instance.playClickSound();
+    }
+    void soundManagement()
+    {
+        if(currentState == CharacterState.Walking)
+        {
+            AudioManager.Instance.PlayWalkSound();
+        }
+        else if(currentState == CharacterState.Running)
+        {
+            AudioManager.Instance.PlayRunSound();
+        }
+        
+    }
     void HandleTouchRotation()
     {
         if (Input.touchCount > 0)
@@ -264,7 +307,9 @@ public class CharacterMovement : MonoBehaviour
     {
         if (!GroundCheck.isGrounded)
         {
+            Debug.Log("Cannot jump, not grounded!");
             return;
+
 
 
         }
@@ -272,8 +317,15 @@ public class CharacterMovement : MonoBehaviour
         velocity.y = Mathf.Sqrt(jumpForce * -2f * gravity);
         currentState = CharacterState.Jumping;
         anim.Play("Jump");
-    }
+        StartCoroutine(wait());
 
+    }
+    IEnumerator wait()
+    {
+        yield return new WaitForSeconds(01f);
+        AudioManager.Instance.playJumpSound();
+
+    }
     // =========================
     // RUN BUTTON EVENTS
     // =========================

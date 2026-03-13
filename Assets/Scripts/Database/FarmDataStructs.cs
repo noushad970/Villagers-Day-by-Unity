@@ -94,10 +94,10 @@ public class PlayerStateData
     public int CrismasTree;
 
     //mission index
-    public int CurrentMission1Index=0;
-    public int CurrentMission2Index=0;
-    public int CurrentMission3Index = 0;
-    public int CurrentMission4Index = 0;
+    public int CurrentMission1Index=1;
+    public int CurrentMission2Index=2;
+    public int CurrentMission3Index = 3;
+    public int CurrentMission4Index = 4;
 
 }
 public class animalItemData

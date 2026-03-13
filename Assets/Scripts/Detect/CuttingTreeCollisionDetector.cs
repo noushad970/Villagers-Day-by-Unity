@@ -52,7 +52,7 @@ public class CuttingTreeCollisionDetector : MonoBehaviour
             p.Play();
             hitCount++;
             hasHitThisChop = true;
-
+            AudioManager.Instance.playAxeHitSound();
 
             NoticeUI.Instance.ShowNotice($"Tree Hit! ({hitCount}/3)");
             if (hitCount == 3)
@@ -66,9 +66,14 @@ public class CuttingTreeCollisionDetector : MonoBehaviour
             Destroy(p.gameObject, 4f);
             //
         }
+        else
+        {
+            AudioManager.Instance.playNoHittingSound();
+        }
     }
     IEnumerator destroyTree()
     {
+        AudioManager.Instance.playDestroyTreeSound();
         yield return new WaitForSeconds(5f);
         treeWoodPrefab.SetActive(true);
         GameObject woodStack=treeWoodPrefab;

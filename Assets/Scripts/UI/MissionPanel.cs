@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
@@ -20,6 +21,7 @@ public class MissionPanel : MonoBehaviour
     {
         DeliverButton.onClick.AddListener(DeliverFood);
     }
+    
     public void LoadMission(int missionIndex)
     {
         var requirements = MissionData.GetMissionRequirements(missionIndex);
@@ -30,7 +32,7 @@ public class MissionPanel : MonoBehaviour
             return;
         }
 
-
+        canDelivered= true;
         ClearItems();
 
         var sorted = requirements.OrderBy(x => x.Key).ToList();
@@ -61,6 +63,7 @@ public class MissionPanel : MonoBehaviour
         }
         if(canDelivered)
         {
+            AudioManager.Instance.playMissionDoneSound();
             airplane.StartFly();
             if(title.text=="Mission 1")
             {
@@ -71,6 +74,8 @@ public class MissionPanel : MonoBehaviour
                 {
                     PlayerSaveManager.Instance.AddItem(item.Key, -item.Value);
                 }
+                int randmonIndex = UnityEngine.Random.Range(0, 50);
+                PlayerSaveManager.Instance.UpdateItem("CurrentMission1Index", randmonIndex);
             }
             else if (title.text == "Mission 2")
             {
@@ -81,6 +86,8 @@ public class MissionPanel : MonoBehaviour
                 {
                     PlayerSaveManager.Instance.AddItem(item.Key, -item.Value);
                 }
+                int randmonIndex = UnityEngine.Random.Range(0, 50);
+                PlayerSaveManager.Instance.UpdateItem("CurrentMission12ndex", randmonIndex);
             }
             else if (title.text == "Mission 3")
             {
@@ -91,6 +98,8 @@ public class MissionPanel : MonoBehaviour
                 {
                     PlayerSaveManager.Instance.AddItem(item.Key, -item.Value);
                 }
+                int randmonIndex = UnityEngine.Random.Range(0, 50);
+                PlayerSaveManager.Instance.UpdateItem("CurrentMission3Index", randmonIndex);
             }
             else if (title.text == "Mission 4")
             {
@@ -101,6 +110,8 @@ public class MissionPanel : MonoBehaviour
                 {
                     PlayerSaveManager.Instance.AddItem(item.Key, -item.Value);
                 }
+                int randmonIndex = UnityEngine.Random.Range(0, 50);
+                PlayerSaveManager.Instance.UpdateItem("CurrentMission4Index", randmonIndex);
             }
 
         }
