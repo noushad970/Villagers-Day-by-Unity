@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.HID;
 using UnityEngine.UI;
 
@@ -40,10 +41,7 @@ public class RaycastDetector : MonoBehaviour
             indicatorInstance.SetActive(false);
         }
         anim = GetComponent<Animator>();
-        if (treeSaveManager != null)
-        {
-            treeSaveManager.LoadTrees();
-        }
+        
         //ClearAllPlantedTrees();
         //treeSaveManager.WriteToFile();
         plantingButton.onClick.AddListener(() =>
@@ -68,11 +66,19 @@ public class RaycastDetector : MonoBehaviour
     void Update()
     {
         detectWithRay();
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            InterectButton.onClick.Invoke();
+        }
+        if (Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame)
+        {
+            plantingButton.onClick.Invoke();
+        }
     }
     private void onClickPlantingButton(string plantingObj)
     {
         if (plantingObj.Contains("Seed"))
-        plantingCrops(RemoveLast4(plantingObj));
+        plantingCrops(plantingObj);
         else
         PlantingTree(plantingObj);
 
@@ -282,7 +288,8 @@ public class RaycastDetector : MonoBehaviour
     public void PlantingTree(string plantName)
     {
         if (referenceObject == null) return;
-        if(PlayerSaveManager.Instance.GetItemCount(plantName)>0)
+        Debug.Log("Player has " + PlayerSaveManager.Instance.GetItemCount(plantName) + " of " + plantName);
+        if (PlayerSaveManager.Instance.GetItemCount(plantName)>0)
         {
             Ray ray = new Ray(referenceObject.position, referenceObject.forward);
             RaycastHit hit;
@@ -320,7 +327,7 @@ public class RaycastDetector : MonoBehaviour
                         // Save tree data with "Planted" state
                         if (treeSaveManager != null)
                         {
-                            treeSaveManager.SaveTree(tree, "Planted");
+                            treeSaveManager.SaveTree(tree);
                             AudioManager.Instance.playPlantSound();
                             PlayerSaveManager.Instance.AddItem(plantName, -1);
                         }
@@ -337,6 +344,7 @@ public class RaycastDetector : MonoBehaviour
             NoticeUI.Instance.ShowNotice("You don't have any " + plantName + " to plant.");
         }
     }
+
     public void RemoveTree(GameObject tree)
     {
         if (tree == null) return;
@@ -352,7 +360,7 @@ public class RaycastDetector : MonoBehaviour
        // Destroy(tree);
 
         Debug.Log($"Tree removed: {tree.name}");
-        NoticeUI.Instance.ShowNotice($"Removed: {tree.name}");
+      //  NoticeUI.Instance.ShowNotice($"Removed: {tree.name}");
     }
     /// <summary>
     /// Deletes all planted trees from the TreeSaveManager database and destroys them in the scene
@@ -379,10 +387,10 @@ public class RaycastDetector : MonoBehaviour
     {
         if (referenceObject == null) return;
 
-
+        Debug.Log("Player has " + PlayerSaveManager.Instance.GetItemCount(cropName) + " of " + cropName);
         if (PlayerSaveManager.Instance.GetItemCount(cropName) > 0)
         {
-            anim.Play("Interact");
+            anim.Play("Interect");
             if (Physics.Raycast(ray, out hit, rayLength))
             {
                 GameObject target = hit.collider.gameObject;
@@ -405,10 +413,10 @@ public class RaycastDetector : MonoBehaviour
                             NoticeUI.Instance.ShowNotice("Cannot plant here: Crop already planted");
                             return;
                         }
-
+                        string cropOr=RemoveLast4(cropName);
                         for (int i = 0; i < cropPrefab.Length; i++)
                         {
-                            if (cropPrefab[i].name == cropName)
+                            if (cropPrefab[i].name == cropOr)
                             {
                                 // Instantiate crop at CropArea position
                                 GameObject crop = Instantiate(
@@ -420,15 +428,15 @@ public class RaycastDetector : MonoBehaviour
                                 // Parent crop to CropArea
                                 crop.transform.SetParent(col.transform);
 
-                                NoticeUI.Instance.ShowNotice("Planted: " + cropName);
+                                NoticeUI.Instance.ShowNotice("Planted: " + cropOr);
                                 AudioManager.Instance.playPlantSound();
-                                string seedname = cropName + "Seed";
-                                PlayerSaveManager.Instance.AddItem(seedname, -1);
+                                //string seedname = cropName + "Seed";
+                                PlayerSaveManager.Instance.AddItem(cropName, -1);
                                 //save to LandDataComponent
                                 GameObject pr = hit.collider.gameObject.transform.parent.gameObject;
                                 GameObject gPr = pr.transform.parent.gameObject;
                                 int index = hit.collider.gameObject.transform.GetSiblingIndex();
-                                gPr.GetComponent<LandDataComponent>().PlantCrop(index, cropName);
+                                gPr.GetComponent<LandDataComponent>().PlantCrop(index, cropOr);
                                 FarmController farmController = FindObjectOfType<FarmController>();
                                 if (farmController != null)
                                 {

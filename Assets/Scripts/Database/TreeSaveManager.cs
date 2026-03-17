@@ -1,14 +1,14 @@
 using System.Collections.Generic;
-using UnityEngine;
 using System.IO;
-using System.Collections;
-
+using Unity.VisualScripting.Antlr3.Runtime.Tree;
+using UnityEngine;
 [System.Serializable]
 public class TreeData
 {
+    public string treeID;
     public string plantName;
     public Vector3 position;
-    public string state; // "Planted", "Grown", "Cutted"
+    public string state;
 }
 
 [System.Serializable]
@@ -20,116 +20,147 @@ public class TreeDataList
 public class TreeSaveManager : MonoBehaviour
 {
     public string saveFileName = "TreeData.json";
-    public List<GameObject> plantedTrees = new List<GameObject>();
+
     public GameObject[] treePrefab;
-    private string SavePath => Path.Combine(Application.persistentDataPath, saveFileName);
+
+    public List<GameObject> plantedTrees = new List<GameObject>();
 
     private TreeDataList treeDataList = new TreeDataList();
+
+    private string SavePath => Path.Combine(Application.persistentDataPath, saveFileName);
 
     void Start()
     {
         LoadTrees();
-        
     }
-    //private void Update()
-    //{
-    //    for (int i = 0; i < treePrefab.Length; i++)
-    //    {
-            
-    //        if(treePrefab[i] == null) continue;
-    //        {
+    private void Update()
+    {
 
-    //            ChangeTreeState(treePrefab[i], "Cutted");
-    //            Debug.Log("Available Tree Prefab: " + treePrefab[i].name);
-    //            plantedTrees.Remove(treePrefab[i]);
-    //            GetTreeState(treePrefab[i]);
+    }
 
-    //        }
-    //    }
-    //}
-
-    // Save a new tree
+    // SAVE NEW TREE
     public void SaveTree(GameObject tree, string state = "Planted")
     {
+        TreeID id = tree.GetComponent<TreeID>();
+
+        // Generate ID if empty
+        if (id == null)
+        {
+            Debug.LogError("TreeID component missing!");
+            return;
+        }
+
+        if (string.IsNullOrEmpty(id.treeID))
+        {
+            id.treeID = System.Guid.NewGuid().ToString();
+        }
+
+        // prevent duplicate save
+        if (treeDataList.trees.Exists(t => t.treeID == id.treeID))
+        {
+            Debug.Log("Tree already saved: " + id.treeID);
+            return;
+        }
+
         TreeData data = new TreeData
         {
+            treeID = id.treeID,
             plantName = tree.name.Replace("(Clone)", ""),
             position = tree.transform.position,
             state = state
         };
 
         treeDataList.trees.Add(data);
+
         plantedTrees.Add(tree);
+
         WriteToFile();
+
+        Debug.Log("Tree saved successfully: " + id.treeID);
     }
 
-    // Change the state of a tree
+    // CHANGE TREE STATE
     public void ChangeTreeState(GameObject tree, string newState)
     {
-        string treeName = tree.name.Replace("(Clone)", "");
-        Vector3 pos = tree.transform.position;
+        TreeID id = tree.GetComponent<TreeID>();
 
-        // Find the tree in saved data
-        TreeData found = treeDataList.trees.Find(t => t.plantName == treeName && t.position == pos);
+        TreeData found = treeDataList.trees.Find(t => t.treeID == id.treeID);
+
+        Debug.Log(found != null ?
+            $"Found tree data: {found.plantName} at {found.position} with state {found.state}"
+            : "Tree data not found!");
+
         if (found != null)
         {
             found.state = newState;
+
             WriteToFile();
-            Debug.Log($"Tree {treeName} at {pos} state changed to {newState}");
-        }
-        else
-        {
-            Debug.LogWarning("Tree not found in saved data!");
         }
     }
 
-    // Get tree state
-    public string GetTreeState(GameObject tree)
+    // REMOVE TREE (CUT TREE)
+    public void RemoveTree(GameObject tree)
     {
-        string treeName = tree.name.Replace("(Clone)", "");
-        Vector3 pos = tree.transform.position;
+        ChangeTreeState(tree, "Cutted");
 
-        TreeData found = treeDataList.trees.Find(t => t.plantName == treeName && t.position == pos);
-        return found != null ? found.state : "Unknown";
+        if (plantedTrees.Contains(tree))
+        {
+            plantedTrees.Remove(tree);
+        }
     }
 
-    // Write current data to JSON
+    // WRITE JSON
     public void WriteToFile()
     {
         string json = JsonUtility.ToJson(treeDataList, true);
+
         File.WriteAllText(SavePath, json);
+
+        Debug.Log("Tree data saved: " + SavePath);
     }
 
-    // Load trees
+    // LOAD TREES
     public void LoadTrees()
     {
-        if (!File.Exists(SavePath)) return;
+        if (!File.Exists(SavePath))
+        {
+            Debug.Log("No save file found.");
+            return;
+        }
 
         string json = File.ReadAllText(SavePath);
+
         treeDataList = JsonUtility.FromJson<TreeDataList>(json);
+
+        if (treeDataList == null || treeDataList.trees == null)
+        {
+            treeDataList = new TreeDataList();
+            return;
+        }
 
         foreach (TreeData data in treeDataList.trees)
         {
-            // Optional: spawn the tree prefab according to state
-            // If state == "Cutted", you could disable the tree GameObject in scene
-            for(int i=0;i<treePrefab.Length;i++)
-            {
-                if(treePrefab[i].name == data.plantName)
-                {
-                    Debug.Log($"Loading tree: {data.plantName} at {data.position} with state {data.state}");
-                    if (data.state == "Cutted")
-                    {
+            if (data.state == "Cutted")
+                continue;
 
-                    }
-                    else
-                    {
-                        GameObject tree = Instantiate(treePrefab[i], data.position, Quaternion.identity);
-                        plantedTrees.Add(tree);
-                    }
+            for (int i = 0; i < treePrefab.Length; i++)
+            {
+                if (treePrefab[i].name == data.plantName)
+                {
+                    GameObject tree = Instantiate(treePrefab[i], data.position, Quaternion.identity);
+
+                    TreeID id = tree.GetComponent<TreeID>();
+
+                    if (id != null)
+                        id.treeID = data.treeID;
+
+                    plantedTrees.Add(tree);
+
+                    Debug.Log($"Loaded tree: {data.plantName} at {data.position}");
+
                     break;
                 }
             }
         }
     }
-
 }

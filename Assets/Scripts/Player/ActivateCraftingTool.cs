@@ -1,5 +1,7 @@
+using System.Collections;
 using Unity.Cinemachine;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class ActivateCraftingTool : MonoBehaviour
@@ -29,7 +31,27 @@ public class ActivateCraftingTool : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
+        {
+            interectButton.onClick.Invoke();
+        }
+        if (Keyboard.current.digit1Key.wasPressedThisFrame)
+        {
+            takeAxeButton.onClick.Invoke();
+        }
+        if (Keyboard.current.digit2Key.wasPressedThisFrame)
+        {
+            takeShovelButton.onClick.Invoke();
+        }
+        if (Keyboard.current.digit4Key.wasPressedThisFrame)
+        {
+            takeFishingRodeButton.onClick.Invoke();
+        }
+        if (Keyboard.current.digit5Key.wasPressedThisFrame)
+        {
+            emptyHandButton.onClick.Invoke();
+        }
+
     }
     public void setActiveAllToolsFalse()
     {
@@ -85,6 +107,7 @@ public class ActivateCraftingTool : MonoBehaviour
         setActiveAllToolsFalse();
         CharacterMovement.instance.makeHandStateEmpty();
         AudioManager.Instance.playSwitchSound();
+        
     }
     private void onClickInterectButton()
     {
@@ -92,13 +115,13 @@ public class ActivateCraftingTool : MonoBehaviour
         {
             //do something with pickaxe
             anim.Play("Chopping");
-            AudioManager.Instance.playNoHittingSound();
+            StartCoroutine(wait2());
         }
         else if (isShovelActive)
         {
             //do something with shovel
             anim.Play("Plowing");
-            AudioManager.Instance.playPlowingSound();
+            StartCoroutine(wait());
         }
         else if (isFishingRodeActive && FishingManager.canFishing)
         {
@@ -131,6 +154,18 @@ public class ActivateCraftingTool : MonoBehaviour
             AudioManager.Instance.playNoHittingSound();
             //do something with hammer
         }
+    }
+    IEnumerator wait()
+    {
+        yield return new WaitForSeconds(0.7f);
+
+        AudioManager.Instance.playPlowingSound();
+
+    }
+    IEnumerator wait2()
+    {
+        yield return new WaitForSeconds(0.5f);
+        AudioManager.Instance.playNoHittingSound();
     }
     public bool isToolActive()
     {

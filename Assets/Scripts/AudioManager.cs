@@ -1,6 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class AudioManager : MonoBehaviour
@@ -35,7 +36,7 @@ public class AudioManager : MonoBehaviour
 
     private void Update()
     {
-        DetectUIButton();
+       DetectUIButton();
     }
     public void PlayWalkSound()
     {
@@ -319,22 +320,23 @@ public class AudioManager : MonoBehaviour
 
     void DetectUIButton()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
-            if (EventSystem.current.IsPointerOverGameObject())
+            PointerEventData pointerData = new PointerEventData(EventSystem.current);
+            pointerData.position = Mouse.current.position.ReadValue();
+
+            var results = new System.Collections.Generic.List<RaycastResult>();
+            EventSystem.current.RaycastAll(pointerData, results);
+
+            foreach (var result in results)
             {
-                GameObject clickedObj = EventSystem.current.currentSelectedGameObject;
+                Button btn = result.gameObject.GetComponent<Button>();
 
-                if (clickedObj != null)
+                if (btn != null)
                 {
-                    Button btn = clickedObj.GetComponent<Button>();
-
-                    if (btn != null)
-                    {
-                        Debug.Log("Button Pressed: " + btn.name);
-
-                        OnAnyButtonPressed(btn);
-                    }
+                    Debug.Log("Button Pressed: " + btn.name);
+                    OnAnyButtonPressed(btn);
+                    break;
                 }
             }
         }

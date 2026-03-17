@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class FoodAndWaterPoint : MonoBehaviour
@@ -11,9 +12,15 @@ public class FoodAndWaterPoint : MonoBehaviour
         }
         return false;
     }
-
-    public void refillFood()
+    private void Update()
     {
+        if (!checkFood()) {
+            StartCoroutine(refillFood());
+        }
+    }
+     IEnumerator refillFood()
+    {
+        yield return new WaitForSeconds(5f);
         foodObject.SetActive(true);
     }
 }

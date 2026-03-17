@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class OpenInventory : MonoBehaviour
@@ -17,6 +18,10 @@ public class OpenInventory : MonoBehaviour
 
     void Update()
     {
+        if (Keyboard.current.digit3Key.wasPressedThisFrame)
+        {
+            InventoryButton.onClick.Invoke();
+        }
     }
     private void Open()
     {

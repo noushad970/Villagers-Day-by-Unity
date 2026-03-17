@@ -14,14 +14,21 @@ public class CuttingTreeCollisionDetector : MonoBehaviour
     Rigidbody rb;
     public float animDetectionTime = 1.5f; // Time window to detect hits during chopping animation  
     public RaycastDetector detector;
+    public TreeSaveManager treeSaveManager;
+    GameObject Tree;
     private void Awake()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
+        GameObject Tree = GameObject.FindGameObjectWithTag("GameManager");
+
+
         if (player != null)
         {
             animator = player.GetComponent<Animator>();
             detector = player.GetComponent<RaycastDetector>();
         }
+        StartCoroutine(FindGameManagerRoutine());
+
         rb = GetComponent<Rigidbody>();
         // Find AxeEffect in hierarchy
         GameObject effectObj = GameObject.Find("AxeEffect");
@@ -30,6 +37,27 @@ public class CuttingTreeCollisionDetector : MonoBehaviour
             hitParticle = effectObj.GetComponent<ParticleSystem>();
         }
 
+    }
+    IEnumerator FindGameManagerRoutine()
+    {
+        while (Tree == null)
+        {
+            Tree = GameObject.FindGameObjectWithTag("GameManager");
+
+            if (Tree != null)
+            {
+                Debug.Log("GameManager Found: " + Tree.name);
+                OnGameManagerFound();
+                yield break;
+            }
+
+            yield return new WaitForSeconds(0.5f); // check every 0.5 seconds
+        }
+    }
+    void OnGameManagerFound()
+    {
+        // Your logic after finding GameMan
+        treeSaveManager = Tree.GetComponent<TreeSaveManager>();
     }
     private void Update()
     {
@@ -59,6 +87,8 @@ public class CuttingTreeCollisionDetector : MonoBehaviour
             {
                 RotateTree(this.gameObject);
                 rb.isKinematic = false;
+
+                treeSaveManager.ChangeTreeState(this.gameObject, "Cutted");
                 //spawn tree wood prefab here
                 StartCoroutine(destroyTree());
 
@@ -80,7 +110,6 @@ public class CuttingTreeCollisionDetector : MonoBehaviour
 
         Instantiate(woodStack, this.transform.position, Quaternion.identity);
         Destroy(this.gameObject); 
-        detector.RemoveTree(this.gameObject);
         treeDestroyParticla.Play();
         StartCoroutine(destroyWoodStack(woodStack));
     }

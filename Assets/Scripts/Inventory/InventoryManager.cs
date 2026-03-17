@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -8,6 +9,9 @@ public class InventoryManager : MonoBehaviour
     [SerializeField] private TextMeshProUGUI[] CountSlotItemTexts;///11 for seed types
 
     //Rohu, Hilsa, Tilapia, Catfish, Salmon, Tuna, Mackerel, Sardine, Cod, Carp, Egg, Milk, Wool, Meat
+    [SerializeField] private GameObject[] inHandObjects;
+    public List<Button> toolsButton = new List<Button>();
+    public List<GameObject> toolsUI = new List<GameObject>();
     private void Start()
     {
         for (int i = 0; i < inventorySlotsItems.Length; i++)
@@ -17,7 +21,41 @@ public class InventoryManager : MonoBehaviour
             inventorySlotsItems[i].GetComponent<Button>().onClick.AddListener(() =>
                 OnChangingItemButtonClicked(inventorySlotsItems[index].GetComponent<Button>()));
         }
+        for (int i = 0; i < inHandObjects.Length; i++)
+        {
+            inHandObjects[i].SetActive(false);
+        }
+        for (int i = 0; i < toolsUI.Count; i++)
+        {
+            toolsUI[i].SetActive(false);
+        }
+        for (int i = 0; i < toolsButton.Count; i++)
+        {
+            int index = i; // important for closure
+
+            toolsButton[i].onClick.AddListener(() => toolsButtonPressed(index));
+        }
     }
+    void falseEveryUI()
+    {
+        for (int i = 0; i < inHandObjects.Length; i++)
+        {
+            inHandObjects[i].SetActive(false);
+        }
+        for (int i = 0; i < toolsUI.Count; i++)
+        {
+            toolsUI[i].SetActive(false);
+        }
+    }
+    void toolsButtonPressed(int index)
+    {
+        falseEveryUI();
+        for (int i = 0; i < toolsUI.Count; i++)
+        {
+            toolsUI[i].SetActive(i == index);
+        }
+    }
+    
     private void Update()
     {
         getSeedData();
@@ -422,13 +460,13 @@ public class InventoryManager : MonoBehaviour
 
         if (PlayerSaveManager.Instance.GetItemCount("CrismasTree") > 0)
         {
-            inventorySlotsItems[42].SetActive(true);
-            CountSlotItemTexts[42].text = PlayerSaveManager.Instance.GetItemCount("CrismasTree").ToString();
+            inventorySlotsItems[43].SetActive(true);
+            CountSlotItemTexts[43].text = PlayerSaveManager.Instance.GetItemCount("CrismasTree").ToString();
         }
 
         else
         {
-            inventorySlotsItems[42].SetActive(false);
+            inventorySlotsItems[43].SetActive(false);
         }
 
 
@@ -436,10 +474,23 @@ public class InventoryManager : MonoBehaviour
     }
     private void OnChangingItemButtonClicked(Button clickedButton)
     {
+        falseEveryUI();
         string itemName="Holding"+ clickedButton.gameObject.name;
         CharacterMovement.instance.SetHandStateFromString(itemName);
+        string itime= clickedButton.gameObject.name;
         ActivateCraftingTool.Instance.setActiveAllToolsFalse();
         Debug.Log("Current state: " + CharacterMovement.instance.handState.ToString());
+        for(int i=0; i<inHandObjects.Length; i++)
+        {
+            if(inHandObjects[i].name == itime)
+            {
+                inHandObjects[i].SetActive(true);
+            }
+            else
+            {
+                inHandObjects[i].SetActive(false);
+            }
+        }
     }
     public void ChangeHandStatement()
     {

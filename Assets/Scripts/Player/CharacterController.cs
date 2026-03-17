@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.InputSystem;
 using UnityEngine.Playables;
 using UnityEngine.UI;
 
@@ -90,6 +91,91 @@ public class CharacterMovement : MonoBehaviour
     private bool isTouching = false;
     
     public static CharacterMovement instance;
+
+    // mouse settings
+
+    // =========================
+    // PC CONTROL VARIABLES
+    float mouseSensitivity = 3f;
+    bool mouseLocked = true;
+    public GameObject[] uiObjs;
+    void mouseLockUnlock()
+    {
+        bool isUnLock = false;
+        for (int i = 0; i < uiObjs.Length; i++)
+        {
+            if (uiObjs[i].activeSelf)
+            {
+                isUnLock = true;
+               
+            }
+        }
+        Debug.Log("Unlock Statues: "     + isUnLock);
+        if (isUnLock)
+        {
+            UnlockMouse();
+        }
+        else
+        {
+            LockMouse();
+        }
+    }
+    void LockMouse()
+    {
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+        mouseLocked = true;
+    }
+
+    void UnlockMouse()
+    {
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
+        mouseLocked = false;
+    }
+    // =========================
+    // PC INPUTS
+    // =========================
+    void HandlePCInputs()
+    {
+        // Jump
+        if (Keyboard.current.spaceKey.wasPressedThisFrame)
+        {
+            Jump();
+        }
+
+        // Run
+        if (Keyboard.current.leftShiftKey.isPressed || Keyboard.current.rightShiftKey.isPressed)
+        {
+            isRunPressed = true;
+        }
+        else
+        {
+            isRunPressed = false;
+        }
+
+    }
+
+
+
+    // =========================
+    // MOUSE LOOK
+    // =========================
+    void HandleMouseLook()
+    {
+        if (!mouseLocked) return;
+        if (Mouse.current == null) return;
+
+        float mouseX = Mouse.current.delta.ReadValue().x * mouseSensitivity * Time.deltaTime;
+
+        transform.Rotate(Vector3.up * mouseX);
+    }
+
+    // movement sound
+    [Header("Footstep Settings")]
+    public float walkStepRate = 0.5f;  // Time between walk footsteps
+    public float runStepRate = 0.35f;  // Time between run footsteps
+    private float stepTimer = 0f;
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -98,6 +184,8 @@ public class CharacterMovement : MonoBehaviour
         jumpButton.onClick.AddListener(Jump);
         handState = currentHandState.Empty;
         instance = this;
+
+        LockMouse();
     }
     
     void Update()
@@ -108,48 +196,38 @@ public class CharacterMovement : MonoBehaviour
         HandleTouchRotation();
         if(currentState== CharacterState.Idle)
         FacePlayerToCamera();
-        DetectUIButton();
         soundManagement();
-    }
-    void DetectUIButton()
-    {
-        if (Input.GetMouseButtonDown(0))
-        {
-            if (EventSystem.current.IsPointerOverGameObject())
-            {
-                GameObject clickedObj = EventSystem.current.currentSelectedGameObject;
 
-                if (clickedObj != null)
-                {
-                    Button btn = clickedObj.GetComponent<Button>();
-
-                    if (btn != null)
-                    {
-                        Debug.Log("Button Pressed: " + btn.name);
-
-                        OnAnyButtonPressed(btn);
-                    }
-                }
-            }
-        }
+        HandleMouseLook();
+        HandlePCInputs();
+        mouseLockUnlock();
     }
 
-    void OnAnyButtonPressed(Button button)
-    {
-        // Your global function
-        AudioManager.Instance.playClickSound();
-    }
     void soundManagement()
     {
-        if(currentState == CharacterState.Walking)
+        if (currentState == CharacterState.Walking)
         {
-            AudioManager.Instance.PlayWalkSound();
+            stepTimer -= Time.deltaTime;
+            if (stepTimer <= 0f)
+            {
+                AudioManager.Instance.PlayWalkSound();
+                stepTimer = walkStepRate;
+            }
         }
-        else if(currentState == CharacterState.Running)
+        else if (currentState == CharacterState.Running)
         {
-            AudioManager.Instance.PlayRunSound();
+            stepTimer -= Time.deltaTime;
+            if (stepTimer <= 0f)
+            {
+                AudioManager.Instance.PlayRunSound();
+                stepTimer = runStepRate;
+            }
         }
-        
+        else
+        {
+            // Reset timer when idle or jumping
+            stepTimer = 0f;
+        }
     }
     void HandleTouchRotation()
     {
@@ -157,12 +235,12 @@ public class CharacterMovement : MonoBehaviour
         {
             Touch touch = Input.GetTouch(0);
 
-            if (touch.phase == TouchPhase.Began)
+            if (touch.phase == UnityEngine.TouchPhase.Began)
             {
                 lastTouchPosition = touch.position;
                 isTouching = true;
             }
-            else if (touch.phase == TouchPhase.Moved && isTouching)
+            else if (touch.phase == UnityEngine.TouchPhase.Moved && isTouching)
             {
                 Vector2 delta = touch.position - lastTouchPosition;
                 float yaw = delta.x * rotationSpeed;
@@ -172,7 +250,7 @@ public class CharacterMovement : MonoBehaviour
 
                 lastTouchPosition = touch.position;
             }
-            else if (touch.phase == TouchPhase.Ended || touch.phase == TouchPhase.Canceled)
+            else if (touch.phase == UnityEngine.TouchPhase.Ended || touch.phase == UnityEngine.TouchPhase.Canceled)
             {
                 isTouching = false;
             }
@@ -230,9 +308,28 @@ public class CharacterMovement : MonoBehaviour
     public Camera mainCam;
     void HandleMovement()
     {
-        float x = joystick.Horizontal;
-        float z = joystick.Vertical;
+        //float x = joystick.Horizontal;
+        //float z = joystick.Vertical;
+        // Mobile joystick input
+        float keyboardX = 0f;
+        float keyboardZ = 0f;
 
+        if (Keyboard.current.aKey.isPressed || Keyboard.current.leftArrowKey.isPressed)
+            keyboardX = -1;
+
+        if (Keyboard.current.dKey.isPressed || Keyboard.current.rightArrowKey.isPressed)
+            keyboardX = 1;
+
+        if (Keyboard.current.wKey.isPressed || Keyboard.current.upArrowKey.isPressed)
+            keyboardZ = 1;
+
+        if (Keyboard.current.sKey.isPressed || Keyboard.current.downArrowKey.isPressed)
+            keyboardZ = -1;
+        float x = joystick.Horizontal + keyboardX;
+        float z = joystick.Vertical + keyboardZ;
+
+
+        //added end
         float magnitude = new Vector2(x, z).magnitude;
 
         // IDLE
