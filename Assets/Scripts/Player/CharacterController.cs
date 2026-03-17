@@ -110,7 +110,6 @@ public class CharacterMovement : MonoBehaviour
                
             }
         }
-        Debug.Log("Unlock Statues: "     + isUnLock);
         if (isUnLock)
         {
             UnlockMouse();
@@ -205,7 +204,8 @@ public class CharacterMovement : MonoBehaviour
 
     void soundManagement()
     {
-        if (currentState == CharacterState.Walking)
+        if (GroundCheck.isGrounded) { 
+            if (currentState == CharacterState.Walking)
         {
             stepTimer -= Time.deltaTime;
             if (stepTimer <= 0f)
@@ -227,6 +227,7 @@ public class CharacterMovement : MonoBehaviour
         {
             // Reset timer when idle or jumping
             stepTimer = 0f;
+        }
         }
     }
     void HandleTouchRotation()
@@ -404,7 +405,7 @@ public class CharacterMovement : MonoBehaviour
     {
         if (!GroundCheck.isGrounded)
         {
-            Debug.Log("Cannot jump, not grounded!");
+            NoticeUI.Instance.ShowNotice("You can't jump while in the air!");
             return;
 
 
@@ -498,7 +499,6 @@ public class CharacterMovement : MonoBehaviour
         {
             SetAllAnimFalse();
             anim.SetBool("Run", true);
-            Debug.Log("Run Right");
 
             //if (Mathf.Abs(x) > Mathf.Abs(y))
             //{

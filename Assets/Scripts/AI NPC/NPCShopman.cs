@@ -139,17 +139,20 @@ public class NPCShopman : MonoBehaviour
     public string ShopKeeperName { get { return shopKeeperName; } }
     private void onClickSellButton()
     {
+        AudioManager.Instance.playClickSound();
         sellPanel.SetActive(true);
         buyPanel.SetActive(false);
     }
     private void onClickBuyButton()
     {
+        AudioManager.Instance.playClickSound();
         sellPanel.SetActive(false);
         buyPanel.SetActive(true);
     }
     [SerializeField] private GameObject confirmPanel;
     public void onClickShopItemButton(Button itm)
     {
+        AudioManager.Instance.playClickSound();
         itms = itm.gameObject;
         selectedItemName = itm.name.ToString();
         Debug.Log(selectedItemName);
@@ -241,5 +244,6 @@ public class NPCShopman : MonoBehaviour
     void confirmPanelNo()
     {
         confirmPanel.SetActive(false);
+        AudioManager.Instance.playClickSound();
     }
 }

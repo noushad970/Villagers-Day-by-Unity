@@ -9,7 +9,7 @@ public class ActivateCraftingTool : MonoBehaviour
     public static ActivateCraftingTool Instance;
     [SerializeField] private GameObject Axe,Shovel,fishingRode,Hammer;
     public static bool handIsEmpty = true;
-    [SerializeField] private Button takeAxeButton, takeShovelButton, takeFishingRodeButton, takeHammerButton,emptyHandButton,interectButton;
+    [SerializeField] private Button takeAxeButton, takeShovelButton, takeFishingRodeButton, takeHammerButton,emptyHandButton,interectButton,ThrowButton,PullButton;
     public static bool isAxeActive, isShovelActive, isFishingRodeActive, isHammerActive,fishingStage1,fishingStage2,fishRodPull;
     private Animator anim;
     [SerializeField] private CinemachineCamera cam;
@@ -24,6 +24,8 @@ public class ActivateCraftingTool : MonoBehaviour
         takeShovelButton.onClick.AddListener(ActivateShovel);
         takeHammerButton.onClick.AddListener(ActivateSword);
         interectButton.onClick.AddListener(onClickInterectButton);
+        ThrowButton.onClick.AddListener(throwRod);
+        PullButton.onClick.AddListener(pullRod);
         emptyHandButton.onClick.AddListener(onClickEmptyHand);
         setActiveAllToolsFalse();
     }
@@ -34,6 +36,7 @@ public class ActivateCraftingTool : MonoBehaviour
         if (Mouse.current != null && Mouse.current.leftButton.wasPressedThisFrame)
         {
             interectButton.onClick.Invoke();
+            throwRod();
         }
         if (Keyboard.current.digit1Key.wasPressedThisFrame)
         {
@@ -51,7 +54,24 @@ public class ActivateCraftingTool : MonoBehaviour
         {
             emptyHandButton.onClick.Invoke();
         }
+        
+        if (Mouse.current != null && Mouse.current.rightButton.wasPressedThisFrame)
+        {
+            pullRod();
+        }
+        if (isFishingRodeActive)
+        {
+            interectButton.gameObject.SetActive(false);
 
+            ThrowButton.gameObject.SetActive(true);
+            PullButton.gameObject.SetActive(true);
+        }
+        else
+        {
+            interectButton.gameObject.SetActive(true);
+            ThrowButton.gameObject.SetActive(false);
+            PullButton.gameObject.SetActive(false);
+        }
     }
     public void setActiveAllToolsFalse()
     {
@@ -123,7 +143,16 @@ public class ActivateCraftingTool : MonoBehaviour
             anim.Play("Plowing");
             StartCoroutine(wait());
         }
-        else if (isFishingRodeActive && FishingManager.canFishing)
+        else if (isHammerActive)
+        {
+            anim.Play("Cutting");
+            AudioManager.Instance.playNoHittingSound();
+            //do something with hammer
+        }
+    }
+    void throwRod()
+    {
+         if (isFishingRodeActive && FishingManager.canFishing)
         {
             //do something with fishing rode
             if (fishingStage1)
@@ -133,11 +162,18 @@ public class ActivateCraftingTool : MonoBehaviour
                 fishingStage2 = true;
                 CharacterMovement.instance.freezePlayer();
                 cam.gameObject.SetActive(false);
-                joystick.enabled=false;
+                joystick.enabled = false;
                 AudioManager.Instance.playThrowingRodSound();
                 FishingManager.Instance.bitingStart();
             }
-            else if (fishingStage2)
+        }
+    }
+    void pullRod()
+    {
+         if (isFishingRodeActive && FishingManager.canFishing)
+        {
+            
+            if (fishingStage2)
             {
                 FishingManager.Instance.stopBiting();
                 anim.Play("PullOutRod");
@@ -147,12 +183,6 @@ public class ActivateCraftingTool : MonoBehaviour
                 cam.gameObject.SetActive(true);
                 joystick.enabled = true;
             }
-        }
-        else if (isHammerActive)
-        {
-            anim.Play("Cutting");
-            AudioManager.Instance.playNoHittingSound();
-            //do something with hammer
         }
     }
     IEnumerator wait()

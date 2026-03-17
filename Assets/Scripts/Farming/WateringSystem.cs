@@ -8,8 +8,8 @@ public class WateringSystem : MonoBehaviour
     private bool isWateringOn = false;
     private void Start()
     {
-        TurnOffWatering();
         isWateringOn=false;
+        TurnOnWatering();
 
     }
     private void Update()

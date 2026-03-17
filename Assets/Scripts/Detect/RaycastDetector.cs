@@ -77,10 +77,13 @@ public class RaycastDetector : MonoBehaviour
     }
     private void onClickPlantingButton(string plantingObj)
     {
-        if (plantingObj.Contains("Seed"))
-        plantingCrops(plantingObj);
-        else
-        PlantingTree(plantingObj);
+        if(plantingObj.Contains("Seed") || plantingObj.Contains("Tree"))
+        {
+            if (plantingObj.Contains("Seed"))
+                plantingCrops(plantingObj);
+            else
+                PlantingTree(plantingObj);
+        }
 
     }
     private void detectWithRay()
@@ -125,6 +128,7 @@ public class RaycastDetector : MonoBehaviour
                 canPlace = false;
                 FishingManager.canFishing = false;
             }
+            Debug.Log("Can Fishing: " + FishingManager.canFishing);
             UpdateIndicator(hit.point, canPlace);
             // Print the tag of the object hit
             // Debug.Log("Hit object: " + hit.collider.gameObject.name + " | Tag: " + hit.collider.gameObject.tag);
@@ -152,11 +156,7 @@ public class RaycastDetector : MonoBehaviour
             return;
         anim.Play("Interect");  
         // If already holding an object, drop it
-        if (heldObject != null)
-        {
-            DropObject();
-            return;
-        }
+        
 
         // Shoot ray to detect object in front
         Ray ray = new Ray(referenceObject.position, referenceObject.forward);
@@ -170,12 +170,7 @@ public class RaycastDetector : MonoBehaviour
             if (target == gameObject)
                 return;
 
-            // Only pick up objects with tag "Pickup"
-            if (target.CompareTag("Pickup"))
-            {
-                PickUp(target,0.1f);
-                NoticeUI.Instance.ShowNotice("Picked up: " + target.name);
-            }
+            
             ShopkeeperInventory.instance.OpenShopUI(getObjectName());
             //collect crop
             if(target.CompareTag("CollectableCrop") && target.GetComponent<checkIsGrownCrop>().enabled==true)
@@ -387,7 +382,6 @@ public class RaycastDetector : MonoBehaviour
     {
         if (referenceObject == null) return;
 
-        Debug.Log("Player has " + PlayerSaveManager.Instance.GetItemCount(cropName) + " of " + cropName);
         if (PlayerSaveManager.Instance.GetItemCount(cropName) > 0)
         {
             anim.Play("Interect");

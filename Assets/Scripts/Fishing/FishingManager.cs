@@ -11,7 +11,7 @@ public class FishingManager : MonoBehaviour
     public static bool canFishing=false;
     int randomBiteTime;
     [SerializeField] private GameObject fishingUI,congratsUI,SorryUI;
-    [SerializeField] private TextMeshProUGUI helpingText;
+    [SerializeField] private TextMeshProUGUI helpingText,congratsText;
     void Start()
     {
         Instance = this;
@@ -36,6 +36,7 @@ public class FishingManager : MonoBehaviour
         activateFishingUI(); 
 
     }
+    public GameObject[] fishUI;
     private void fishing()
     {
         if (ActivateCraftingTool.isFishingRodeActive)
@@ -48,7 +49,6 @@ public class FishingManager : MonoBehaviour
                 if (isFishBited)
                 {
                     Debug.Log("You caught a fish!");
-                    helpingText.text = "You caught a fish!";
                     congratsUI.SetActive(true);
                     SorryUI.SetActive(false);
                     // Add logic for catching a fish
@@ -69,6 +69,11 @@ public class FishingManager : MonoBehaviour
 
                     int randomIndex = Random.Range(0, fishNames.Length);
                     PlayerSaveManager.Instance.AddItem(fishNames[randomIndex], 1);
+
+                    helpingText.text = "You just caught a " + fishNames[randomIndex] + "!";
+                    congratsText.text = "Congratulations! You caught a " + fishNames[randomIndex] + "!";
+                    AudioManager.Instance.playCollectSound();
+                    StartCoroutine(enableFishUI(fishNames[randomIndex]));
                     //caught fish UI
                     StopCoroutine(bitingFunction());
                 }
@@ -98,6 +103,25 @@ public class FishingManager : MonoBehaviour
         congratsUI.SetActive(false);
         SorryUI.SetActive(false);
 
+    }
+    IEnumerator enableFishUI(string name)
+    {
+        for (int i = 0; i < fishUI.Length; i++)
+        {
+            if (fishUI[i].name == name)
+            {
+                fishUI[i].SetActive(true);
+            }
+            else
+            {
+                fishUI[i].SetActive(false);
+            }
+        }
+        yield return new WaitForSeconds(5);
+        for(int i = 0;i < fishUI.Length; i++)
+        {
+            fishUI[i].SetActive(false);
+        }
     }
     private void activateFishingUI()
     {
