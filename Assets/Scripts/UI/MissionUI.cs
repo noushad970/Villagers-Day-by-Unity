@@ -33,6 +33,14 @@ public class MissionUI : MonoBehaviour
                 MissionPanel.SetActive(false);
 
     }
+    public void refreshMission()
+    {
+
+        missionPanels[0].LoadMission(PlayerSaveManager.Instance.GetItemCount("CurrentMission1Index"));
+        missionPanels[1].LoadMission(PlayerSaveManager.Instance.GetItemCount("CurrentMission2Index"));
+        missionPanels[2].LoadMission(PlayerSaveManager.Instance.GetItemCount("CurrentMission3Index"));
+        missionPanels[3].LoadMission(PlayerSaveManager.Instance.GetItemCount("CurrentMission4Index"));
+    }
     //[Header("UI References (Drag & Drop in Inspector)")]
     //[SerializeField] private TMP_Text titleText;
     //[SerializeField] private Transform itemListParent;

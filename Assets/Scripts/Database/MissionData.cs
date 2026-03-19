@@ -5,7 +5,7 @@ using UnityEngine;
 public static class MissionData
 {
     private static readonly string[] missions = {
-        "1 Meat, 14 Pumkin, 18 Cabbage, 19 Milk, 2 Pepper, 3 Bean, 3 Carrot, 7 kg Suger",
+        "1 Egg, 1 Milk, 1 Wheat, 1 Bean",
         "14 Bean, 18 Sardine, 7 Salmon, 8 Tuna",
         "11 Chilli, 11 Pumkin, 14 Mackerel, 5 Bean, 7 Wool, 9 Meat",
         "12 Broccoli, 12 Rohu, 9 Cabbage",

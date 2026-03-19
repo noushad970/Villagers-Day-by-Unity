@@ -2,55 +2,42 @@ using UnityEngine;
 
 public class WateringSystem : MonoBehaviour
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    public GameObject onMotor, offMotor;
-    public ParticleSystem[] waterParticles;
+    public GameObject[] waterParticles;
     private bool isWateringOn = false;
     private void Start()
     {
         isWateringOn=false;
-        TurnOnWatering();
-
-    }
-    private void Update()
-    {
-        if(isWateringOn)
+        for (int i = 0; i < waterParticles.Length; i++)
         {
 
-            for(int i=0; i< waterParticles.Length; i++)
-            {
-                 waterParticles[i].gameObject.SetActive(true);
-                
-            }
-        }
-        else
-        {
-           for (int i = 0; i < waterParticles.Length; i++)
-            {
-                
-                    waterParticles[i].gameObject.SetActive(false);
-                
-            }
+            waterParticles[i].SetActive(false);
+
         }
     }
+    
     public void TurnOnWatering()
     {
-        onMotor.SetActive(true);
-        offMotor.SetActive(false);
         AudioManager.Instance.playwateringSound();
-        isWateringOn = true;
         NoticeUI.Instance.ShowNotice("Watering On");
+        Debug.Log("Watering On");
+        Debug.Log("Game object name: " + this.gameObject.name);
+        for (int i = 0; i < waterParticles.Length; i++)
+        {
+            waterParticles[i].SetActive(true);
+
+        }
     }
     public void TurnOffWatering()
     {
-        onMotor.SetActive(false);
-        offMotor.SetActive(true);
-        isWateringOn = false;
         AudioManager.Instance.stopWateringSound();
         NoticeUI.Instance.ShowNotice("Watering Off");
+        Debug.Log("Watering Off");
+        for (int i = 0; i < waterParticles.Length; i++)
+        {
+
+            waterParticles[i].SetActive(false);
+
+        }
     }
-    public bool IsWateringOn()
-    {
-        return isWateringOn;
-    }
+    
 }

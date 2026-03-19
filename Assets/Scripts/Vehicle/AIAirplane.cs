@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class AIAirplane : MonoBehaviour
@@ -21,10 +22,9 @@ public class AIAirplane : MonoBehaviour
     private bool isFlying = false;
     private bool isStoppingPhase = false;
     private bool isReturningToIdleRotation = false;
-
+    public GameObject[] particles;
     private void Start()
     {
-        StartFly();
     }
     void Update()
     {
@@ -55,8 +55,20 @@ public class AIAirplane : MonoBehaviour
         isStoppingPhase = false;
         AudioManager.Instance.StartVehicleEnginePlane();
         isReturningToIdleRotation = false;
+        StartCoroutine(fireWork());
     }
-
+    IEnumerator fireWork()
+    {
+        for(int i=0;i<particles.Length;i++)
+        {
+            particles[i].SetActive(true);
+        }
+        yield return new WaitForSeconds(20);
+        for (int i = 0; i < particles.Length; i++)
+        {
+            particles[i].SetActive(false);
+        }
+    }
     public void StopFly()
     {
         isFlying = false;

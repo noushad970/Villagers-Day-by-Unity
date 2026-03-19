@@ -1,11 +1,12 @@
 using TMPro;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
 public class MenuUIControl : MonoBehaviour
 {
-    public Button pauseButton, resumeButton, quitButton, soundOnOffButton;
-    public GameObject menuObj;
+    public Button pauseButton, resumeButton, quitButton, gameControlButton,soundOnOffButton,backfromTutorialButton;
+    public GameObject menuObj,gameControlDetailUI;
     public TMP_Text soundStatusState;
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -14,13 +15,19 @@ public class MenuUIControl : MonoBehaviour
         resumeButton.onClick.AddListener(onClickResumeButton);
         quitButton.onClick.AddListener(onClickQuitButton);
         soundOnOffButton.onClick.AddListener(onClickSoundOnOffButton);
+        backfromTutorialButton.onClick.AddListener(onClickbackFromTutorial);
+        gameControlButton.onClick.AddListener(onClickGameControlButton);
 
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (Keyboard.current.pKey.wasPressedThisFrame)
+        {
+            pauseButton.onClick.Invoke();
 
+        }
     }
     void onClickPauseButton()
     {
@@ -49,5 +56,13 @@ public class MenuUIControl : MonoBehaviour
             soundStatusState.text = "SOUND [ON]";
         }
 
+    }
+    void onClickbackFromTutorial()
+    {
+        gameControlDetailUI.SetActive(false);
+    }
+    void onClickGameControlButton()
+    {
+        gameControlDetailUI.SetActive(true);
     }
 }

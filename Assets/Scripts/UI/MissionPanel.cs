@@ -65,7 +65,7 @@ public class MissionPanel : MonoBehaviour
         {
             AudioManager.Instance.playMissionDoneSound();
             airplane.StartFly();
-            if(title.text=="Mission 1")
+            if(title.text=="Mission 1" || title.text == "MISSION 1")
             {
                 var requirements = MissionData.GetMissionRequirements(PlayerSaveManager.Instance.GetItemCount("CurrentMission1Index"));
                 var sorted = requirements.OrderBy(x => x.Key).ToList();
@@ -77,7 +77,7 @@ public class MissionPanel : MonoBehaviour
                 int randmonIndex = UnityEngine.Random.Range(0, 50);
                 PlayerSaveManager.Instance.UpdateItem("CurrentMission1Index", randmonIndex);
             }
-            else if (title.text == "Mission 2")
+            else if (title.text == "Mission 2" || title.text == "MISSION 2")
             {
                 var requirements = MissionData.GetMissionRequirements(PlayerSaveManager.Instance.GetItemCount("CurrentMission2Index")); 
                 var sorted = requirements.OrderBy(x => x.Key).ToList();
@@ -89,7 +89,7 @@ public class MissionPanel : MonoBehaviour
                 int randmonIndex = UnityEngine.Random.Range(0, 50);
                 PlayerSaveManager.Instance.UpdateItem("CurrentMission12ndex", randmonIndex);
             }
-            else if (title.text == "Mission 3")
+            else if (title.text == "Mission 3" || title.text == "MISSION 3")
             {
                 var requirements = MissionData.GetMissionRequirements(PlayerSaveManager.Instance.GetItemCount("CurrentMission3Index"));
                 var sorted = requirements.OrderBy(x => x.Key).ToList();
@@ -101,7 +101,7 @@ public class MissionPanel : MonoBehaviour
                 int randmonIndex = UnityEngine.Random.Range(0, 50);
                 PlayerSaveManager.Instance.UpdateItem("CurrentMission3Index", randmonIndex);
             }
-            else if (title.text == "Mission 4")
+            else if (title.text == "Mission 4" || title.text == "MISSION 4")
             {
                 var requirements = MissionData.GetMissionRequirements(PlayerSaveManager.Instance.GetItemCount("CurrentMission4Index"));
                 var sorted = requirements.OrderBy(x => x.Key).ToList();

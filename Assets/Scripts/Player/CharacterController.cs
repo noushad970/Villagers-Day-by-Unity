@@ -71,7 +71,7 @@ public class CharacterMovement : MonoBehaviour
     public float runSpeed = 6f;
     public float jumpForce = 5f;
     public float gravity = -9.81f;
-
+    public ParticleSystem footp1, footp2;
     public Joystick joystick;
 
     private CharacterController controller;
@@ -201,9 +201,10 @@ public class CharacterMovement : MonoBehaviour
         HandlePCInputs();
         mouseLockUnlock();
     }
-
+    bool x = false;
     void soundManagement()
     {
+
         if (GroundCheck.isGrounded) { 
             if (currentState == CharacterState.Walking)
         {
@@ -219,7 +220,16 @@ public class CharacterMovement : MonoBehaviour
             stepTimer -= Time.deltaTime;
             if (stepTimer <= 0f)
             {
+                    x = !x;
                 AudioManager.Instance.PlayRunSound();
+                    if (x)
+                    {
+                        footp1.Play();
+                    }
+                    else
+                    {
+                        footp2.Play();
+                    }
                 stepTimer = runStepRate;
             }
         }

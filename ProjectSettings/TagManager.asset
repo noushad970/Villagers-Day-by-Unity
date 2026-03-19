@@ -58,6 +58,7 @@ TagManager:
   - DeliveryMission
   - TreeSave
   - GameManager
+  - MotorButtonOff
   layers:
   - Default
   - TransparentFX

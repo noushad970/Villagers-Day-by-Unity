@@ -128,7 +128,6 @@ public class RaycastDetector : MonoBehaviour
                 canPlace = false;
                 FishingManager.canFishing = false;
             }
-            Debug.Log("Can Fishing: " + FishingManager.canFishing);
             UpdateIndicator(hit.point, canPlace);
             // Print the tag of the object hit
             // Debug.Log("Hit object: " + hit.collider.gameObject.name + " | Tag: " + hit.collider.gameObject.tag);
@@ -193,21 +192,19 @@ public class RaycastDetector : MonoBehaviour
                 addCropToInventory(target.name.ToString());
             }
             //water button detection and on off
-            WateringSystem wat = target.GetComponent<WateringSystem>();
+            WateringSystem wat = hit.collider.GetComponent<WateringSystem>();
             if (target.CompareTag("MotorButton") && wat != null)
             {
                 AudioManager.Instance.playClickSound();
-                if (wat.IsWateringOn())
-                {
-                    wat.TurnOffWatering();
-                }
-                else
-                {
-                    wat.TurnOnWatering();
-                }
+                wat.TurnOnWatering();
+            }
+            if (target.CompareTag("MotorButtonOff") && wat != null)
+            {
+                AudioManager.Instance.playClickSound();
+                wat.TurnOffWatering();
             }
             //collect animal item
-            if(target.GetComponent<AnimalLifeCycle>()!=null)
+            if (target.GetComponent<AnimalLifeCycle>()!=null)
             {
                 AnimalLifeCycle cycle = target.GetComponent<AnimalLifeCycle>();
                 if (cycle.isReadyToCollect() && cycle != null)

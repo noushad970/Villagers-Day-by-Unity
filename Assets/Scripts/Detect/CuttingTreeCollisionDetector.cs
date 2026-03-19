@@ -31,11 +31,7 @@ public class CuttingTreeCollisionDetector : MonoBehaviour
 
         rb = GetComponent<Rigidbody>();
         // Find AxeEffect in hierarchy
-        GameObject effectObj = GameObject.Find("AxeEffect");
-        if (effectObj != null)
-        {
-            hitParticle = effectObj.GetComponent<ParticleSystem>();
-        }
+        
 
     }
     IEnumerator FindGameManagerRoutine()
@@ -76,8 +72,7 @@ public class CuttingTreeCollisionDetector : MonoBehaviour
         if (collision.gameObject.CompareTag("TreeHitPoint"))
         {
             Debug.Log("Tree Hit During Chopping!");
-            ParticleSystem p= Instantiate(hitParticle, collision.gameObject.transform,collision.transform);
-            p.Play();
+            hitParticle.Play();
             hitCount++;
             hasHitThisChop = true;
             AudioManager.Instance.playAxeHitSound();
@@ -93,7 +88,6 @@ public class CuttingTreeCollisionDetector : MonoBehaviour
                 StartCoroutine(destroyTree());
 
             }
-            Destroy(p.gameObject, 4f);
             //
         }
         else
