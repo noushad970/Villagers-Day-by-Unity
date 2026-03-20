@@ -77,8 +77,8 @@ public class CuttingTreeCollisionDetector : MonoBehaviour
             hasHitThisChop = true;
             AudioManager.Instance.playAxeHitSound();
 
-            NoticeUI.Instance.ShowNotice($"Tree Hit! ({hitCount}/3)");
-            if (hitCount == 3)
+            NoticeUI.Instance.ShowNotice($"Tree Hit! ({hitCount}/5)");
+            if (hitCount == 5)
             {
                 RotateTree(this.gameObject);
                 rb.isKinematic = false;

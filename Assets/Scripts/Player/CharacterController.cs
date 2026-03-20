@@ -71,9 +71,8 @@ public class CharacterMovement : MonoBehaviour
     public float runSpeed = 6f;
     public float jumpForce = 5f;
     public float gravity = -9.81f;
-    public ParticleSystem footp1, footp2;
     public Joystick joystick;
-
+    private RaycastDetector raycast;
     private CharacterController controller;
     private Vector3 velocity;
     // Run Button State
@@ -99,6 +98,8 @@ public class CharacterMovement : MonoBehaviour
     float mouseSensitivity = 3f;
     bool mouseLocked = true;
     public GameObject[] uiObjs;
+
+    
     void mouseLockUnlock()
     {
         bool isUnLock = false;
@@ -113,11 +114,33 @@ public class CharacterMovement : MonoBehaviour
         if (isUnLock)
         {
             UnlockMouse();
+            
         }
         else
         {
             LockMouse();
         }
+    }
+
+    
+    IEnumerator RunOnlyOnce()
+    {
+        Debug.Log("This runs ONLY once, even after restarting the game!");
+        yield return new WaitForSeconds(1f);
+        PlayerSaveManager.Instance.AddCoins(1000);
+        PlayerSaveManager.Instance.AddItem("BeanSeed",5);
+         PlayerSaveManager.Instance.AddItem("BeetrootSeed", 5);
+          PlayerSaveManager.Instance.AddItem("BroccoliSeed", 5);
+           PlayerSaveManager.Instance.AddItem("CabbageSeed", 5);
+            PlayerSaveManager.Instance.AddItem("CarrotSeed", 5);
+             PlayerSaveManager.Instance.AddItem("ChilliSeed", 5);
+              PlayerSaveManager.Instance.AddItem("CornSeed", 5);
+               PlayerSaveManager.Instance.AddItem("PepperSeed", 5);
+                PlayerSaveManager.Instance.AddItem("PumpkinSeed", 5);
+                 PlayerSaveManager.Instance.AddItem("TomatoSeed", 5);
+                  PlayerSaveManager.Instance.AddItem("WatermelonSeed", 5);
+                   PlayerSaveManager.Instance.AddItem("WheatSeed", 5);
+        // Your code here
     }
     void LockMouse()
     {
@@ -183,7 +206,14 @@ public class CharacterMovement : MonoBehaviour
         jumpButton.onClick.AddListener(Jump);
         handState = currentHandState.Empty;
         instance = this;
+        raycast=GetComponent<RaycastDetector>();
+        if (PlayerPrefs.GetInt("HasRunBefore", 0) == 0)
+        {
+            StartCoroutine(RunOnlyOnce());
 
+            PlayerPrefs.SetInt("HasRunBefore", 1);
+            PlayerPrefs.Save();
+        }
         LockMouse();
     }
     
@@ -220,16 +250,8 @@ public class CharacterMovement : MonoBehaviour
             stepTimer -= Time.deltaTime;
             if (stepTimer <= 0f)
             {
-                    x = !x;
                 AudioManager.Instance.PlayRunSound();
-                    if (x)
-                    {
-                        footp1.Play();
-                    }
-                    else
-                    {
-                        footp2.Play();
-                    }
+                   
                 stepTimer = runStepRate;
             }
         }

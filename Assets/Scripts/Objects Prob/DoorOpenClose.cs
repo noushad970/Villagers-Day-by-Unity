@@ -30,7 +30,7 @@ public class DoorOpenClose : MonoBehaviour
     }
     IEnumerator wait2()
     {
-               yield return new WaitForSeconds(4f);
+               yield return new WaitForSeconds(3f);
          backToZeroAll();
     }
     public void backToZeroAll()

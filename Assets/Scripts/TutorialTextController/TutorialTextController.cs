@@ -26,13 +26,13 @@ public class TutorialTextController : MonoBehaviour
         {
             "Hello! My name is Mr Mango. I am a Happy farmer. I will be with you to explore this beautiful village with you.",
 
-"So first lets talk about our main goal which is Hastle of Hunger...........................",
+"So first lets talk about our main goal which is Outgrow Hunger where you can connect with nature. You can collect food and donate those to your neighbour village or country.",
 
 "You have to collect foods by harvesting or from animal. Food which is very important for your health. To survive in this world and also to fullfil other people's need.",
 
 "Here you can harvest crop, catch fish, collect food from animal also you can buy food from shop. There is a Bazar where you can buy any food.",
 
-"First Buy some crops seed from the store and plant them in the harvesting field. You need to first plow the field where you will harvest them.",
+"First Buy some crops seed from the store and plant them in the harvesting field. You need to first plow the field where you will harvest them. Select shovel and try to hit toward the harvest land to plow it.",
 
 "After planting crops or tree wait for those tree or crops to grow. After complete growing you can collect and or deliver them.",
 
@@ -132,7 +132,7 @@ public class TutorialTextController : MonoBehaviour
     void Function2()
     {
         Debug.Log("Run every time AFTER tutorial is done");
-        SceneManager.LoadScene("MainGameScene"); // Example: Load main game scene
+        this.gameObject.SetActive(false);
         // 👉 Your normal game start logic
         // Example:
         // Load main UI, enable controls, etc.

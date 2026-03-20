@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.HID;
@@ -28,9 +30,12 @@ public class RaycastDetector : MonoBehaviour
     private GameObject indicatorInstance;
     private Animator anim;
 
-
+    public TextMeshProUGUI helpingMessage;
     [SerializeField] private Button plantingButton, InterectButton;
 
+
+    private float lastHitTime;
+    private bool isHitting = false;
     void Start()
     {
         if (InterectButton != null)
@@ -63,6 +68,7 @@ public class RaycastDetector : MonoBehaviour
 
         return input.Substring(7);
     }
+    
     void Update()
     {
         detectWithRay();
@@ -74,6 +80,89 @@ public class RaycastDetector : MonoBehaviour
         {
             plantingButton.onClick.Invoke();
         }
+        checkHittingRay();
+        
+    }
+    void checkHittingRay()
+    {
+
+        // Detect ray hit
+        if (Physics.Raycast(ray, out hit))
+        {
+            if (hit.collider.CompareTag("CropArea"))
+            {
+                isHitting = true;
+                lastHitTime = Time.time;
+            }
+            else if (hit.collider.CompareTag("Water"))
+            {
+                isHitting = true;
+                lastHitTime = Time.time;
+            }
+            else if (hit.collider.gameObject.CompareTag("CollectableCrop") && hit.collider.gameObject.GetComponent<checkIsGrownCrop>().enabled == true)
+            {
+                isHitting = true;
+                lastHitTime = Time.time;
+            }
+            else if (hit.collider.CompareTag("MotorButton") && hit.collider.GetComponent<WateringSystem>() != null)
+            {
+                isHitting = true;
+                lastHitTime = Time.time;
+            }
+            else if (hit.collider.CompareTag("MotorButtonOff") && hit.collider.GetComponent<WateringSystem>() != null)
+            {
+                isHitting = true;
+                lastHitTime = Time.time;
+            }
+            else if (hit.collider.gameObject.GetComponent<AnimalLifeCycle>() != null)
+            {
+                AnimalLifeCycle cycle = hit.collider.gameObject.GetComponent<AnimalLifeCycle>();
+                if (cycle.isReadyToCollect() && cycle != null)
+                {
+                    isHitting = true;
+                    lastHitTime = Time.time;
+                }
+
+            }
+            else if (hit.collider.CompareTag("Wood"))
+            {
+                isHitting = true;
+                lastHitTime = Time.time;
+            }
+            else if (hit.collider.CompareTag("DoorNegative"))
+            {
+                isHitting = true;
+                lastHitTime = Time.time;
+            }
+            else if (hit.collider.CompareTag("DeliveryMission"))
+            {
+                isHitting = true;
+                lastHitTime = Time.time;
+            }
+            else if (hit.collider.name.ToString() == "fisherShopKeeper" || hit.collider.name.ToString() == "foodShopKeeper" || hit.collider.name.ToString() == "farmerShopKeeper" || hit.collider.name.ToString() == "blacksmithShopKeeper" || hit.collider.name.ToString() == "meatShopKeeper" || hit.collider.name.ToString() == "seedShopKeeper" || hit.collider.name.ToString() == "animalShopKeeper")
+            {
+                isHitting = true;
+                lastHitTime = Time.time;
+            }
+            else
+            {
+                isHitting=false;    
+            }
+            // Show text (you can customize this)
+        }
+        else
+        {
+            isHitting = false;
+        }
+
+        // If not hitting, wait then clear
+        if (!isHitting && !string.IsNullOrWhiteSpace(helpingMessage.text))
+        {
+            if (Time.time - lastHitTime >= 1)
+            {
+                helpingMessage.text = "";
+            }
+        }
     }
     private void onClickPlantingButton(string plantingObj)
     {
@@ -84,8 +173,9 @@ public class RaycastDetector : MonoBehaviour
             else
                 PlantingTree(plantingObj);
         }
-
+        
     }
+    
     private void detectWithRay()
     {
         if (referenceObject == null || camObj == null) return;
@@ -129,6 +219,50 @@ public class RaycastDetector : MonoBehaviour
                 FishingManager.canFishing = false;
             }
             UpdateIndicator(hit.point, canPlace);
+
+            if (hit.collider.CompareTag("CropArea"))
+            {
+                helpingMessage.text = "Press plant button or right mouse button to plant a crop.";
+            }else if (hit.collider.CompareTag("Water"))
+            {
+                helpingMessage.text = "Throw Fishing Rod toward water to catch the fish. Press Interect button or left mouse button";
+            }
+            else if (hit.collider.gameObject.CompareTag("CollectableCrop") && hit.collider.gameObject.GetComponent<checkIsGrownCrop>().enabled == true)
+            {
+                helpingMessage.text = "Press interect button or left mouse button to collect the crop's food";
+            }else if (hit.collider.CompareTag("MotorButton") && hit.collider.GetComponent<WateringSystem>() != null)
+            {
+                helpingMessage.text = "Press left mouse button or Interect button to start the Motor";
+            }
+            else if (hit.collider.CompareTag("MotorButtonOff") && hit.collider.GetComponent<WateringSystem>() != null)
+            {
+                helpingMessage.text = "Press left mouse button or Interect button to turn off the Motor";
+            }else if (hit.collider.gameObject.GetComponent<AnimalLifeCycle>() != null)
+            {
+                AnimalLifeCycle cycle = hit.collider.gameObject.GetComponent<AnimalLifeCycle>();
+                if (cycle.isReadyToCollect() && cycle != null)
+                {
+                    helpingMessage.text = "Press left mouse button or Interect button to collect the item";
+                }
+                
+            }else if (hit.collider.CompareTag("Wood"))
+            {
+                helpingMessage.text = "Press left mouse button or Interect button to collect the item";
+            }else if (hit.collider.CompareTag("DoorNegative"))
+            {
+                helpingMessage.text = "Press left mouse button or interect button to open the door";
+            }else if (hit.collider.CompareTag("DeliveryMission"))
+            {
+                helpingMessage.text = "Press left mouse button or interect button to open the Game Missions";
+            }else if (hit.collider.name.ToString() == "fisherShopKeeper" || hit.collider.name.ToString() == "foodShopKeeper" || hit.collider.name.ToString() == "farmerShopKeeper" || hit.collider.name.ToString() == "blacksmithShopKeeper" || hit.collider.name.ToString() == "meatShopKeeper" || hit.collider.name.ToString() == "seedShopKeeper" || hit.collider.name.ToString() == "animalShopKeeper")
+            {
+                helpingMessage.text = "Press left mouse button or interect button to open the shop";
+            }
+            else
+            {
+                helpingMessage.text = "";
+            }
+
             // Print the tag of the object hit
             // Debug.Log("Hit object: " + hit.collider.gameObject.name + " | Tag: " + hit.collider.gameObject.tag);
         }
@@ -147,6 +281,14 @@ public class RaycastDetector : MonoBehaviour
       //  Debug.Log("Is valid placement: " + isValid);
         MeshRenderer mr = indicatorInstance.GetComponent<MeshRenderer>();
         mr.material = isValid ? validMaterial : invalidMaterial;
+        if (isValid)
+        {
+            helpingMessage.text = "Press right mouse button or  Planting button to plant the tree or crops";
+        }
+        else
+        {
+            helpingMessage.text = "";
+        }
     }
 
     void OnInteract()
@@ -285,7 +427,7 @@ public class RaycastDetector : MonoBehaviour
         {
             Ray ray = new Ray(referenceObject.position, referenceObject.forward);
             RaycastHit hit;
-
+            
             anim.Play("Interect");
 
             if (Physics.Raycast(ray, out hit, rayLength))
@@ -296,7 +438,7 @@ public class RaycastDetector : MonoBehaviour
                 if (!target.CompareTag("Land"))
                     return;
 
-
+                
                 // Loop through plant prefabs
                 for (int i = 0; i < plantPrefab.Length; i++)
                 {
@@ -452,11 +594,12 @@ public class RaycastDetector : MonoBehaviour
     public string getObjectName()
     {
        
+        
         if (hit.collider.name.ToString()=="fisherShopKeeper" || hit.collider.name.ToString() == "foodShopKeeper" || hit.collider.name.ToString() == "farmerShopKeeper"|| hit.collider.name.ToString() =="blacksmithShopKeeper"|| hit.collider.name.ToString()== "meatShopKeeper"||hit.collider.name.ToString()== "seedShopKeeper" || hit.collider.name.ToString() == "animalShopKeeper")
         {
             //hit.collider.gameObject.GetComponent<NPCShopman>().enableShopSection();
             EnableShop shopman = hit.collider.gameObject.GetComponent<EnableShop>();
-           NoticeUI.Instance.ShowNotice("Shop Opened");
+           //NoticeUI.Instance.ShowNotice("Shop Opened");
             shopman.enableShopSection();
             
             return hit.collider.name.ToString();
