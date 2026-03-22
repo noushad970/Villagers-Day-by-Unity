@@ -16,12 +16,9 @@ public class VillagerNPC : MonoBehaviour
 
     [Header("Obstacle Avoidance")]
     public float detectionDistance = 1.5f;
-    public float avoidStrength = 3f;
 
     private int currentWaypointIndex;
     private Animator animator;
-
-    private Vector3 avoidDirection;
 
     void Start()
     {
@@ -42,8 +39,13 @@ public class VillagerNPC : MonoBehaviour
                 yield return null;
             }
 
-            // Idle
+            // 💤 Idle
             animator.SetBool("isWalking", false);
+
+            // ✅ Lock X and Z rotation during idle
+            Vector3 rot = transform.eulerAngles;
+            transform.rotation = Quaternion.Euler(0f, rot.y, 0f);
+
             float waitTime = Random.Range(minIdleTime, maxIdleTime);
             yield return new WaitForSeconds(waitTime);
 
@@ -54,13 +56,20 @@ public class VillagerNPC : MonoBehaviour
     void MoveToWaypoint()
     {
         Vector3 targetDir = (waypoints[currentWaypointIndex].position - transform.position).normalized;
-
-        // 🚧 Obstacle detection & avoidance
         Vector3 finalDirection = targetDir;
 
+        // 🚧 Obstacle detection
         if (IsObstacleAhead(out RaycastHit hit))
         {
-            PickNewWaypoint();
+            // 👉 Get a side direction to avoid obstacle
+            Vector3 avoidDir = Vector3.Cross(hit.normal, Vector3.up).normalized;
+
+            // Mix original + avoid direction
+            finalDirection = (targetDir + avoidDir * 2f).normalized;
+
+            // Optional: also change waypoint sometimes
+            if (Random.value < 0.02f)
+                PickNewWaypoint();
         }
 
         // Smooth rotation
@@ -70,7 +79,7 @@ public class VillagerNPC : MonoBehaviour
             transform.rotation = Quaternion.Slerp(transform.rotation, lookRotation, rotationSpeed * Time.deltaTime);
         }
 
-        // Move forward
+        // Always move forward ✅
         transform.position += transform.forward * moveSpeed * Time.deltaTime;
     }
 
@@ -83,10 +92,11 @@ public class VillagerNPC : MonoBehaviour
     {
         Ray ray = new Ray(transform.position + Vector3.up * 0.5f, transform.forward);
 
-        if (Physics.Raycast(ray, out hit, detectionDistance))
+        // ✅ Detect EVERYTHING (trigger + non-trigger)
+        if (Physics.Raycast(ray, out hit, detectionDistance, ~0, QueryTriggerInteraction.Collide))
         {
-            // Ignore ground using tag
-            if (hit.collider.CompareTag("Land"))
+            // Ignore ground layer (recommended instead of tag)
+            if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Ground"))
                 return false;
 
             return true;

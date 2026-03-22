@@ -42,7 +42,7 @@ public class CuttingTreeCollisionDetector : MonoBehaviour
 
             if (Tree != null)
             {
-                Debug.Log("GameManager Found: " + Tree.name);
+                //Debug.Log("GameManager Found: " + Tree.name);
                 OnGameManagerFound();
                 yield break;
             }

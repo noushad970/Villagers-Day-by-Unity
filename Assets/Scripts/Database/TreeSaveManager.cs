@@ -1,7 +1,6 @@
 using System.Collections.Generic;
-using System.IO;
-using Unity.VisualScripting.Antlr3.Runtime.Tree;
 using UnityEngine;
+
 [System.Serializable]
 public class TreeData
 {
@@ -19,43 +18,36 @@ public class TreeDataList
 
 public class TreeSaveManager : MonoBehaviour
 {
-    public string saveFileName = "TreeData.json";
+    private const string TREE_KEY = "TREE_DATA";
 
     public GameObject[] treePrefab;
-
     public List<GameObject> plantedTrees = new List<GameObject>();
 
     private TreeDataList treeDataList = new TreeDataList();
-
-    private string SavePath => Path.Combine(Application.persistentDataPath, saveFileName);
 
     void Start()
     {
         LoadTrees();
     }
-    private void Update()
-    {
 
-    }
-
-    // SAVE NEW TREE
+    // ================= SAVE NEW TREE =================
     public void SaveTree(GameObject tree, string state = "Planted")
     {
         TreeID id = tree.GetComponent<TreeID>();
 
-        // Generate ID if empty
         if (id == null)
         {
             Debug.LogError("TreeID component missing!");
             return;
         }
 
+        // Generate ID if empty
         if (string.IsNullOrEmpty(id.treeID))
         {
             id.treeID = System.Guid.NewGuid().ToString();
         }
 
-        // prevent duplicate save
+        // Prevent duplicate
         if (treeDataList.trees.Exists(t => t.treeID == id.treeID))
         {
             Debug.Log("Tree already saved: " + id.treeID);
@@ -71,34 +63,34 @@ public class TreeSaveManager : MonoBehaviour
         };
 
         treeDataList.trees.Add(data);
-
         plantedTrees.Add(tree);
 
-        WriteToFile();
+        SaveToPrefs();
 
         Debug.Log("Tree saved successfully: " + id.treeID);
     }
 
-    // CHANGE TREE STATE
+    // ================= CHANGE STATE =================
     public void ChangeTreeState(GameObject tree, string newState)
     {
         TreeID id = tree.GetComponent<TreeID>();
 
-        TreeData found = treeDataList.trees.Find(t => t.treeID == id.treeID);
+        if (id == null) return;
 
-        Debug.Log(found != null ?
-            $"Found tree data: {found.plantName} at {found.position} with state {found.state}"
-            : "Tree data not found!");
+        TreeData found = treeDataList.trees.Find(t => t.treeID == id.treeID);
 
         if (found != null)
         {
             found.state = newState;
-
-            WriteToFile();
+            SaveToPrefs();
+        }
+        else
+        {
+            Debug.LogWarning("Tree data not found!");
         }
     }
 
-    // REMOVE TREE (CUT TREE)
+    // ================= REMOVE TREE =================
     public void RemoveTree(GameObject tree)
     {
         ChangeTreeState(tree, "Cutted");
@@ -109,26 +101,28 @@ public class TreeSaveManager : MonoBehaviour
         }
     }
 
-    // WRITE JSON
-    public void WriteToFile()
+    // ================= SAVE =================
+    void SaveToPrefs()
     {
-        string json = JsonUtility.ToJson(treeDataList, true);
+        string json = JsonUtility.ToJson(treeDataList, false); // no pretty print (smaller size)
 
-        File.WriteAllText(SavePath, json);
+        PlayerPrefs.SetString(TREE_KEY, json);
+        PlayerPrefs.Save();
 
-        Debug.Log("Tree data saved: " + SavePath);
+        Debug.Log("Tree data saved (PlayerPrefs)");
     }
 
-    // LOAD TREES
+    // ================= LOAD =================
     public void LoadTrees()
     {
-        if (!File.Exists(SavePath))
+        if (!PlayerPrefs.HasKey(TREE_KEY))
         {
-            Debug.Log("No save file found.");
+            Debug.Log("No tree save found.");
+            treeDataList = new TreeDataList();
             return;
         }
 
-        string json = File.ReadAllText(SavePath);
+        string json = PlayerPrefs.GetString(TREE_KEY);
 
         treeDataList = JsonUtility.FromJson<TreeDataList>(json);
 
@@ -138,29 +132,41 @@ public class TreeSaveManager : MonoBehaviour
             return;
         }
 
+        // 🔥 Prevent duplicate spawn on reload
+        foreach (var tree in plantedTrees)
+        {
+            if (tree == null) continue;
+
+            // ✅ Only destroy scene objects, NOT prefabs
+            if (tree.scene.IsValid())
+            {
+                Destroy(tree);
+            }
+        }
+        plantedTrees.Clear();
+
         foreach (TreeData data in treeDataList.trees)
         {
             if (data.state == "Cutted")
                 continue;
 
-            for (int i = 0; i < treePrefab.Length; i++)
+            foreach (var prefab in treePrefab)
             {
-                if (treePrefab[i].name == data.plantName)
+                if (prefab.name == data.plantName)
                 {
-                    GameObject tree = Instantiate(treePrefab[i], data.position, Quaternion.identity);
+                    GameObject tree = Instantiate(prefab, data.position, Quaternion.identity);
 
                     TreeID id = tree.GetComponent<TreeID>();
-
                     if (id != null)
                         id.treeID = data.treeID;
 
                     plantedTrees.Add(tree);
 
-                    Debug.Log($"Loaded tree: {data.plantName} at {data.position}");
-
                     break;
                 }
             }
         }
+
+        Debug.Log("Tree data loaded (PlayerPrefs)");
     }
 }

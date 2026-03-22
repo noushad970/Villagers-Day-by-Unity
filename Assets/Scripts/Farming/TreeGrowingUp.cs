@@ -11,10 +11,13 @@ public class TreeGrowingUp : MonoBehaviour
     private CuttingTreeCollisionDetector collisionDetector;
     void Start()
     {
-        // Start from zero scale (or very small)
         transform.localScale = Vector3.zero;
-        collisionDetector=GetComponent<CuttingTreeCollisionDetector>();
-        // Start growing automatically (or call StartGrowth manually)
+
+        collisionDetector = GetComponent<CuttingTreeCollisionDetector>();
+
+        if (collisionDetector != null)
+            collisionDetector.enabled = false;
+
         StartGrowth();
     }
 

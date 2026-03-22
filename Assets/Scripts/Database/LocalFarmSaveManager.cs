@@ -1,31 +1,35 @@
 ﻿using UnityEngine;
-using System.IO;
 
 public class LocalFarmSaveManager : MonoBehaviour
 {
-    private string saveFileName = "FarmData.json";
-    private string SavePath => Path.Combine(Application.persistentDataPath, saveFileName);
+    private const string FARM_KEY = "farm_data";
 
     public void SaveFarm(FarmData data)
     {
-        string json = JsonUtility.ToJson(data, true); // pretty print
-        File.WriteAllText(SavePath, json);
-        Debug.Log("✅ Farm data saved at: " + SavePath);
+        string json = JsonUtility.ToJson(data, true);
+        PlayerPrefs.SetString(FARM_KEY, json);
+        PlayerPrefs.Save();
+
+        Debug.Log("✅ Farm data saved (PlayerPrefs)");
     }
 
     public FarmData LoadFarm()
     {
-        if (!File.Exists(SavePath))
+        if (!PlayerPrefs.HasKey(FARM_KEY))
         {
             Debug.LogWarning("No farm save found!");
             return null;
         }
 
-        string json = File.ReadAllText(SavePath);
+        string json = PlayerPrefs.GetString(FARM_KEY);
         FarmData data = JsonUtility.FromJson<FarmData>(json);
-        Debug.Log("✅ Farm data loaded from: " + SavePath);
+
+        Debug.Log("✅ Farm data loaded (PlayerPrefs)");
         return data;
     }
 
-    public bool HasSave() => File.Exists(SavePath);
+    public bool HasSave()
+    {
+        return PlayerPrefs.HasKey(FARM_KEY);
+    }
 }

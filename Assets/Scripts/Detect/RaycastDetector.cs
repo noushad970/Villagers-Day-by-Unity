@@ -322,6 +322,7 @@ public class RaycastDetector : MonoBehaviour
                 GameObject gPr = pr.transform.parent.gameObject;
                 GameObject ggPr = gPr.transform.parent.gameObject;
                 int index = hit.collider.gameObject.transform.GetSiblingIndex();
+                addCropToInventory(target.name.ToString());
                 ggPr.GetComponent<LandDataComponent>().RemoveCrop(target); 
                 FarmController farmController = FindObjectOfType<FarmController>();
                 AudioManager.Instance.playCollectSound();
@@ -331,7 +332,7 @@ public class RaycastDetector : MonoBehaviour
                     farmController.SaveFarm();
 
                 }
-                addCropToInventory(target.name.ToString());
+                Destroy(target);
             }
             //water button detection and on off
             WateringSystem wat = hit.collider.GetComponent<WateringSystem>();

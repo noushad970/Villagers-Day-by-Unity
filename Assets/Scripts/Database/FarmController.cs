@@ -4,14 +4,14 @@ public class FarmController : MonoBehaviour
 {
     public LocalFarmSaveManager saveManager;
     public LandDataComponent[] allLands;
-    public GameObject[] cropPrefabs; // Assign prefabs by name for planting
+    public GameObject[] cropPrefabs;
 
     private void Start()
     {
         LoadFarm();
     }
 
-    // Save the whole farm
+    // ================= SAVE =================
     public void SaveFarm()
     {
         FarmData farm = new FarmData();
@@ -25,38 +25,68 @@ public class FarmController : MonoBehaviour
         saveManager.SaveFarm(farm);
     }
 
-    // Load farm and instantiate crops
+    // ================= LOAD =================
     public void LoadFarm()
     {
         FarmData farm = saveManager.LoadFarm();
         if (farm == null) return;
 
-        for (int i = 0; i < farm.lands.Length; i++)
+        int landCount = Mathf.Min(allLands.Length, farm.lands.Length);
+
+        for (int i = 0; i < landCount; i++)
         {
             LandDataComponent landComp = allLands[i];
             LandData savedLand = farm.lands[i];
 
+            // Apply fertilization
             landComp.isFertilized = savedLand.isFertilized;
+            landComp.landData.isFertilized = savedLand.isFertilized;
 
-            for (int j = 0; j < savedLand.cropAreas.Length; j++)
+            // ✅ Update visuals (IMPORTANT)
+            landComp.SendMessage("UpdateVisual", SendMessageOptions.DontRequireReceiver);
+
+            int cropCount = Mathf.Min(
+                landComp.cropAreasTransforms.Length,
+                savedLand.cropAreas.Length
+            );
+
+            for (int j = 0; j < cropCount; j++)
             {
-                landComp.plantedCropNames[j] = savedLand.cropAreas[j].cropName;
+                Transform area = landComp.cropAreasTransforms[j];
 
-                if (!string.IsNullOrEmpty(savedLand.cropAreas[j].cropName))
+                // 🔥 CLEAR OLD CROPS FIRST
+                if (area.childCount > 0)
                 {
-                    // Instantiate crop prefab at local position
-                    GameObject prefab = GetCropPrefab(savedLand.cropAreas[j].cropName);
+                    for (int k = area.childCount - 1; k >= 0; k--)
+                    {
+                        Destroy(area.GetChild(k).gameObject);
+                    }
+                }
+
+                string cropName = savedLand.cropAreas[j].cropName;
+                landComp.plantedCropNames[j] = cropName;
+
+                if (!string.IsNullOrEmpty(cropName))
+                {
+                    GameObject prefab = GetCropPrefab(cropName);
+
                     if (prefab != null)
                     {
-                        GameObject crop = Instantiate(prefab, landComp.cropAreasTransforms[j].position, Quaternion.identity);
-                        crop.transform.SetParent(landComp.cropAreasTransforms[j]);
+                        GameObject crop = Instantiate(prefab, area.position, Quaternion.identity);
+                        crop.transform.SetParent(area);
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Prefab not found: " + cropName);
                     }
                 }
             }
         }
+
         Debug.Log("✅ Farm loaded");
     }
 
+    // ================= GET PREFAB =================
     private GameObject GetCropPrefab(string cropName)
     {
         foreach (var prefab in cropPrefabs)

@@ -11,8 +11,8 @@ public class CropGrowUp : MonoBehaviour
     [SerializeField] private float minSizeX=.1f, minSizeY=0.1f, minSizeZ = 0.1f;
     [SerializeField] private float maxSizeX=1.5f, maxSizeY = 1.5f, maxSizeZ = 1.5f;
     [SerializeField] private float totTime = 60f;
-    private checkIsGrownCrop isGrownCrop;
-    private void Awake()
+    public checkIsGrownCrop isGrownCrop;
+    private void Start()
     {
         isGrownCrop = GetComponent<checkIsGrownCrop>();
         isGrownCrop.enabled = false;
@@ -24,6 +24,7 @@ public class CropGrowUp : MonoBehaviour
         StartScaling();
         cropName=this.gameObject.name;
         StartCoroutine(readyForCollect());
+        checkIsGrown = false;
 
 
 
@@ -101,10 +102,12 @@ public class CropGrowUp : MonoBehaviour
     {
 
     }
+    public bool checkIsGrown=false;
     IEnumerator readyForCollect()
     {
         yield return new WaitForSeconds(cropGrowthTime);
         isGrownCrop.enabled = true;
+        checkIsGrown = true;
     }
     public bool isCropGrown()
     {

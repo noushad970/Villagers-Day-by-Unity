@@ -476,6 +476,7 @@ public class InventoryManager : MonoBehaviour
     {
         falseEveryUI();
         string itemName="Holding"+ clickedButton.gameObject.name;
+        Debug.Log("Clicked item: " + itemName);
         CharacterMovement.instance.SetHandStateFromString(itemName);
         string itime= clickedButton.gameObject.name;
         ActivateCraftingTool.Instance.setActiveAllToolsFalse();

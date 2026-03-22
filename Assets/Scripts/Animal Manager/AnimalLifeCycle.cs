@@ -33,9 +33,19 @@ public class AnimalLifeCycle : MonoBehaviour
     public GameObject[] randomWalkPoints;
 
     private Transform currentTarget;
+     float amplitude = 0.3f;   // How high it moves
+     float frequency = 5f;     // Speed of movement
+    public Vector3 yUp =new Vector3(0, 1.5f,0);
 
+    private Vector3 startPos;
+
+    
+
+    
     private void Start()
     {
+        if(this.gameObject.CompareTag("Goat1")||this.gameObject.CompareTag("Goat2"))
+        startPos = this.gameObject.transform.position+yUp;
         anim = GetComponent<Animator>();
         foreach (Transform child in transform)
         {
@@ -152,6 +162,15 @@ public class AnimalLifeCycle : MonoBehaviour
     }
     private void Update()
     {
+
+        if (this.gameObject.CompareTag("Goat1") || this.gameObject.CompareTag("Goat2"))
+            startPos = this.gameObject.transform.position + yUp;
+
+        if (this.gameObject.CompareTag("Goat1") || this.gameObject.CompareTag("Goat2"))
+        {
+            float yOffset = Mathf.Sin(Time.time * frequency) * amplitude;
+            collectableItem.transform.position = startPos + new Vector3(0f, yOffset, 0f);
+        }
         switch (currentState)
         {
             case animalState.idleState:

@@ -1,11 +1,10 @@
 ﻿using UnityEngine;
-using System.IO;
 
 public class PlayerSaveManager : MonoBehaviour
 {
     public static PlayerSaveManager Instance;
 
-    private string savePath;
+    private const string SAVE_KEY = "player_state"; // instead of file path
     public PlayerStateData playerData;
 
     void Awake()
@@ -15,7 +14,6 @@ public class PlayerSaveManager : MonoBehaviour
             Instance = this;
             DontDestroyOnLoad(gameObject);
 
-            savePath = Path.Combine(Application.persistentDataPath, "player_state.json");
             LoadPlayer();
         }
         else
@@ -28,18 +26,20 @@ public class PlayerSaveManager : MonoBehaviour
     public void SavePlayer()
     {
         string json = JsonUtility.ToJson(playerData, true);
-        File.WriteAllText(savePath, json);
-        Debug.Log("Player data saved");
+        PlayerPrefs.SetString(SAVE_KEY, json);
+        PlayerPrefs.Save();
+
+        Debug.Log("Player data saved (PlayerPrefs)");
     }
 
     // ---------------- LOAD ----------------
     public void LoadPlayer()
     {
-        if (File.Exists(savePath))
+        if (PlayerPrefs.HasKey(SAVE_KEY))
         {
-            string json = File.ReadAllText(savePath);
+            string json = PlayerPrefs.GetString(SAVE_KEY);
             playerData = JsonUtility.FromJson<PlayerStateData>(json);
-            Debug.Log("Player data loaded");
+            Debug.Log("Player data loaded (PlayerPrefs)");
         }
         else
         {
@@ -63,45 +63,45 @@ public class PlayerSaveManager : MonoBehaviour
         SavePlayer();
         return true;
     }
+
     public int GetCoinCount()
     {
         return playerData.coins;
     }
-    // ---------------- SEEDS ----------------
-    public void AddItem(string PlantedOrCollectedItemName, int amount)
+
+    // ---------------- ITEMS ----------------
+    public void AddItem(string itemName, int amount)
     {
-        var field = typeof(PlayerStateData).GetField(PlantedOrCollectedItemName);
+        var field = typeof(PlayerStateData).GetField(itemName);
         if (field != null)
         {
             int current = (int)field.GetValue(playerData);
             field.SetValue(playerData, current + amount);
-            Debug.Log($"Added {amount} to {PlantedOrCollectedItemName}. New total: {(int)field.GetValue(playerData)}");
             SavePlayer();
         }
         else
         {
-            Debug.LogError("Seed not found: " + PlantedOrCollectedItemName);
-        }
-    }
-    public void UpdateItem(string PlantedOrCollectedItemName, int amount)
-    {
-        var field = typeof(PlayerStateData).GetField(PlantedOrCollectedItemName);
-        if (field != null)
-        {
-            int current = (int)field.GetValue(playerData);
-            field.SetValue(playerData, amount);
-            Debug.Log($"Updated {amount} to {PlantedOrCollectedItemName}. New Update Value: {(int)field.GetValue(playerData)}");
-            SavePlayer();
-        }
-        else
-        {
-            Debug.LogError("Seed not found: " + PlantedOrCollectedItemName);
+            Debug.LogError("Item not found: " + itemName);
         }
     }
 
-    public bool UseItem(string PlantedOrCollectedItemName, int amount)
+    public void UpdateItem(string itemName, int amount)
     {
-        var field = typeof(PlayerStateData).GetField(PlantedOrCollectedItemName);
+        var field = typeof(PlayerStateData).GetField(itemName);
+        if (field != null)
+        {
+            field.SetValue(playerData, amount);
+            SavePlayer();
+        }
+        else
+        {
+            Debug.LogError("Item not found: " + itemName);
+        }
+    }
+
+    public bool UseItem(string itemName, int amount)
+    {
+        var field = typeof(PlayerStateData).GetField(itemName);
         if (field == null) return false;
 
         int current = (int)field.GetValue(playerData);
@@ -112,17 +112,18 @@ public class PlayerSaveManager : MonoBehaviour
         return true;
     }
 
-    public int GetItemCount(string seedName)
+    public int GetItemCount(string itemName)
     {
-        var field = typeof(PlayerStateData).GetField(seedName);
+        var field = typeof(PlayerStateData).GetField(itemName);
         if (field == null) return 0;
         return (int)field.GetValue(playerData);
     }
+
+    // PRICE FUNCTION (UNCHANGED)
     public int GetItemPrice(string itemName)
     {
         switch (itemName)
         {
-            // Seeds
             case "BeanSeed": return 5;
             case "BeetrootSeed": return 6;
             case "BroccoliSeed": return 7;
@@ -136,7 +137,6 @@ public class PlayerSaveManager : MonoBehaviour
             case "WatermelonSeed": return 12;
             case "WheatSeed": return 4;
 
-            // Crops
             case "Bean": return 20;
             case "Beetroot": return 25;
             case "Broccoli": return 30;
@@ -150,7 +150,6 @@ public class PlayerSaveManager : MonoBehaviour
             case "Watermelon": return 60;
             case "Wheat": return 18;
 
-            // Fish
             case "Rohu": return 80;
             case "Hilsa": return 150;
             case "Tilapia": return 70;
@@ -159,24 +158,19 @@ public class PlayerSaveManager : MonoBehaviour
             case "Tuna": return 180;
             case "Mackerel": return 90;
             case "Sardine": return 50;
-            case "Cod": return 100;   // ✅ example you asked for
+            case "Cod": return 100;
             case "Carp": return 75;
 
-            // animal items
             case "Egg": return 10;
             case "Milk": return 25;
             case "Wool": return 30;
             case "Meat": return 200;
             case "Wood": return 15;
 
-            //food items
             case "Rice": return 40;
             case "Flour": return 30;
             case "Suger": return 40;
 
-
-
-            // animals
             case "Cow": return 1000;
             case "Chicken": return 100;
             case "Sheep": return 500;
@@ -184,7 +178,6 @@ public class PlayerSaveManager : MonoBehaviour
             case "Goat2": return 600;
             case "Duck": return 100;
 
-            //tree
             case "CrismasTree": return 50;
             case "BigTree": return 40;
 
@@ -193,5 +186,4 @@ public class PlayerSaveManager : MonoBehaviour
                 return 0;
         }
     }
-
 }

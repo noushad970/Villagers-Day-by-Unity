@@ -100,7 +100,4 @@ public class PlayerStateData
     public int CurrentMission4Index = 4;
 
 }
-public class animalItemData
-{
-    
-}
+
