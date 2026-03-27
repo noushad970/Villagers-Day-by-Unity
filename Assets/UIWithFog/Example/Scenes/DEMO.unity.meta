@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 0a65149f6882c71429741bef15ff1acf
+DefaultImporter:
+  externalObjects: {}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
+AssetOrigin:
+  serializedVersion: 1
+  productId: 195773
+  packageName: UI Shader With Fog
+  packageVersion: 1.0
+  assetPath: Assets/UIWithFog/Example/Scenes/DEMO.unity
+  uploadId: 438878

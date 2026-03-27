@@ -65,7 +65,33 @@ public class CharacterMovement : MonoBehaviour
     [SerializeField] private Button jumpButton;
 
     private Animator anim;
+    private const string RUN_KEY = "HasRunBefore2";
 
+    
+
+    IEnumerator RunOnlyOnce(System.Action functionToRun)
+    {
+        yield return new WaitForSeconds(1f); // Delay to ensure everything is initialized
+        if (!PlayerPrefs.HasKey(RUN_KEY))
+        {
+            functionToRun.Invoke(); // Run your function
+
+            PlayerPrefs.SetInt(RUN_KEY, 1); // Mark as executed
+            PlayerPrefs.Save();
+        }
+    }
+
+    void MyFunction()
+    { // Optional delay before running the function
+        Debug.Log("This runs ONLY once, even after restarting the game.");
+
+        PlayerSaveManager.Instance.AddCoins(1000);
+        PlayerSaveManager.Instance.AddItem("BeanSeed", 5);
+        PlayerSaveManager.Instance.AddItem("CarrotSeed", 5);
+        PlayerSaveManager.Instance.AddItem("TomatoSeed", 5);
+        PlayerSaveManager.Instance.AddItem("WheatSeed", 5);
+        PlayerSaveManager.Instance.AddItem("BigTree", 5);
+    }
     [Header("Camera")]
     public Camera mainCam;
     public float rotationSpeed = 0.2f;
@@ -96,6 +122,7 @@ public class CharacterMovement : MonoBehaviour
         jumpButton.onClick.AddListener(Jump);
         handState = currentHandState.Empty;
 
+        StartCoroutine(RunOnlyOnce(MyFunction));
         instance = this;
 
     }

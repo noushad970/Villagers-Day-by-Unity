@@ -50,7 +50,6 @@ public class TreeSaveManager : MonoBehaviour
         // Prevent duplicate
         if (treeDataList.trees.Exists(t => t.treeID == id.treeID))
         {
-            Debug.Log("Tree already saved: " + id.treeID);
             return;
         }
 
@@ -67,7 +66,6 @@ public class TreeSaveManager : MonoBehaviour
 
         SaveToPrefs();
 
-        Debug.Log("Tree saved successfully: " + id.treeID);
     }
 
     // ================= CHANGE STATE =================
@@ -109,7 +107,6 @@ public class TreeSaveManager : MonoBehaviour
         PlayerPrefs.SetString(TREE_KEY, json);
         PlayerPrefs.Save();
 
-        Debug.Log("Tree data saved (PlayerPrefs)");
     }
 
     // ================= LOAD =================
@@ -117,7 +114,6 @@ public class TreeSaveManager : MonoBehaviour
     {
         if (!PlayerPrefs.HasKey(TREE_KEY))
         {
-            Debug.Log("No tree save found.");
             treeDataList = new TreeDataList();
             return;
         }

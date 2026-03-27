@@ -7,10 +7,11 @@ public class ShopkeeperInventory : MonoBehaviour
                       foodShopUI, meatShopUI, seedShopUI, animalShopUI,shopPanel;
     public Button closeButton;
     public static ShopkeeperInventory instance;
+    public NPCShopman[] shopKeepers;
     private void Start()
     {
         instance=this;
-        closeButton.onClick.AddListener(CloseAllShopUIs);
+        closeButton.onClick.AddListener(CloseAllShopUIMenuExit);
     }
     public void OpenShopUI(string shopKeeperName)
     {
@@ -61,6 +62,7 @@ public class ShopkeeperInventory : MonoBehaviour
     }
     public void CloseAllShopUIs()
     {
+        
         farmerShopUI.SetActive(false);
         shopPanel.SetActive(false);
         fisherShopUI.SetActive(false);
@@ -68,6 +70,23 @@ public class ShopkeeperInventory : MonoBehaviour
         meatShopUI.SetActive(false);
         seedShopUI.SetActive(false);
         animalShopUI.SetActive(false);
-        closeButton.gameObject.SetActive(false);    
+        closeButton.gameObject.SetActive(false); 
+        
+    }
+    public void CloseAllShopUIMenuExit()
+    {
+
+        farmerShopUI.SetActive(false);
+        shopPanel.SetActive(false);
+        fisherShopUI.SetActive(false);
+        foodShopUI.SetActive(false);
+        meatShopUI.SetActive(false);
+        seedShopUI.SetActive(false);
+        animalShopUI.SetActive(false);
+        closeButton.gameObject.SetActive(false);
+        for (int i = 0; i < shopKeepers.Length; i++)
+        {
+            shopKeepers[i].onClickCloseButton();
+        }
     }
 }

@@ -10,6 +10,7 @@ public class ChildrenCollisionForwarder : MonoBehaviour
         
     }
 
+    [System.Obsolete]
     private void OnCollisionEnter(Collision collision)
     {
         if (parentSwitcher != null)

@@ -345,7 +345,6 @@ public class AudioManager : MonoBehaviour
     void OnAnyButtonPressed(Button button)
     {
         // Your global function
-        Debug.Log("Detected Button From Anywhere: " + button.name);
         playClickSound();
     }
 }

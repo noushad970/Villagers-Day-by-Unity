@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 
 public class CollisionPointDetector : MonoBehaviour
 {
@@ -11,7 +12,7 @@ public class CollisionPointDetector : MonoBehaviour
     [SerializeField] private ParticleSystem dustParticle,SublandParticle;
 
     private LandDataComponent landData; // Reference to LandDataComponent
-
+    public FarmController farmController; // Reference to FarmController for saving 
     void Start()
     {
         // Get the LandDataComponent attached to this parent
@@ -54,7 +55,8 @@ public class CollisionPointDetector : MonoBehaviour
         if (dustParticle != null)
         {
             GameObject dp = Instantiate(dustParticle.gameObject, hitter.transform.position, Quaternion.identity);
-            dp.GetComponent<ParticleSystem>().Play();
+            var ps = dp.GetComponent<ParticleSystem>();
+            if (ps != null) ps.Play();
             Destroy(dp, 4f);
 
         }
@@ -63,6 +65,7 @@ public class CollisionPointDetector : MonoBehaviour
         {
             if (land != null) land.SetActive(false);
             if (subLand != null) subLand.SetActive(true);
+            if(SublandParticle != null) 
             SublandParticle.Play();
 
             // ✅ Update the LandDataComponent state
@@ -70,13 +73,20 @@ public class CollisionPointDetector : MonoBehaviour
             {
                 landData.isFertilized = true;
 
-                // Save the farm immediately
-                FarmController farmController = FindObjectOfType<FarmController>();
-                if (farmController != null)
-                {
-                    farmController.SaveFarm();
-                }
+                StartCoroutine(saveLand());
             }
+        }
+    }
+
+    [System.Obsolete]
+    IEnumerator saveLand()
+    {
+        yield return new WaitForSeconds(1f);
+        // Save the farm immediately
+
+        if (farmController != null)
+        {
+            farmController.SaveFarm();
         }
     }
 }

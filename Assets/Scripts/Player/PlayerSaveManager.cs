@@ -28,7 +28,7 @@ public class PlayerSaveManager : MonoBehaviour
         string json = JsonUtility.ToJson(playerData, true);
         PlayerPrefs.SetString(SAVE_KEY, json);
         PlayerPrefs.Save();
-
+        Debug.Log("Saving coins or items");
         Debug.Log("Player data saved (PlayerPrefs)");
     }
 

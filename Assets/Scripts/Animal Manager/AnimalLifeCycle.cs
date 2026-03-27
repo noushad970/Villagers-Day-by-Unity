@@ -213,7 +213,6 @@ public class AnimalLifeCycle : MonoBehaviour
                 case animalState.idleState:
                     yield return new WaitForSeconds(Random.Range(20, 40));
                     currentState = animalState.hungerState;
-                    Debug.Log("Animal is now hungry");
 
                     break;
 
@@ -226,7 +225,6 @@ public class AnimalLifeCycle : MonoBehaviour
                 case animalState.drinkAndEatState:
                     yield return new WaitForSeconds(Random.Range(35, 60));
                     currentState = animalState.giveEggState;
-                    Debug.Log("Animal is ready to give egg");
                     break;
 
                 case animalState.hungerState:

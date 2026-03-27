@@ -55,7 +55,7 @@ public class TutorialTextController : MonoBehaviour
         }
 
         StartTyping();
-        startgameButton.onClick.AddListener(Function2);
+        startgameButton.onClick.AddListener(onClickStartButton);
         nextButton.onClick.AddListener(OnNextButtonPressed);
     }
 
@@ -108,7 +108,6 @@ public class TutorialTextController : MonoBehaviour
         // ✅ Save so it never runs again
         PlayerPrefs.SetInt(TUTORIAL_KEY, 1);
         PlayerPrefs.Save(); // Important for WebGL
-
         OnTutorialComplete();
     }
 
@@ -128,7 +127,10 @@ public class TutorialTextController : MonoBehaviour
         // Example:
         // Enable gameplay, give rewards, etc.
     }
-    
+    void onClickStartButton()
+    {
+        Function2();
+    }
     void Function2()
     {
         Debug.Log("Run every time AFTER tutorial is done");

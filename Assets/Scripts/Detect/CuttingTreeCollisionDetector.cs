@@ -9,7 +9,6 @@ public class CuttingTreeCollisionDetector : MonoBehaviour
     private bool hasHitThisChop = false;
     public int hitCount = 0;
     [SerializeField] private ParticleSystem hitParticle;
-    public ParticleSystem treeDestroyParticla;
     public GameObject treeWoodPrefab;
     Rigidbody rb;
     public float animDetectionTime = 1.5f; // Time window to detect hits during chopping animation  
@@ -104,7 +103,6 @@ public class CuttingTreeCollisionDetector : MonoBehaviour
 
         Instantiate(woodStack, this.transform.position, Quaternion.identity);
         Destroy(this.gameObject); 
-        treeDestroyParticla.Play();
         StartCoroutine(destroyWoodStack(woodStack));
     }
     IEnumerator destroyWoodStack(GameObject gm)

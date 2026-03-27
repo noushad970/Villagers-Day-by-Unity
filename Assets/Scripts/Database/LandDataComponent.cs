@@ -54,7 +54,6 @@ public class LandDataComponent : MonoBehaviour
     {
         isFertilized = true;
         landData.isFertilized = true;
-        Debug.Log($"{gameObject.name} fertilized!");
     }
 
     // Plant crop in CropArea
@@ -62,13 +61,11 @@ public class LandDataComponent : MonoBehaviour
     {
         if (!isFertilized)
         {
-            Debug.LogWarning("Cannot plant crop: Land not fertilized");
             return;
         }
 
         if (index < 0 || index >= landData.cropAreas.Length)
         {
-            Debug.LogWarning("Invalid CropArea index");
             return;
         }
 
@@ -95,7 +92,6 @@ public class LandDataComponent : MonoBehaviour
     {
         if (cropAreaObject == null)
         {
-            Debug.LogWarning("CropArea object is null");
             return;
         }
 
@@ -105,7 +101,6 @@ public class LandDataComponent : MonoBehaviour
             {
                 if (!landData.cropAreas[i].isPlanted)
                 {
-                    Debug.Log("No crop planted on this CropArea");
                     return;
                 }
 
@@ -120,12 +115,10 @@ public class LandDataComponent : MonoBehaviour
                     Destroy(cropAreasTransforms[i].GetChild(0).gameObject);
                 }
 
-                Debug.Log($"Crop removed from {gameObject.name} → {cropAreaObject.name}");
                 return;
             }
         }
 
-        Debug.LogWarning("CropArea GameObject not found in this LandDataComponent");
     }
 
 }

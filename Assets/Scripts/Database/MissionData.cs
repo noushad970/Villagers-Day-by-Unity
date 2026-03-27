@@ -110,7 +110,6 @@ public static class MissionData
     public static void LogMissionRequirements(int missionIndex)
     {
         var req = GetMissionRequirements(missionIndex);
-        Debug.Log($"Mission {missionIndex} Requirements:");
         foreach (var kvp in req)
         {
             Debug.Log($"- {kvp.Key}: {kvp.Value}");

@@ -37,7 +37,15 @@ public class NPCShopman : MonoBehaviour
         //PlayerSaveManager.Instance.AddItem("Cow", -5);
 
     }
-    
+    private void OnEnable()
+    {
+        onClickBuyButton();
+    }
+    public void onClickCloseButton()
+    {
+        selectedItemName = "";
+        selectedItemPrice = 0;
+    }
     private void ButtonUpdateBuyAndSell()
     {
         for (int i = 0; i < fishesSell.Length; i++)
@@ -155,7 +163,6 @@ public class NPCShopman : MonoBehaviour
         AudioManager.Instance.playClickSound();
         itms = itm.gameObject;
         selectedItemName = itm.name.ToString();
-        Debug.Log(selectedItemName);
         selectedItemPrice = PlayerSaveManager.Instance.GetItemPrice(itm.name);
         if (sellPanel.activeSelf)
         {
@@ -190,6 +197,7 @@ public class NPCShopman : MonoBehaviour
     }
     void confirmPanelYes()
     {
+        Debug.Log("Selected Item: " + selectedItemName + ", Price: " + selectedItemPrice);
         if (string.IsNullOrEmpty(selectedItemName))
         {
             return;
@@ -198,7 +206,7 @@ public class NPCShopman : MonoBehaviour
 
         if (sellPanel.activeSelf)
         {
-            PlayerSaveManager.Instance.UseItem(selectedItemName, 1);
+            PlayerSaveManager.Instance.AddItem(selectedItemName, -1);
             PlayerSaveManager.Instance.AddCoins(selectedItemPrice);
             AudioManager.Instance.playSellSound();
         }
@@ -219,6 +227,8 @@ public class NPCShopman : MonoBehaviour
                         vehicle.deliverAnimal(selectedItemName, true);
                         NoticeUI.Instance.ShowNotice("Delivering " + selectedItemName + " to your farm. Please wait...");
                         AudioManager.Instance.playBuySound();
+                        PlayerSaveManager.Instance.AddItem(selectedItemName, 1);
+                        PlayerSaveManager.Instance.AddCoins(-selectedItemPrice);
                     }
                     else
                     {
