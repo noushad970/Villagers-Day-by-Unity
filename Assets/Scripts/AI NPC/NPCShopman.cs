@@ -40,6 +40,11 @@ public class NPCShopman : MonoBehaviour
     private void OnEnable()
     {
         onClickBuyButton();
+        isShopOpen = true;
+    }
+    private void OnDisable()
+    {
+        isShopOpen = false;
     }
     public void onClickCloseButton()
     {
@@ -144,6 +149,7 @@ public class NPCShopman : MonoBehaviour
         PlayerSaveManager.Instance.AddItem("Rohu", 5);
 
     }
+    public static bool isShopOpen = false;
     public string ShopKeeperName { get { return shopKeeperName; } }
     private void onClickSellButton()
     {
